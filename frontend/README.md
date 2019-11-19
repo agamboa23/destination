@@ -3,7 +3,7 @@
 ## Project setup
 Lints the whole project, then serves it
 ```
-npm install
+npm start
 ```
 
 ### Compiles and hot-reloads for development
