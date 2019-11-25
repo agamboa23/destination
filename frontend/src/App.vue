@@ -1,27 +1,23 @@
 <template>
   <v-app>
+    <v-navigation-drawer app dark v-model="drawer">
+      <!--  -->
+    </v-navigation-drawer>
     <v-app-bar app color="primary">
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <div class="d-flex align-center">
         <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+          class="mx-3"
+          alt="DestiNation Logo"
+          :src="require('@/assets/logo.png')"
           transition="scale-transition"
-          width="40"
+          contain
+          width="50"
         />
-
         <span class="display-1 font-weight-light">DestiNation</span>
       </div>
-
       <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
+      <v-btn text>
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
     </v-app-bar>
@@ -37,7 +33,7 @@ export default {
   name: 'App',
 
   data: () => ({
-    //
+    drawer: false
   })
 }
 </script>
