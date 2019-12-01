@@ -5,7 +5,11 @@
     </v-navigation-drawer>
     <v-app-bar app color="primary">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <div class="d-flex align-center">
+      <div
+        :style="{ cursor: pointer }"
+        class="d-flex align-center"
+        @click="toRoot()"
+      >
         <v-img
           class="mx-3"
           alt="DestiNation Logo"
@@ -47,6 +51,9 @@ export default {
     drawer: false
   }),
   methods: {
+    toRoot() {
+      this.$router.push({ name: 'home' })
+    },
     toLogin() {
       this.$router.push({ name: 'auth', params: { type: 'login' } })
     },

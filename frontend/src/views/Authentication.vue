@@ -16,6 +16,7 @@ export default {
   components: {
     login: Login,
     'sign-up': SignUp
-  }
+  },
+  computed: {}
 }
 </script>
