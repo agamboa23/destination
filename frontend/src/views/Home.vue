@@ -1,15 +1,14 @@
 <template>
-  <hello-world />
+  <welcome />
 </template>
 
 <script>
-import HelloWorld from '../components/HelloWorld'
+import WelcomeVue from '../components/Welcome.vue'
 
 export default {
   name: 'Home',
-
   components: {
-    HelloWorld
+    welcome: WelcomeVue
   }
 }
 </script>
