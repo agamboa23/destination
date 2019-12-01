@@ -17,20 +17,25 @@
         <span class="display-1 font-weight-light">DestiNation</span>
       </div>
       <v-spacer></v-spacer>
-      <v-btn class="mx-2" color="secondary" depressed>
+      <v-btn class="mx-2" color="secondary" depressed @click="toLogin()">
         Log In
       </v-btn>
-      <v-btn outlined>
+      <v-btn outlined @click="toSignup()">
         Sign Up
         <v-icon>mdi-face</v-icon>
       </v-btn>
     </v-app-bar>
     <v-content>
-      <router-view />
+      <v-container fluid fill-height>
+        <router-view />
+      </v-container>
     </v-content>
     <v-footer app>
-      <v-spacer></v-spacer>
       &copy; 2019 DestiNation Inc.
+      <v-spacer></v-spacer>
+      <v-btn text to="/about">
+        About Us
+      </v-btn>
     </v-footer>
   </v-app>
 </template>
@@ -38,9 +43,17 @@
 <script>
 export default {
   name: 'App',
-
   data: () => ({
     drawer: false
-  })
+  }),
+  methods: {
+    toLogin() {
+      this.$router.push({ name: 'auth', params: { type: 'login' } })
+    },
+    toSignup() {
+      this.$router.push({ name: 'auth', params: { type: 'signup' } })
+    }
+  },
+  computed: {}
 }
 </script>
