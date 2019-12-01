@@ -2,9 +2,20 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const userRoutes = require('./api/routes/users');
+const tripRoutes = require('./api/routes/trips');
+const profileRoutes = require('./api/routes/profiles');
+const locationRoutes = require('./api/routes/locations');
 
+mongoose.connect(
+    "mongodb+srv://destination:destination@destinationcluster-tgndx.mongodb.net/test?retryWrites=true&w=majority",
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    }
+);
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -21,6 +32,9 @@ app.use((req,res,next) => {
 });
 
 app.use('/users', userRoutes);
+app.use('/trips', tripRoutes);
+app.use('/profiles', profileRoutes);
+app.use('/locations', locationRoutes);
 
 app.use((req,res,next) => {
     const error = new Error('Not found');
