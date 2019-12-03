@@ -47,9 +47,11 @@
 <script>
 export default {
   name: 'App',
-  data: () => ({
-    drawer: false
-  }),
+  data: () => {
+    return {
+      drawer: false
+    }
+  },
   methods: {
     toRoot() {
       this.$router.push({ name: 'home' })
