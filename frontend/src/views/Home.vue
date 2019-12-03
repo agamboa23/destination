@@ -1,15 +1,20 @@
 <template>
-  <hello-world />
+  <v-row align="center" justify="center">
+    <v-col cols="12" sm="8" md="4">
+      <welcome />
+    </v-col>
+  </v-row>
 </template>
 
 <script>
-import HelloWorld from '../components/HelloWorld'
+import WelcomeVue from '../components/Welcome.vue'
 
 export default {
   name: 'Home',
-
   components: {
-    HelloWorld
+    welcome: WelcomeVue
   }
 }
 </script>
+
+<style scoped></style>
