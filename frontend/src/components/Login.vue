@@ -38,15 +38,15 @@ export default {
     }
   },
   methods: {
-    submit() {
+    async submit() {
       if (this.$refs.form.validate()) {
         const cred = {
           email: this.email,
           password: this.password
         }
         console.log('CRED', cred)
-        const res = axios.post('http://localhost:3000/users/login', cred)
-        console.log('JSON WEB TOKEN', res)
+        const res = await axios.post('http://localhost:3000/users/login', cred)
+        console.log('JSON WEB TOKEN', res.data)
       } else {
         this.$refs.form.reset()
       }
