@@ -1,4 +1,7 @@
 const User = require('../models/user');
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 exports.users_get_all =  (req, res, next) => {
     User.find()
@@ -100,12 +103,12 @@ exports.users_login = (req, res, next) => {
                         }
                     );
                     return res.status(200).json({
-                        message: 'Auth successful',
+                        message: 'Login successful',
                         token: token
                     });
                 }
                 return res.status(401).json({
-                    message: 'Auth failed'
+                    message: 'Login failed'
                 });
             });
         })
