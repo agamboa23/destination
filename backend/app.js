@@ -10,13 +10,14 @@ const profileRoutes = require('./api/routes/profiles');
 const locationRoutes = require('./api/routes/locations');
 
 mongoose.connect(
-    "mongodb+srv://destination:destination@destinationcluster-tgndx.mongodb.net/test?retryWrites=true&w=majority",
+    "mongodb+srv://destination:destination@cluster0-4yfyz.mongodb.net/test?retryWrites=true&w=majority",
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     }
 );
 app.use(morgan('dev'));
+app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
