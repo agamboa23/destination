@@ -6,7 +6,7 @@
     <v-app-bar app color="primary">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <div
-        :style="{ cursor: pointer }"
+        style="cursor: pointer;"
         class="d-flex align-center"
         @click="toRoot()"
       >

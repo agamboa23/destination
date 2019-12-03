@@ -45,7 +45,7 @@ export default {
           password: this.password
         }
         console.log('CRED', cred)
-        const res = axios.post('http://localhost:3000/users/login', cred).data
+        const res = axios.post('http://localhost:3000/users/login', cred)
         console.log('JSON WEB TOKEN', res)
       } else {
         this.$refs.form.reset()
