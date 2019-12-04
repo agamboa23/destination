@@ -14,7 +14,7 @@ export default new Vuetify({
         error: '#ff5722',
         warning: '#ffeb3b',
         info: '#3f51b5',
-        success: '#cddc39'
+        success: '#43A047'
       }
     }
   }
