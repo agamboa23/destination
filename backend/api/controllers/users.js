@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-exports.users_get_all =  (req, res, next) => {
+exports.users_get_all = (req, res, next) => {
     User.find()
     .select('first_name _id userImage')
     .exec()
@@ -32,7 +32,7 @@ exports.users_get_all =  (req, res, next) => {
     });
 };
 
-exports.users_signup =  (req, res, next) => {
+exports.users_signup = (req, res, next) => {
     User.find({ email: req.body.email })
         .exec()
         .then(user => {
@@ -104,7 +104,8 @@ exports.users_login = (req, res, next) => {
                     );
                     return res.status(200).json({
                         message: 'Login successful',
-                        token: token
+                        token: token,
+                        userId: user[0]._id
                     });
                 }
                 return res.status(401).json({
@@ -123,7 +124,7 @@ exports.users_login = (req, res, next) => {
 exports.users_get_user =  (req, res, next) => {
     const id = req.params.userId;
     User.findById(id)
-    .select('first_name _id userImage')
+    .select('first_name _id last_name gender age languages')
     .exec()
     .then(doc => {
         if(doc){
