@@ -30,7 +30,7 @@
       </v-btn>
     </v-app-bar>
     <v-content>
-      <v-container fluid fill-height>
+      <v-container fluid fill-height class="pa-0">
         <router-view />
       </v-container>
     </v-content>
@@ -57,10 +57,10 @@ export default {
       this.$router.push({ name: 'home' })
     },
     toLogin() {
-      this.$router.push({ name: 'auth', params: { type: 'login' } })
+      this.$router.push({ name: 'login' })
     },
     toSignup() {
-      this.$router.push({ name: 'auth', params: { type: 'signup' } })
+      this.$router.push({ name: 'signup' })
     }
   },
   computed: {}
