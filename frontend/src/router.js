@@ -22,9 +22,16 @@ export default new Router({
         import(/* webpackChunkName: "about" */ './views/About.vue')
     },
     {
-      path: '/auth/:type',
-      name: 'auth',
-      component: Authentication
+      path: '/login',
+      name: 'login',
+      component: Authentication,
+      props: { type: 'login' }
+    },
+    {
+      path: '/signup',
+      name: 'signup',
+      component: Authentication,
+      props: { type: 'signup' }
     }
   ]
 })

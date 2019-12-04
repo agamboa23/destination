@@ -1,8 +1,8 @@
 <template>
   <v-row align="center" justify="center">
     <v-col cols="12" sm="8" md="4">
-      <login v-if="true" />
-      <sign-up v-if="false" />
+      <login v-if="isLogin" />
+      <sign-up v-if="!isLogin" />
     </v-col>
   </v-row>
 </template>
@@ -17,6 +17,16 @@ export default {
     login: Login,
     'sign-up': SignUp
   },
-  computed: {}
+  computed: {
+    isLogin() {
+      return this.type === 'login'
+    }
+  },
+  props: {
+    type: {
+      type: String,
+      default: ''
+    }
+  }
 }
 </script>
