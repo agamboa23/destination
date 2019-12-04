@@ -1,7 +1,7 @@
 // Initial State
 const state = {
-  signedIn: false,
-  token: ''
+  id: '',
+  firstName: ''
 }
 
 const getters = {}
@@ -9,9 +9,9 @@ const getters = {}
 const actions = {}
 
 const mutations = {
-  login(state, token) {
-    state.token = token
-    state.signedIn = true
+  setUser(state, user) {
+    state.id = user.id
+    state.firstName = user.firstName
   }
 }
 

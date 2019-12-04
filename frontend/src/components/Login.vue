@@ -41,7 +41,7 @@
       :color="snackcolor"
       :top="true"
       :right="true"
-      :timeout="5500"
+      :timeout="timeout"
     >
       {{ snacktext }}
       <v-btn color="white" text @click="snackbar = false">
@@ -68,7 +68,8 @@ export default {
       },
       snackbar: false,
       snackcolor: '',
-      snacktext: ''
+      snacktext: '',
+      timeout: 3000
     }
   },
   methods: {
@@ -89,10 +90,12 @@ export default {
             'http://localhost:3000/users/login',
             cred
           )
-          console.log('JSON WEB TOKEN', res.data.token)
+          this.$store.commit('auth/login', res.data.token)
           this.invokeSnackbar(res.data.message, 'success')
           this.loading = false
-          // this.$router.push({ name: 'home' })
+          setTimeout(() => {
+            this.$router.push({ name: 'home' })
+          }, 1500)
         } catch (err) {
           console.log(err)
           // this.$refs.form.reset()
