@@ -21,13 +21,7 @@
         <span class="display-1 font-weight-light">DestiNation</span>
       </div>
       <v-spacer></v-spacer>
-      <v-btn class="mx-2" color="secondary" depressed @click="toLogin()">
-        Log In
-      </v-btn>
-      <v-btn outlined @click="toSignup()">
-        Sign Up
-        <v-icon>mdi-face</v-icon>
-      </v-btn>
+      <bar-icons />
     </v-app-bar>
     <v-content>
       <v-container fluid fill-height class="pa-0">
@@ -45,24 +39,17 @@
 </template>
 
 <script>
+import AppBarIcons from '@/components/AppBarIcons.vue'
+
 export default {
   name: 'App',
+  components: {
+    'bar-icons': AppBarIcons
+  },
   data: () => {
     return {
       drawer: false
     }
-  },
-  methods: {
-    toRoot() {
-      this.$router.push({ name: 'home' })
-    },
-    toLogin() {
-      this.$router.push({ name: 'login' })
-    },
-    toSignup() {
-      this.$router.push({ name: 'signup' })
-    }
-  },
-  computed: {}
+  }
 }
 </script>
