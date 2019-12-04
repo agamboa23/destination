@@ -91,6 +91,13 @@ export default {
             cred
           )
           this.$store.commit('auth/login', res.data.token)
+          const userId = res.data.userId
+          const firstName = axios.get('http://localhost:3000/users/' + userId)
+            .data.user.first_name
+          this.$store.commit('user/setuser', {
+            id: userId,
+            firstName: firstName
+          })
           this.invokeSnackbar(res.data.message, 'success')
           this.loading = false
           setTimeout(() => {

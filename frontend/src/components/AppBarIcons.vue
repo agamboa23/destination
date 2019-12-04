@@ -12,8 +12,7 @@
     <div v-if="signedIn">
       <v-btn icon>
         <v-icon>mdi-account</v-icon>
-        <!-- {{ firstName }} -->
-        Should be Fist Name
+        {{ firstName }}
       </v-btn>
     </div>
   </div>
