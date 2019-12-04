@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const Trip = require('../models/trip');
 const User = require('../models/user');
 
+const UsersController = require('../controllers/users');
+
 exports.trips_get_all = (req, res, next) => {
     Trip.find()
     .select('user _id')
@@ -55,6 +57,7 @@ exports.trips_get_trip = (req, res, next) => {
 };
 
 exports.trips_add_trip = (req, res, next) => {
+    var today = new Date();
     User.findById(req.body.userId)
     .then(user => {
         if(!user) {
@@ -65,7 +68,12 @@ exports.trips_add_trip = (req, res, next) => {
         const trip = new Trip({
             _id: new mongoose.Types.ObjectId(),
             user: req.body.userId,
-            destination: req.body.destination
+            destination: req.body.destination,
+            date_of_trip: req.body.date_of_trip,
+            date_of_publish: today,
+            members: req.body.members,
+            number_of_members: req.body.number_of_members,
+            isOpen: req.body.isOpen
         });
         return trip.save();
     })

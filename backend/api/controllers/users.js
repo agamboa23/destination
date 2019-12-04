@@ -3,35 +3,6 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-exports.users_get_all = (req, res, next) => {
-    User.find()
-    .select('first_name _id userImage')
-    .exec()
-    .then(docs => {
-        const response = {
-            count: docs.length,
-            users: docs.map(doc => {
-                return {
-                    fist_name: doc.first_name,
-                    _id: doc._id,
-                    userImage: doc.userImage,
-                    request: {
-                        type: 'GET',
-                        url: 'http://localhost:3000/users/' + doc._id
-                    }
-                }
-            })
-        };
-        res.status(200).json(response);
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json({
-            error: err
-        });
-    });
-};
-
 exports.users_signup = (req, res, next) => {
     User.find({ email: req.body.email })
         .exec()
@@ -56,6 +27,7 @@ exports.users_signup = (req, res, next) => {
                             gender: req.body.gender,
                             age: req.body.age,
                             languages: req.body.languages,
+                            trips: req.body.trips
                         });
                         user.save()
                             .then(result => {
@@ -121,10 +93,39 @@ exports.users_login = (req, res, next) => {
         });
 };
 
+exports.users_get_all = (req, res, next) => {
+    User.find()
+    .select('first_name _id ') //userImage')
+    .exec()
+    .then(docs => {
+        const response = {
+            count: docs.length,
+            users: docs.map(doc => {
+                return {
+                    first_name: doc.first_name,
+                    _id: doc._id,
+                    userImage: doc.userImage,
+                    request: {
+                        type: 'GET',
+                        url: 'http://localhost:3000/users/' + doc._id
+                    }
+                }
+            })
+        };
+        res.status(200).json(response);
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    });
+};
+
 exports.users_get_user =  (req, res, next) => {
     const id = req.params.userId;
     User.findById(id)
-    .select('first_name _id last_name gender age languages')
+    .select('email first_name _id last_name gender age languages trips')
     .exec()
     .then(doc => {
         if(doc){
@@ -142,6 +143,27 @@ exports.users_get_user =  (req, res, next) => {
     .catch(err => {
         console.log(err),
         res.status(500).json({error: err});
+    });
+};
+
+exports.user_add_trip = (req, res, next) => {
+    const id = req.params.userId; //both userId and tripId are sent via params!
+    const tripId = req.params.tripId;
+    User.update({ _id: id }, { $addToSet: { trips: [ tripId ] }})
+    .exec()
+    .then(result => {
+        res.status(200).json({
+            message: 'User updated',
+            request: {
+                 type: 'GET',
+                 url: 'http://localhost:3000/users/' + id
+            }
+        });
+    })
+    .catch(err => {
+        res.status(500).json({
+            error: err
+        });
     });
 };
 

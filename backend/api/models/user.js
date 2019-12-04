@@ -13,9 +13,10 @@ const userSchema = mongoose.Schema({
     last_name: {type: String},
     gender: {type: String},
     age: {type: Number},
-    languages: { type: Array},
-    profile_id: { type: Number},
-    userImage: { type: String }
+    languages: {type: Array},
+    trips: {type: Array},
+    profile_id: {type: Number},
+    userImage: {type: String}
 });
 
 module.exports = mongoose.model('User', userSchema);
