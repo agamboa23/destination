@@ -1,29 +1,54 @@
 <template>
-  <v-card class="elevation-12">
-    <v-toolbar color="primary" dark flat>
-      <v-toolbar-title>Login Form</v-toolbar-title>
-    </v-toolbar>
-    <v-card-text>
-      <v-form ref="form" @keyup.native.enter="submit()">
-        <v-text-field
-          v-model="email"
-          label="E-Mail"
-          prepend-icon="mdi-account"
-          type="text"
-        />
-        <v-text-field
-          v-model="password"
-          label="Password"
-          prepend-icon="mdi-lock"
-          type="password"
-        />
-      </v-form>
-    </v-card-text>
-    <v-card-actions>
-      <v-spacer />
-      <v-btn color="primary" @click="submit()">Login</v-btn>
-    </v-card-actions>
-  </v-card>
+  <div class="text-center">
+    <v-card class="elevation-12">
+      <v-toolbar color="secondary" dark flat>
+        <v-toolbar-title>Login Form</v-toolbar-title>
+      </v-toolbar>
+      <v-card-text>
+        <v-form ref="form" v-model="valid" @keyup.native.enter="submit()">
+          <v-text-field
+            color="secondary"
+            v-model="email"
+            label="E-Mail"
+            prepend-icon="mdi-account"
+            type="text"
+            :rules="[rules.required, rules.email]"
+          />
+          <v-text-field
+            color="secondary"
+            v-model="password"
+            label="Password"
+            prepend-icon="mdi-lock"
+            type="password"
+            :rules="[rules.required]"
+          />
+        </v-form>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer />
+        <v-btn
+          class="px-4"
+          color="secondary"
+          :loading="loading"
+          :disabled="!valid || loading"
+          @click="submit()"
+          >Login</v-btn
+        >
+      </v-card-actions>
+    </v-card>
+    <v-snackbar
+      v-model="snackbar"
+      :color="snackcolor"
+      :top="true"
+      :right="true"
+      :timeout="5500"
+    >
+      {{ snacktext }}
+      <v-btn color="white" text @click="snackbar = false">
+        Close
+      </v-btn>
+    </v-snackbar>
+  </div>
 </template>
 
 <script>
@@ -33,22 +58,47 @@ export default {
   name: 'Login',
   data: () => {
     return {
+      valid: true,
+      loading: false,
       email: '',
-      password: ''
+      password: '',
+      rules: {
+        required: v => !!v || 'Required.',
+        email: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'Not a valid E-Mail'
+      },
+      snackbar: false,
+      snackcolor: '',
+      snacktext: ''
     }
   },
   methods: {
+    invokeSnackbar(text, color) {
+      this.snacktext = text
+      this.snackcolor = color
+      this.snackbar = true
+    },
     async submit() {
       if (this.$refs.form.validate()) {
-        const cred = {
-          email: this.email,
-          password: this.password
+        try {
+          this.loading = true
+          const cred = {
+            email: this.email,
+            password: this.password
+          }
+          const res = await axios.post(
+            'http://localhost:3000/users/login',
+            cred
+          )
+          console.log('JSON WEB TOKEN', res.data.token)
+          this.invokeSnackbar(res.data.message, 'success')
+          this.loading = false
+          // this.$router.push({ name: 'home' })
+        } catch (err) {
+          console.log(err)
+          // this.$refs.form.reset()
+          this.invokeSnackbar('Authorization Error', 'error')
+          this.loading = false
         }
-        console.log('CRED', cred)
-        const res = await axios.post('http://localhost:3000/users/login', cred)
-        console.log('JSON WEB TOKEN', res.data)
-      } else {
-        this.$refs.form.reset()
       }
     }
   }

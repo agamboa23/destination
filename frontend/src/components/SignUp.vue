@@ -1,5 +1,5 @@
 <template>
-  <v-card> </v-card>
+  <v-card> lolo.</v-card>
 </template>
 
 <script>
