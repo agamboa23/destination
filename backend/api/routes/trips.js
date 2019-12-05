@@ -11,6 +11,8 @@ router.get('/', TripsController.trips_get_all);
 router.post('/', TripsController.trips_add_trip);
 router.get('/:tripId', TripsController.trips_get_trip);
 router.patch('/:tripId', TripsController.trips_update_trip);
+router.patch('/addreq/:tripId/:userId', TripsController.trip_add_request);
+router.patch('/accreq/:tripId/:userId', TripsController.trip_accept_request);
 router.delete('/:tripId', TripsController.trips_delete_trip);
 
 module.exports = router;

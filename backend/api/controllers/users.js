@@ -146,27 +146,6 @@ exports.users_get_user =  (req, res, next) => {
     });
 };
 
-exports.user_add_trip = (req, res, next) => {
-    const id = req.params.userId; //both userId and tripId are sent via params!
-    const tripId = req.params.tripId;
-    User.update({ _id: id }, { $addToSet: { trips: [ tripId ] }})
-    .exec()
-    .then(result => {
-        res.status(200).json({
-            message: 'User updated',
-            request: {
-                 type: 'GET',
-                 url: 'http://localhost:3000/users/' + id
-            }
-        });
-    })
-    .catch(err => {
-        res.status(500).json({
-            error: err
-        });
-    });
-};
-
 exports.users_patch_user =  (req, res, next) => {
     const id = req.params.userId;
     const updateOps = {};

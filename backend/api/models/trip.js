@@ -11,6 +11,7 @@ const tripSchema = mongoose.Schema({
     date_of_publish: {type: Date}, //, required: true},
     destination: {type: String}, //, required: true},
     members: {type: Array},
+    requests: {type: Array},
     number_of_members: {type: Number},
     isOpen: {type: Boolean}
 });

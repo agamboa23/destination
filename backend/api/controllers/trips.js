@@ -3,8 +3,6 @@ const mongoose = require('mongoose');
 const Trip = require('../models/trip');
 const User = require('../models/user');
 
-const UsersController = require('../controllers/users');
-
 exports.trips_get_all = (req, res, next) => {
     Trip.find()
     .select('user _id')
@@ -57,8 +55,10 @@ exports.trips_get_trip = (req, res, next) => {
 };
 
 exports.trips_add_trip = (req, res, next) => {
-    var today = new Date();
-    User.findById(req.body.userId)
+    const userId = req.body.userId;
+    let tripId;
+    const today = new Date();
+    User.findById(userId)
     .then(user => {
         if(!user) {
             return res.status(404).json({
@@ -67,7 +67,7 @@ exports.trips_add_trip = (req, res, next) => {
         }
         const trip = new Trip({
             _id: new mongoose.Types.ObjectId(),
-            user: req.body.userId,
+            user: userId,
             destination: req.body.destination,
             date_of_trip: req.body.date_of_trip,
             date_of_publish: today,
@@ -75,16 +75,17 @@ exports.trips_add_trip = (req, res, next) => {
             number_of_members: req.body.number_of_members,
             isOpen: req.body.isOpen
         });
-        return trip.save();
+        tripId = trip._id;
+        return trip.save()
+                    .then((doc) => 
+                        User.findOneAndUpdate(
+                            { _id: userId }, 
+                            { $addToSet: { trips: [doc._id] } }));
     })
     .then(result => {
-        console.log(result);
         res.status(201).json({
             message: 'Trip saved',
-            createdTrip: {
-                _id: result._id,
-                user: result.user,
-            },
+            tripId: tripId,
             request: {
                 type: 'GET',
                 url: 'http://localhost:3000/trips/'
@@ -96,8 +97,58 @@ exports.trips_add_trip = (req, res, next) => {
         res.status(500).json({
             error: err,
         });
-    });    
+    }); 
 };
+
+// After the user requested to join the trip, adds the user id to trip's requests
+exports.trip_add_request = (req, res, next) => {
+    const tripId = req.params.tripId;
+    const userId = req.params.userId;
+    Trip.update({_id: tripId}, { $addToSet: { requests:  [userId] }})
+    .exec()
+    .then(result => {
+        res.status(200).json({
+            message: 'Trip updated',
+            request: {
+                 type: 'GET',
+                 url: 'http://localhost:3000/trips/' + tripId
+            }
+        });
+    })
+    .catch(err => {
+        res.status(500).json({
+            error: err
+        });
+    });
+};
+/*
+* After the author accepted the request, removes the user id from trips's requests array
+* and adds it to trip's members array
+*/
+exports.trip_accept_request = (req, res, next) => {
+    const tripId = req.params.tripId;
+    const userId = req.params.userId;
+    Trip.update(
+        { _id: tripId },
+        { $pull: {requests: { $in: [userId] }}, $addToSet: { members: [userId] }})
+    .exec()
+    .then(result => {
+        res.status(200).json({
+            message: 'Trip updated',
+            request: {
+                 type: 'GET',
+                 url: 'http://localhost:3000/trips/' + tripId
+            }
+        });
+    })
+    .catch(err => {
+        res.status(500).json({
+            error: err
+        });
+    });
+    
+};
+
 
 exports.trips_update_trip = (req, res, next) => {
     res.status(200).json({
