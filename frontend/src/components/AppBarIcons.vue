@@ -10,8 +10,8 @@
       </v-btn>
     </div>
     <div v-if="signedIn">
-      <v-btn icon>
-        <v-icon>mdi-account</v-icon>
+      <v-btn text>
+        <v-icon class="mr-2">mdi-account</v-icon>
         {{ firstName }}
       </v-btn>
     </div>
@@ -29,9 +29,6 @@ export default {
     }
   },
   methods: {
-    toRoot() {
-      this.$router.push({ name: 'home' })
-    },
     toLogin() {
       this.$router.push({ name: 'login' })
     },

@@ -92,9 +92,11 @@ export default {
           )
           this.$store.commit('auth/login', res.data.token)
           const userId = res.data.userId
-          const firstName = axios.get('http://localhost:3000/users/' + userId)
-            .data.user.first_name
-          this.$store.commit('user/setuser', {
+          const userResponse = await axios.get(
+            'http://localhost:3000/users/' + userId
+          )
+          const firstName = userResponse.data.user.first_name
+          this.$store.commit('user/setUser', {
             id: userId,
             firstName: firstName
           })
