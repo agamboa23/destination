@@ -10,21 +10,23 @@
             outlined
             color="secondary"
             v-model="firstName"
+            type="text"
             label="First Name"
             prepend-inner-icon="mdi-pencil"
-            :rules="[rules.required]"
+            :rules="[rules.required, rules.noDigit]"
           >
           </v-text-field>
           <v-text-field
             outlined
             color="secondary"
+            type="text"
             v-model="lastName"
             label="Last Name"
             prepend-inner-icon="mdi-pencil-outline"
-            :rules="[rules.required]"
+            :rules="[rules.required, rules.noDigit]"
           >
           </v-text-field>
-          <v-select
+          <v-autocomplete
             outlined
             color="secondary"
             v-model="gender"
@@ -33,22 +35,28 @@
             prepend-inner-icon="mdi-gender-male-female"
             :rules="[rules.required]"
           >
-          </v-select>
-          <v-text-field
+          </v-autocomplete>
+          <v-select
             outlined
             color="secondary"
-            :value="age"
+            v-model="age"
             label="Age"
+            type="number"
+            :items="ages"
             prepend-inner-icon="mdi-glass-mug-variant"
-            :rules="[rules.required, rules.age]"
-          ></v-text-field>
+            :rules="[rules.required]"
+          ></v-select>
           <v-autocomplete
             outlined
             color="secondary"
             chips
+            multiple
+            prepend-inner-icon="mdi-translate"
             v-model="languages"
+            :search-input.sync="search"
             label="Languages"
             :items="langSelection"
+            :rules="[langRule]"
           ></v-autocomplete>
           <v-text-field
             color="secondary"
@@ -105,6 +113,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import langPack from '@/assets/languages'
 
 export default {
@@ -122,6 +131,7 @@ export default {
       genderSelection: ['Male', 'Female', 'Non-Binary'],
       age: 18,
       languages: [],
+      search: null,
       rules: {
         required: v => !!v || 'Required',
         email: v =>
@@ -129,7 +139,7 @@ export default {
         password: v =>
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(v) ||
           'Minimum eight characters, at least one uppercase letter, one lowercase letter and one number',
-        age: v => (v >= 18 && v <= 100) || 'Minimum Age is 18'
+        noDigit: v => /^([^0-9]*)$/.test(v) || 'No digits are allowed'
       },
       snackbar: false,
       snackcolor: '',
@@ -143,8 +153,53 @@ export default {
       this.snackcolor = color
       this.snackbar = true
     },
+    async login() {
+      const cred = {
+        email: this.email,
+        password: this.password
+      }
+      const res = await axios.post('http://localhost:3000/users/login', cred)
+      this.$store.commit('auth/login', res.data.token)
+      const userId = res.data.userId
+      const userResponse = await axios.get(
+        'http://localhost:3000/users/' + userId
+      )
+      const firstName = userResponse.data.user.first_name
+      this.$store.commit('user/setUser', {
+        id: userId,
+        firstName: firstName
+      })
+    },
     async submit() {
-      console.log(this.$refs.form.validate())
+      if (this.$refs.form.validate()) {
+        try {
+          this.loading = true
+          const user = {
+            email: this.email,
+            password: this.password,
+            first_name: this.firstName,
+            last_name: this.lastName,
+            gender: this.gender,
+            age: this.age,
+            languages: this.languages
+          }
+          const res = await axios.post(
+            'http://localhost:3000/users/signup',
+            user
+          )
+          this.login()
+          this.invokeSnackbar(res.data.message, 'success')
+          this.loading = false
+          setTimeout(() => {
+            this.$router.push({ name: 'home' })
+          }, 1500)
+        } catch (error) {
+          // this.$refs.form.reset()
+          console.log(error)
+          this.invokeSnackbar('Authorization Error', 'error')
+          this.loading = false
+        }
+      }
     }
   },
   computed: {
@@ -157,6 +212,22 @@ export default {
         result.push(langPack[i].name)
       }
       return result
+    },
+    langRule() {
+      return () =>
+        this.languages.length !== 0 || 'Atleast one language should be selected'
+    },
+    ages() {
+      const result = []
+      for (let index = 17; index < 100; index++) {
+        result.push(index + 1)
+      }
+      return result
+    }
+  },
+  watch: {
+    languages() {
+      this.search = ''
     }
   }
 }
