@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer app v-model="drawer">
+    <v-navigation-drawer v-model="drawer" app temporary>
       <v-list> </v-list>
     </v-navigation-drawer>
     <v-app-bar app color="primary">
@@ -48,7 +48,12 @@ export default {
   },
   data: () => {
     return {
-      drawer: false
+      drawer: null
+    }
+  },
+  methods: {
+    toRoot() {
+      this.$router.push({ name: 'home' })
     }
   }
 }
