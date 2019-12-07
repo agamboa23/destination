@@ -63,7 +63,7 @@ export default {
       email: '',
       password: '',
       rules: {
-        required: v => !!v || 'Required.',
+        required: v => !!v || 'Required',
         email: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'Not a valid E-Mail'
       },
       snackbar: false,

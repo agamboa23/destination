@@ -28,7 +28,7 @@
         <router-view />
       </v-container>
     </v-content>
-    <v-footer app>
+    <v-footer color="accent" padless>
       &copy; 2019 DestiNation Inc.
       <v-spacer></v-spacer>
       <v-btn text to="/about">
