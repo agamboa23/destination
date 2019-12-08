@@ -13,7 +13,7 @@
       <v-btn icon :to="{ name: 'search' }">
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
-      <v-btn text>
+      <v-btn text :to="{ name: 'user' }">
         <v-icon class="mr-2">mdi-account</v-icon>
         {{ firstName }}
       </v-btn>

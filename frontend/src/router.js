@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Authentication from './views/Authentication.vue'
 import Search from './views/Search.vue'
+import User from './views/User.vue'
 
 Vue.use(Router)
 
@@ -38,6 +39,11 @@ export default new Router({
       path: '/search',
       name: 'search',
       component: Search
+    },
+    {
+      path: '/my-profile',
+      name: 'user',
+      component: User
     }
   ]
 })

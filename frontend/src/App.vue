@@ -6,7 +6,6 @@
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
-
           <v-list-item-content>
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item-content>
@@ -70,8 +69,15 @@ export default {
           icon: 'mdi-view-dashboard',
           to: { name: 'home' }
         },
-        { title: 'Account', icon: 'mdi-account' },
-        { title: 'Admin', icon: 'mdi-gavel' }
+        {
+          title: 'Account',
+          icon: 'mdi-account',
+          to: { name: 'user' }
+        },
+        {
+          title: 'Admin',
+          icon: 'mdi-gavel'
+        }
       ]
     }
   },
