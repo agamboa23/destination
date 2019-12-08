@@ -9,6 +9,7 @@ const tripSchema = mongoose.Schema({
     },
     date_of_trip: {type: Date}, //, required: true},
     date_of_publish: {type: Date}, //, required: true},
+    origin: { type: String },
     destination: {type: String}, //, required: true},
     members: {type: Array},
     requests: {type: Array},

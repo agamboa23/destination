@@ -5,7 +5,7 @@ const User = require('../models/user');
 
 exports.trips_get_all = (req, res, next) => {
     Trip.find()
-    .select('user _id')
+    .select('user _id origin destination date_of_trip')
     .populate('user', 'user _id')
     .exec()
     .then(docs => {
@@ -14,7 +14,11 @@ exports.trips_get_all = (req, res, next) => {
             trips: docs.map(doc => {
                 return { 
                     _id: doc._id,
-                    user: doc.user,
+                    origin: doc.origin,
+                    destination: doc.destination,
+                    date: doc.date_of_trip.getFullYear() + "-" + 
+                          doc.date_of_trip.getMonth() + "-" +
+                          doc.date_of_trip.getDate(),
                     request: {
                         type: 'GET',
                         url: 'http://localhost:3000/trips/' + doc._id
@@ -68,6 +72,7 @@ exports.trips_add_trip = (req, res, next) => {
         const trip = new Trip({
             _id: new mongoose.Types.ObjectId(),
             user: userId,
+            origin: req.body.origin,
             destination: req.body.destination,
             date_of_trip: req.body.date_of_trip,
             date_of_publish: today,
@@ -121,6 +126,7 @@ exports.trip_add_request = (req, res, next) => {
         });
     });
 };
+
 /*
 * After the author accepted the request, removes the user id from trips's requests array
 * and adds it to trip's members array
@@ -148,7 +154,6 @@ exports.trip_accept_request = (req, res, next) => {
     });
     
 };
-
 
 exports.trips_update_trip = (req, res, next) => {
     res.status(200).json({
