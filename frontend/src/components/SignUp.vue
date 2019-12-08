@@ -5,7 +5,7 @@
         <v-toolbar-title>Sign-Up Form</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
-        <v-form ref="form" v-model="valid">
+        <v-form ref="form" v-model="valid" lazy-validation>
           <v-text-field
             outlined
             color="secondary"
@@ -74,15 +74,17 @@
             type="password"
             :rules="[rules.required, rules.password]"
           />
-          <v-text-field
-            v-show="!!password"
-            transition="scroll-y-transition"
-            v-model="rePassword"
-            color="secondary"
-            label="Verify Password"
-            type="password"
-            :rules="[rules.required, passwordConfirmationRule]"
-          />
+          <transition name="fade" mode="out-in">
+            <v-text-field
+              v-show="!!password"
+              transition="scroll-y-transition"
+              v-model="rePassword"
+              color="secondary"
+              label="Verify Password"
+              type="password"
+              :rules="[rules.required, passwordConfirmationRule]"
+            />
+          </transition>
         </v-form>
       </v-card-text>
       <v-card-actions>
@@ -233,4 +235,13 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
