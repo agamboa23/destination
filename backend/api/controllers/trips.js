@@ -37,6 +37,7 @@ exports.trips_get_all = (req, res, next) => {
 exports.trips_get_trip = (req, res, next) => {
     Trip.findById(req.params.tripId)
     .populate('user')
+    .select('user _id origin destination date_of_trip date_of_publish isOpen description')
     .exec()
     .then(doc => {
         if(!doc) {
@@ -78,7 +79,8 @@ exports.trips_add_trip = (req, res, next) => {
             date_of_publish: today,
             members: req.body.members,
             number_of_members: req.body.number_of_members,
-            isOpen: req.body.isOpen
+            isOpen: req.body.isOpen,
+            description: req.body.description
         });
         tripId = trip._id;
         return trip.save()
