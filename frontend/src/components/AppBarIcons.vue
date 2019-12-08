@@ -10,6 +10,9 @@
       </v-btn>
     </div>
     <div v-if="signedIn">
+      <v-btn icon :to="{ name: 'search' }">
+        <v-icon>mdi-magnify</v-icon>
+      </v-btn>
       <v-btn text>
         <v-icon class="mr-2">mdi-account</v-icon>
         {{ firstName }}
