@@ -1,7 +1,7 @@
 <template>
   <v-row align="center" justify="center">
     <v-col cols="6" md="4">
-      <p class="display-2 font-italic font-weight-bold">Search</p>
+      <p class="display-2 font-weight-light">Search</p>
       <v-form ref="form">
         <v-autocomplete
           rounded

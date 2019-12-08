@@ -1,3 +1,5 @@
+import router from '@/router.js'
+
 const getDefaultState = () => {
   return {
     signedIn: false,
@@ -14,6 +16,7 @@ const actions = {
   logout({ commit }) {
     commit('resetState')
     commit('user/resetState', null, { root: true })
+    router.push({ name: 'home' })
   }
 }
 
