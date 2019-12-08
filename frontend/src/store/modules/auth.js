@@ -1,17 +1,29 @@
-// Initial State
-const state = {
-  signedIn: false,
-  token: ''
+const getDefaultState = () => {
+  return {
+    signedIn: false,
+    token: ''
+  }
 }
+
+// Initial State
+const state = getDefaultState()
 
 const getters = {}
 
-const actions = {}
+const actions = {
+  logout({ commit }) {
+    commit('resetState')
+    commit('user/resetState', null, { root: true })
+  }
+}
 
 const mutations = {
   login(state, token) {
     state.token = token
     state.signedIn = true
+  },
+  resetState(state) {
+    Object.assign(state, getDefaultState())
   }
 }
 
