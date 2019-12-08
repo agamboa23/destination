@@ -27,6 +27,7 @@
           >
           </v-text-field>
           <v-autocomplete
+            no-data-text="Couldn't find that :("
             outlined
             color="secondary"
             v-model="gender"
@@ -47,6 +48,7 @@
             :rules="[rules.required]"
           ></v-select>
           <v-autocomplete
+            no-data-text="Couldn't find that :("
             outlined
             color="secondary"
             chips
