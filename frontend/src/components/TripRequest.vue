@@ -16,19 +16,20 @@
     </v-card-subtitle>
     <v-card-text>
       Members:
-      <span v-for="(item, index) in namedMembers()" :key="index">
-        {{ item }}
+      <span v-for="(item, index) in members" :key="index">
+        <name :id="item" />
       </span>
       <div></div>
     </v-card-text>
     <v-card-actions>
-      <div v-for="(name, index) in wantsToJoin" :key="index">
-        <span class="mr-12">{{ name }}</span>
-        <v-btn color="green" small icon>
+      <span class="overline">Requests:</span>
+      <div v-for="(name, index) in requests" :key="index">
+        <name class="mx-12" :id="name"></name>
+        <v-btn color="green" small icon @click="accept(name)">
           <v-icon>mdi-check</v-icon>
         </v-btn>
-        <v-btn small icon>
-          <v-icon></v-icon>
+        <v-btn color="red" small icon>
+          <v-icon>mdi-minus</v-icon>
         </v-btn>
       </div>
     </v-card-actions>
@@ -37,9 +38,13 @@
 
 <script>
 import axios from 'axios'
+import NameVue from './Name.vue'
 
 export default {
   name: 'TripRequest',
+  components: {
+    name: NameVue
+  },
   props: {
     tripId: String
   },
@@ -47,7 +52,6 @@ export default {
     return {
       dataReady: false,
       requests: [],
-      wantsToJoin: [],
       members: [],
       maxMembers: 0,
       origin: '',
@@ -56,43 +60,27 @@ export default {
     }
   },
   methods: {
-    async requestsWithNames() {
-      var result = []
-      for (let i = 0; i < this.requests.length; i++) {
-        const res = await axios.get(
-          'http://localhost:3000/users/' + this.requests[i]
-        )
-        const resData = res.data
-        const name = resData.first_name + ' ' + resData.last_name
-        result.push(name)
-      }
-      return result
+    async accept(id) {
+      await axios.patch(
+        'http://localhost:3000/trips/accreq/' + this.tripId + '/' + id
+      )
+      this.init()
     },
-    async namedMembers() {
-      var result = []
-      for (let i = 0; i < this.members.length; i++) {
-        const res = await axios.get(
-          'http://localhost:3000/users/' + this.members[i]
-        )
-        const resData = res.data
-        const name = resData.first_name + ' ' + resData.last_name
-        result.push(name)
-      }
-      return result
+    async init() {
+      const res = await axios.get('http://localhost:3000/trips/' + this.tripId)
+      const resData = res.data.trip
+      this.requests = resData.requests
+      this.members = resData.members
+      this.maxMembers = resData.number_of_members
+      this.origin = resData.origin
+      this.destination = resData.destination
+      const dateArr = resData.date_of_trip.split('T')
+      this.date = dateArr[0]
+      this.dataReady = true
     }
   },
-  async mounted() {
-    const res = await axios.get('http://localhost:3000/trips/' + this.tripId)
-    const resData = res.data.trip
-    this.requests = resData.requests
-    this.wantsToJoin = this.requestsWithNames()
-    this.members = resData.members
-    this.maxMembers = resData.number_of_members
-    this.origin = resData.origin
-    this.destination = resData.destination
-    const dateArr = resData.date_of_trip.split('T')
-    this.date = dateArr[0]
-    this.dataReady = true
+  mounted() {
+    this.init()
   }
 }
 </script>
