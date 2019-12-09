@@ -190,3 +190,22 @@ exports.users_delete_user =  (req, res, next) => {
         });
     });
 };
+
+exports.remove_trip_from_user_trips_array = (req, res, next) => {
+    const userId = req.params.userId;
+    const tripId = req.params.tripId;
+    User.update(
+        { _id: userId }, 
+        { $pull: {trips: { $in: [tripId]} } })
+    .exec()
+    .then( result => {
+        res.status(200).json({
+            message: 'User updated'
+        });
+    })
+    .catch(err => {
+        res.status(500).json({
+            error: err
+        });
+    });
+}
