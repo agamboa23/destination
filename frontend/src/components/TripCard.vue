@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" max-width="400" outlined>
+  <v-card v-if="dataReady" class="mx-auto" max-width="400" outlined>
     <v-list-item three-line>
       <v-list-item-content>
         <div class="overline mb-4">From {{ origin }}</div>
@@ -18,7 +18,7 @@
       <v-btn text>Join</v-btn>
       <v-spacer></v-spacer>
       <span class="subtitle-1 mx-2">
-        {{ trip.members.length }}/{{ trip.number_of_members }}
+        <!-- {{ trip.members.length }}/{{ trip.number_of_members }} -->
       </span>
     </v-card-actions>
   </v-card>
@@ -37,17 +37,15 @@ export default {
   },
   data: () => {
     return {
-      trip: null
+      dataReady: false,
+      trip: {}
     }
   },
-  methods: {
-    async getTrip() {
-      const res = await axios.get('http://localhost:3000/trips/' + this.id)
-      this.trip = res.data.trip
-    }
-  },
-  mounted() {
-    this.getTrip()
+  methods: {},
+  async mounted() {
+    const res = await axios.get('http://localhost:3000/trips/' + this.id)
+    this.trip = res.data.trip
+    this.dataReady = true
   }
 }
 </script>
