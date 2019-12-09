@@ -4,7 +4,7 @@ import Home from './views/Home.vue'
 import Authentication from './views/Authentication.vue'
 import Search from './views/Search.vue'
 import User from './views/User.vue'
-import TripResult from './views/TripResult.vue'
+import UpcomingTrips from './views/UpcomingTrips.vue'
 
 Vue.use(Router)
 
@@ -49,7 +49,7 @@ export default new Router({
     {
       path: '/upcoming-trips',
       name: 'upcoming',
-      component: TripResult
+      component: UpcomingTrips
     }
   ]
 })
