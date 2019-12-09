@@ -21,7 +21,7 @@
       </v-list-item-avatar>
     </v-list-item>
     <v-card-actions>
-      <v-btn text>Join</v-btn>
+      <v-btn text>Click for Details</v-btn>
       <v-spacer></v-spacer>
       <span class="subtitle-1 mx-2">
         {{ trip.members.length }}/{{ trip.number_of_members }}

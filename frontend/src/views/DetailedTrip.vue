@@ -34,8 +34,15 @@
           </v-col>
         </v-row>
         <v-card-actions>
-          <v-btn class="mx-2 mb-2" color="secondary" depressed>
-            Join Trip
+          <v-btn
+            :loading="loading"
+            :disabled="loading"
+            class="mx-2 mb-2"
+            :color="!tripUpdated ? 'secondary' : 'success'"
+            depressed
+            @click="joinTrip()"
+          >
+            {{ buttonText }}
           </v-btn>
           <v-spacer></v-spacer>
           <v-btn color="secondary" icon>
@@ -48,12 +55,16 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import axios from 'axios'
 
 export default {
   name: 'DetailedTripView',
   data: () => {
     return {
+      loading: false,
+      tripUpdated: false,
+      buttonText: 'Send Join Request',
       tripId: '',
       numberOfMembers: 0,
       maxMembers: 0,
@@ -63,6 +74,38 @@ export default {
       description: '',
       date: ''
     }
+  },
+  methods: {
+    async joinTrip() {
+      try {
+        this.loading = true
+        if (this.userId) {
+          const res = await axios.patch(
+            'http://localhost:3000/trips/addreq/' +
+              this.tripId +
+              '/' +
+              this.userId
+          )
+          const resData = res.data.message
+          if (resData === 'Trip updated') {
+            this.buttonText = 'Trip Updated'
+            this.tripUpdated = true
+            this.loading = false
+          }
+        } else {
+          this.buttonText = 'Not Signed In'
+          this.loading = false
+        }
+      } catch (error) {
+        this.loading = false
+        console.log(error)
+      }
+    }
+  },
+  computed: {
+    ...mapState('user', {
+      userId: 'id'
+    })
   },
   created() {
     this.tripId = this.$route.params.tripId
