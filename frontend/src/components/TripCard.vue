@@ -18,7 +18,7 @@
       <v-btn text>Join</v-btn>
       <v-spacer></v-spacer>
       <span class="subtitle-1 mx-2">
-        <!-- {{ trip.members.length }}/{{ trip.number_of_members }} -->
+        {{ trip.members.length }}/{{ trip.number_of_members }}
       </span>
     </v-card-actions>
   </v-card>
