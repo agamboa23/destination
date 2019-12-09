@@ -88,7 +88,7 @@ export default {
           )
           const resData = res.data.message
           if (resData === 'Trip updated') {
-            this.buttonText = 'Trip Updated'
+            this.buttonText = 'Request Sent'
             this.tripUpdated = true
             this.loading = false
           }
