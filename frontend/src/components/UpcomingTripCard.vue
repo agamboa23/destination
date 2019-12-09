@@ -28,7 +28,7 @@
 import axios from 'axios'
 
 export default {
-  name: 'TripCard',
+  name: 'UpcomingTripCard',
   props: {
     origin: String,
     destination: String,

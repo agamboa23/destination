@@ -40,12 +40,12 @@
 
 <script>
 import axios from 'axios'
-import TripCardVue from '../components/TripCard.vue'
+import UpcomingTripCardVue from '../components/UpcomingTripCard.vue'
 
 export default {
   name: 'UpcomingTrips',
   components: {
-    'trip-card': TripCardVue
+    'trip-card': UpcomingTripCardVue
   },
   data: () => {
     return {
