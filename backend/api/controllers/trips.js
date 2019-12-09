@@ -69,7 +69,7 @@ exports.trips_add_trip = (req, res, next) => {
             return res.status(404).json({
                 message: 'User not found'
             });
-        }
+        };
         const trip = new Trip({
             _id: new mongoose.Types.ObjectId(),
             user: userId,
@@ -164,7 +164,9 @@ exports.trips_update_trip = (req, res, next) => {
 };
 
 exports.trips_delete_trip = (req, res, next) => {
-    Trip.remove({ _id: req.params.tripId })
+    const userId = req.params.userId;
+    const tripId = req.params.tripId;
+    Trip.deleteOne({ _id: tripId })
     .exec()
     .then(result => {
         res.status(200).json({
@@ -181,5 +183,5 @@ exports.trips_delete_trip = (req, res, next) => {
         res.status(500).json({
             error: err
         });
-    });
+    })
 };
