@@ -37,7 +37,7 @@ exports.trips_get_all = (req, res, next) => {
 exports.trips_get_trip = (req, res, next) => {
     Trip.findById(req.params.tripId)
     .populate('user')
-    .select('user _id origin destination date_of_trip date_of_publish isOpen description')
+    .select('user _id origin destination date_of_trip date_of_publish isOpen description members number_of_members requests')
     .exec()
     .then(doc => {
         if(!doc) {
