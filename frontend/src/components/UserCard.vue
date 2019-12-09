@@ -1,11 +1,21 @@
 <template>
   <v-card>
-    dıghehgoıesghoıdhtgıoehg
+    {{ id }}
   </v-card>
 </template>
 
 <script>
-export default {}
+import { mapState } from 'vuex'
+
+export default {
+  name: 'UserCard',
+  computed: {
+    ...mapState('user', ['id'])
+  },
+  mounted() {
+    console.log('Al id', this.id)
+  }
+}
 </script>
 
 <style></style>

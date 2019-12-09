@@ -71,7 +71,6 @@ export default {
     }
   },
   async mounted() {
-    console.log('MOUNTED')
     this.init().then(() => {
       this.items = this.res.data
       this.dataReady = true

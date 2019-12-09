@@ -5,6 +5,7 @@ import Authentication from './views/Authentication.vue'
 import Search from './views/Search.vue'
 import User from './views/User.vue'
 import UpcomingTrips from './views/UpcomingTrips.vue'
+import DetailedTrip from './views/DetailedTrip.vue'
 
 Vue.use(Router)
 
@@ -50,6 +51,11 @@ export default new Router({
       path: '/upcoming-trips',
       name: 'upcoming',
       component: UpcomingTrips
+    },
+    {
+      path: '/upcoming-trips/trip-to-:destination',
+      name: 'detailedTripView',
+      component: DetailedTrip
     }
   ]
 })

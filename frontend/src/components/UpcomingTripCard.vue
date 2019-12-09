@@ -1,5 +1,11 @@
 <template>
-  <v-card v-if="dataReady" class="mx-auto" max-width="400" outlined>
+  <v-card
+    v-if="dataReady"
+    class="mx-auto"
+    max-width="400"
+    outlined
+    @click="toDetailedTrip()"
+  >
     <v-list-item three-line>
       <v-list-item-content>
         <div class="overline mb-4">From {{ origin }}</div>
@@ -41,7 +47,14 @@ export default {
       trip: {}
     }
   },
-  methods: {},
+  methods: {
+    toDetailedTrip() {
+      this.$router.push({
+        name: 'detailedTripView',
+        params: { destination: this.destination, tripId: this.id }
+      })
+    }
+  },
   async mounted() {
     const res = await axios.get('http://localhost:3000/trips/' + this.id)
     this.trip = res.data.trip
