@@ -1,14 +1,41 @@
 <template>
-  <v-row align="center" justify="center">
-    <v-col cols="10" v-for="(item, key) in items.trips" :key="key">
-      <trip-card
-        :origin="item.origin"
-        :destination="item.destination"
-        :date="item.date"
-        :id="item._id"
-      />
-    </v-col>
-  </v-row>
+  <div>
+    <div v-if="isEven">
+      <v-row align="center" justify="center">
+        <v-col cols="5" v-for="(item, index) in items.trips" :key="index">
+          <trip-card
+            :origin="item.origin"
+            :destination="item.destination"
+            :date="item.date"
+            :id="item._id"
+          />
+        </v-col>
+      </v-row>
+    </div>
+    <div v-if="!isEven">
+      <v-row align="center" justify="center">
+        <v-col cols="5" v-for="(item, index) in evenTrips" :key="index">
+          <trip-card
+            :origin="item.origin"
+            :destination="item.destination"
+            :date="item.date"
+            :id="item._id"
+          />
+        </v-col>
+      </v-row>
+      <v-row align="center" justify="center">
+        <v-col cols="5">
+          <trip-card
+            :origin="items.trips[items.trips.length - 1].origin"
+            :destination="items.trips[items.trips.length - 1].destination"
+            :date="items.trips[items.trips.length - 1].date"
+            :id="items.trips[items.trips.length - 1]._id"
+          />
+        </v-col>
+        <v-col cols="5"></v-col>
+      </v-row>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -34,6 +61,16 @@ export default {
         trips: res.data.trips
       }
       this.items = result
+    }
+  },
+  computed: {
+    isEven() {
+      return this.items.count % 2 == 0
+    },
+    evenTrips() {
+      const copy = [...this.items.trips]
+      copy.pop()
+      return copy
     }
   },
   mounted() {
