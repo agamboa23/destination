@@ -29,7 +29,7 @@
           <v-col class="overline ml-4 text-justify-center" cols="5">
             Languages spoken by Host:
           </v-col>
-          <v-col cols="3" v-for="(item, index) in userLangs" :key="index">
+          <v-col cols="2" v-for="(item, index) in userLangs" :key="index">
             <v-chip color="accent" small>{{ item }}</v-chip>
           </v-col>
         </v-row>
