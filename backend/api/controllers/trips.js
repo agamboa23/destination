@@ -6,7 +6,7 @@ const User = require('../models/user');
 exports.trips_get_all = (req, res, next) => {
     Trip.find()
     .select('user _id origin destination date_of_trip')
-    .populate('user', 'user _id')
+    .populate('user', 'user _id first_name')
     .exec()
     .then(docs => {
         res.status(200).json({
@@ -19,11 +19,104 @@ exports.trips_get_all = (req, res, next) => {
                     date: doc.date_of_trip.getFullYear() + "-" + 
                           doc.date_of_trip.getMonth() + "-" +
                           doc.date_of_trip.getDate(),
+                    user: doc.user,
                     request: {
                         type: 'GET',
                         url: 'http://localhost:3000/trips/' + doc._id
                     }
                 }
+            })
+        });
+    })
+    .catch(err => {
+        res.status(500).json({
+            error: err
+        });
+    });
+};
+
+exports.trips_get_all_upcoming_trips = (req, res, next) => {
+    const now = new Date();
+    Trip.find({ date_of_trip: { $gt: now } })
+    .select('user _id origin destination date_of_trip')
+    .populate('user', 'user _id first_name')
+    .exec()
+    .then(docs => {
+        res.status(200).json({
+            count: docs.length,
+            trips: docs.map(doc => {
+                    return {
+                            _id: doc._id,
+                            isUpcoming: doc.isUpcoming,
+                            origin: doc.origin,
+                            destination: doc.destination,
+                            date: doc.date_of_trip.getFullYear() + "-" + 
+                                  Number(doc.date_of_trip.getMonth() + 1) + "-" +
+                                  doc.date_of_trip.getDate(),
+                            user: doc.user
+                    }
+            })
+        });
+    })
+    .catch(err => {
+        res.status(500).json({
+            error: err
+        });
+    });
+};
+
+exports.trips_get_upcoming_trips_of_user = (req, res, next) => {
+    const now = new Date();
+    const userId = req.params.userId;
+    Trip.find({ date_of_trip: { $gt: now }, user: userId})
+    .select('user _id origin destination date_of_trip')
+    .populate('user', 'user _id first_name')
+    .exec()
+    .then(docs => {
+        res.status(200).json({
+            count: docs.length,
+            trips: docs.map(doc => {
+                    return {
+                            _id: doc._id,
+                            isUpcoming: doc.isUpcoming,
+                            origin: doc.origin,
+                            destination: doc.destination,
+                            date: doc.date_of_trip.getFullYear() + "-" + 
+                                  Number(doc.date_of_trip.getMonth() + 1) + "-" +
+                                  doc.date_of_trip.getDate(),
+                            user: doc.user
+                    }
+            })
+        });
+    })
+    .catch(err => {
+        res.status(500).json({
+            error: err
+        });
+    });
+};
+
+exports.trips_get_completed_trips_of_user = (req, res, next) => {
+    const now = new Date();
+    const userId = req.params.userId;
+    Trip.find({ date_of_trip: { $lt: now }, user: userId})
+    .select('user _id origin destination date_of_trip')
+    .populate('user', 'user _id first_name')
+    .exec()
+    .then(docs => {
+        res.status(200).json({
+            count: docs.length,
+            trips: docs.map(doc => {
+                    return {
+                            _id: doc._id,
+                            isUpcoming: doc.isUpcoming,
+                            origin: doc.origin,
+                            destination: doc.destination,
+                            date: doc.date_of_trip.getFullYear() + "-" + 
+                                  Number(doc.date_of_trip.getMonth() + 1) + "-" +
+                                  doc.date_of_trip.getDate(),
+                            user: doc.user
+                    }
             })
         });
     })
@@ -79,7 +172,6 @@ exports.trips_add_trip = (req, res, next) => {
             date_of_publish: today,
             members: req.body.members,
             number_of_members: req.body.number_of_members,
-            isOpen: req.body.isOpen,
             description: req.body.description
         });
         tripId = trip._id;
@@ -164,13 +256,32 @@ exports.trips_update_trip = (req, res, next) => {
 };
 
 exports.trips_delete_trip = (req, res, next) => {
-    const userId = req.params.userId;
-    const tripId = req.params.tripId;
     Trip.deleteOne({ _id: tripId })
     .exec()
     .then(result => {
         res.status(200).json({
             message: 'Trip deleted',
+            request: {
+                type: 'POST',
+                url: 'http://localhost:3000/trips/',
+                body: { userId: 'ID'}
+            }
+        });
+    })
+    .catch(err => {
+        console.log(err),
+        res.status(500).json({
+            error: err
+        });
+    })
+};
+
+exports.trips_delete_all = (req, res, next) => {
+    Trip.deleteMany()
+    .exec()
+    .then(result => {
+        res.status(200).json({
+            message: 'All trips deleted',
             request: {
                 type: 'POST',
                 url: 'http://localhost:3000/trips/',

@@ -13,9 +13,8 @@ const tripSchema = mongoose.Schema({
     destination: {type: String}, //, required: true},
     members: {type: Array},
     requests: {type: Array},
-    number_of_members: {type: Number},
-    isOpen: { type: Boolean },
-    description: { type: String}
+    number_of_members: { type: Number },
+    description: { type: String }
 });
 
 module.exports = mongoose.model('Trip', tripSchema);
