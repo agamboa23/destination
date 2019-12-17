@@ -83,7 +83,8 @@ export default {
   },
   methods: {
     toRoot() {
-      this.$router.push({ name: 'home' })
+      // eslint-disable-next-line no-unused-vars
+      this.$router.push({ name: 'home' }).catch(err => {})
     },
     logOut() {
       this.$store.dispatch('auth/logout')
