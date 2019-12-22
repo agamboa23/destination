@@ -14,7 +14,9 @@ const tripSchema = mongoose.Schema({
     members: {type: Array},
     requests: {type: Array},
     number_of_members: { type: Number },
-    description: { type: String }
+    description: { type: String },
+    ratings: { type: Array },
+    reviews: { type: Array }
 });
 
 module.exports = mongoose.model('Trip', tripSchema);
