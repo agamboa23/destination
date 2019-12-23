@@ -8,12 +8,15 @@ const userRoutes = require('./api/routes/users');
 const tripRoutes = require('./api/routes/trips');
 const profileRoutes = require('./api/routes/profiles');
 const locationRoutes = require('./api/routes/locations');
+const notificationRoutes = require('./api/routes/notifications');
 
 mongoose.connect(
     "mongodb+srv://destination:destination@cluster0-4yfyz.mongodb.net/test?retryWrites=true&w=majority",
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
+        useFindAndModify: false,
+        useCreateIndex: true
     }
 );
 app.use(morgan('dev'));
@@ -36,6 +39,7 @@ app.use('/users', userRoutes);
 app.use('/trips', tripRoutes);
 app.use('/profiles', profileRoutes);
 app.use('/locations', locationRoutes);
+app.use('/notifications', notificationRoutes);
 
 app.use((req,res,next) => {
     const error = new Error('Not found');

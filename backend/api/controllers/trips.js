@@ -3,6 +3,18 @@ const nodemailer = require('nodemailer');
 
 const Trip = require('../models/trip');
 const User = require('../models/user');
+const Notification = require('../models/notification');
+
+let transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    requireTLS: true,
+    auth: {
+        user: 'ddestinnation@gmail.com',
+        pass: 'nationdesti15102019'
+    },
+});
 
 exports.trips_get_all = (req, res, next) => {
     Trip.find()
@@ -169,9 +181,11 @@ exports.trips_add_trip = (req, res, next) => {
             date_of_trip: req.body.date_of_trip,
             date_of_publish: today,
             members: req.body.members,
+            requests: req.body.requests,
             number_of_members: req.body.number_of_members,
             description: req.body.description
         });
+        sendConfirmation(user, trip);
         tripId = trip._id;
         return trip.save()
                     .then((doc) => 
@@ -197,7 +211,45 @@ exports.trips_add_trip = (req, res, next) => {
     }); 
 };
 
+async function sendConfirmation(user, trip){
+    let membersNames = [];
+    for(let member of trip.members){
+        await User.findById(member, function(err, data){
+             return membersNames.push(" " + data.first_name)
+        });
+    };
+    let lastMember = membersNames.pop();
+    const output = `<p> You have successfully created a trip</p>
+                    <h3>Trip details</h3>
+                    <ul>
+                        <li>Your trip from ${trip.origin} to ${trip.destination}
+                            unfolds on ${trip.date_of_trip}</li>
+                        <li>At the moment ${membersNames} and ${lastMember} are joining your trip</li>
+                        <li>If you wish to see more details please use the web app</li>
+                    </ul>`;            
+    let HelperOptions = {
+        from: '"Your DestiNation Team" ddestinnation@gmail.com',
+        to: user.email,
+        subject: 'Trip Confirmation',
+        html: output
+    };
+    transporter.sendMail(HelperOptions, (error, info) => {
+        if (error) {
+            console.log(error);
+            res.status(200).json({
+                error: error
+            });
+            return;
+        };
+        console.log("The message was sent!");
+        res.status(200).json({
+            message: "The message was sent!"
+        });
+    });
+};
+
 // After the user requested to join the trip, adds the user id to trip's requests
+// and adds the request notification to the author of the trip
 exports.trip_add_request = (req, res, next) => {
     const tripId = req.params.tripId;
     const userId = req.params.userId;
@@ -217,6 +269,29 @@ exports.trip_add_request = (req, res, next) => {
             error: err
         });
     });
+    makeRequestNotification(tripId);
+};
+
+async function makeRequestNotification(tripId){
+    let authorId;
+    await Trip.findById(tripId, function(err, data){
+        console.log("unutar: " + data.user);
+        authorId = data.user;
+    });
+    console.log(authorId);
+    const notification = new Notification({
+        _id: new mongoose.Types.ObjectId(),
+        tripId: tripId,
+        userId: authorId,
+        date: new Date(),
+        type: "request",
+        isRead: false,
+    });
+    return notification.save()
+                    .then((doc) => 
+                        User.findOneAndUpdate(
+                            { _id: authorId }, 
+                            { $addToSet: { notifications: [doc._id] } }));
 };
 
 /*
@@ -254,7 +329,8 @@ exports.trips_update_trip = (req, res, next) => {
 };
 
 exports.trips_delete_trip = (req, res, next) => {
-    Trip.deleteOne({ _id: tripId })
+    const id = req.params.tripId;
+    Trip.deleteOne({ _id: id })
     .exec()
     .then(result => {
         res.status(200).json({
@@ -295,48 +371,3 @@ exports.trips_delete_all = (req, res, next) => {
     })
 };
 
-exports.trips_send_email_confirmation = (req, res, next) => {
-    const email = req.body.email;
-    const output = `
-      <p> You have successfully created a trip</p>
-      <h3>Trip details</h3>
-      <ul>
-        <li>Your trip from ${req.body.origin} to ${req.body.destination}
-            unfolds on ${req.body.date_of_trip}</li>
-        <li>At the moment ${req.body.members} are joining your trip</li>
-        <li>If you wish to see more details please use the web app</li>
-      </ul>
-    `;
-    let transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false,
-        requireTLS: true,
-        auth: {
-            user: 'ddestinnation@gmail.com',
-            pass: 'nationdesti15102019'
-        },
-    });
-  
-    let HelperOptions = {
-      from: '"Your DestiNation Team" ddestinnation@gmail.com',
-      to: email,
-      subject: 'Trip Confirmation',
-      html: output
-    };
-  
-    transporter.sendMail(HelperOptions, (error, info) => {
-      if (error) {
-        console.log(error);
-        res.status(200).json({
-          error: error
-        });
-        return
-      }
-      console.log("The message was sent!");
-      console.log(info);
-      res.status(200).json({
-        message: "The message was sent!"
-      });
-    });
-  };

@@ -16,7 +16,8 @@ const userSchema = mongoose.Schema({
     languages: {type: Array},
     trips: {type: Array},
     profile_id: {type: Number},
-    userImage: {type: String}
+    userImage: {type: String},
+    notifications: {type: Array}
 });
 
 module.exports = mongoose.model('User', userSchema);
