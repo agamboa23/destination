@@ -293,23 +293,26 @@ exports.trip_add_request = (req, res, next) => {
             error: err
         });
     });
-    makeRequestNotification(tripId);
+    makeRequestNotification(tripId, userId);
 };
 
-async function makeRequestNotification(tripId){
+async function makeRequestNotification(tripId, userId){
     let authorId;
+    let destination;
     await Trip.findById(tripId, function(err, data){
-        console.log("unutar: " + data.user);
         authorId = data.user;
+        destination = data.destination;
     });
     console.log(authorId);
     const notification = new Notification({
         _id: new mongoose.Types.ObjectId(),
-        tripId: tripId,
         userId: authorId,
+        tripId: tripId,
+        memberId: userId,
         date: new Date(),
         type: "request",
         isRead: false,
+        message: "You have a new request for your trip to " + destination,
     });
     return notification.save()
                     .then((doc) => 
@@ -343,13 +346,39 @@ exports.trip_accept_request = (req, res, next) => {
             error: err
         });
     });
-    
+    makeAcceptNotification(tripId, userId)
 };
 
 
 // TODO: make notification and add it to the accepted user's notifications
-async function makeAcceptNotification(){
-
+async function makeAcceptNotification(tripId, userId){
+    let authorId;
+    let destination;
+    await Trip.findById(tripId, function(err, data){
+        console.log("unutar: " + data.user);
+        authorId = data.user;
+        destination = data.destination;
+    });
+    console.log(authorId);
+    await User.findById(authorId, function(err, data){
+        console.log(data);
+    });
+    console.log(authorId);
+    const notification = new Notification({
+        _id: new mongoose.Types.ObjectId(),
+        userId: userId,
+        tripId: tripId,
+        memberId: authorId,
+        date: new Date(),
+        type: "acceptance",
+        isRead: false,
+        message: "Your request to join the trip to " + destination + " was accepted."
+    });
+    return notification.save()
+                    .then((doc) => 
+                        User.findOneAndUpdate(
+                            { _id: userId }, 
+                            { $addToSet: { notifications: [doc._id] } }));
 };
 
 

@@ -15,6 +15,7 @@ const userSchema = mongoose.Schema({
     age: {type: Number},
     languages: {type: Array},
     trips: {type: Array},
+    joined_trips: {type: Array},
     profile_id: {type: Number},
     userImage: {type: String},
     notifications: {type: Array}

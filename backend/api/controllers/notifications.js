@@ -4,7 +4,7 @@ const Notification = require('../models/notification');
 
 exports.notifications_get_all = (req, res, next) => {
     Notification.find()
-    .select('_id')
+    .select('_id userId tripId type date memberId message')
     .exec()
     .then(docs => {
         res.status(200).json({
@@ -15,7 +15,9 @@ exports.notifications_get_all = (req, res, next) => {
                     type: doc.type,
                     userId: doc.userId,
                     tripId: doc.tripId,
+                    memberId: doc.memberId,
                     date: doc.date,
+                    message: doc.message,
                     request: {
                         type: 'GET',
                         url: 'http://localhost:3000/notifications/' + doc._id
@@ -66,7 +68,7 @@ exports.notifications_get_unread_notifications_of_user = (req, res, next) => {
 exports.notifications_get_notification = (req, res, next) => {
     Notification.findById(req.params.notificationId)
     .populate('user')
-    .select('_id tripId userId type date isRead')
+    .select('_id tripId userId memberId type date isRead message')
     .exec()
     .then(doc => {
         if(!doc) {
