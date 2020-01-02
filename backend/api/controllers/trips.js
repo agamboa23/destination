@@ -213,20 +213,44 @@ exports.trips_add_trip = (req, res, next) => {
 
 async function sendConfirmation(user, trip){
     let membersNames = [];
+    let output;
     for(let member of trip.members){
         await User.findById(member, function(err, data){
              return membersNames.push(" " + data.first_name)
         });
     };
-    let lastMember = membersNames.pop();
-    const output = `<p> You have successfully created a trip</p>
-                    <h3>Trip details</h3>
-                    <ul>
-                        <li>Your trip from ${trip.origin} to ${trip.destination}
-                            unfolds on ${trip.date_of_trip}</li>
-                        <li>At the moment ${membersNames} and ${lastMember} are joining your trip</li>
-                        <li>If you wish to see more details please use the web app</li>
-                    </ul>`;            
+    switch(membersNames.length) {
+        case 0:
+            output = `<p> You have successfully created a trip</p>
+            <h3>Trip details</h3>
+            <ul>
+                <li>Your trip from ${trip.origin} to ${trip.destination}
+                    unfolds on ${trip.date_of_trip}</li>
+                <li>At the moment there are no members joining your trip</li>
+                <li>If you wish to see more details please use the web app</li>
+            </ul>`;
+            break;
+        case 1:
+            output = `<p> You have successfully created a trip</p>
+            <h3>Trip details</h3>
+            <ul>
+                <li>Your trip from ${trip.origin} to ${trip.destination}
+                    unfolds on ${trip.date_of_trip}</li>
+                <li>At the moment ${membersNames} is joining your trip</li>
+                <li>If you wish to see more details please use the web app</li>
+            </ul>`;
+            break;
+        default:
+            let lastMember = membersNames.pop();
+            output = `<p> You have successfully created a trip</p>
+                        <h3>Trip details</h3>
+                        <ul>
+                            <li>Your trip from ${trip.origin} to ${trip.destination}
+                                unfolds on ${trip.date_of_trip}</li>
+                            <li>At the moment ${membersNames} and ${lastMember} are joining your trip</li>
+                            <li>If you wish to see more details please use the web app</li>
+                        </ul>`;
+    };     
     let HelperOptions = {
         from: '"Your DestiNation Team" ddestinnation@gmail.com',
         to: user.email,
@@ -321,6 +345,13 @@ exports.trip_accept_request = (req, res, next) => {
     });
     
 };
+
+
+// TODO: make notification and add it to the accepted user's notifications
+async function makeAcceptNotification(){
+
+};
+
 
 exports.trips_update_trip = (req, res, next) => {
     res.status(200).json({
