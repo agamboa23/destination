@@ -323,7 +323,7 @@ async function makeRequestNotification(tripId, userId){
 
 /*
 * After the author accepted the request, removes the user id from trips's requests array
-* and adds it to trip's members array
+* and adds it to trip's members array, plus makes accept notification for user
 */
 exports.trip_accept_request = (req, res, next) => {
     const tripId = req.params.tripId;
@@ -382,6 +382,63 @@ async function makeAcceptNotification(tripId, userId){
                             { $addToSet: { notifications: [doc._id] } }));
 };
 
+/*
+* After the author rejected the request, removes the user id from trips's requests array
+* and makes a rejection notification for user
+*/
+exports.trip_reject_request = (req, res, next) => {
+    const tripId = req.params.tripId;
+    const userId = req.params.userId;
+    Trip.update(
+        { _id: tripId },
+        { $pull: {requests: { $in: [userId] }}})
+    .exec()
+    .then(result => {
+        res.status(200).json({
+            message: 'Trip updated',
+            request: {
+                 type: 'GET',
+                 url: 'http://localhost:3000/trips/' + tripId
+            }
+        });
+    })
+    .catch(err => {
+        res.status(500).json({
+            error: err
+        });
+    });
+    makeRejectionNotification(tripId, userId)
+};
+
+async function makeRejectionNotification(tripId, userId){
+    let authorId;
+    let destination;
+    await Trip.findById(tripId, function(err, data){
+        console.log("unutar: " + data.user);
+        authorId = data.user;
+        destination = data.destination;
+    });
+    console.log(authorId);
+    await User.findById(authorId, function(err, data){
+        console.log(data);
+    });
+    console.log(authorId);
+    const notification = new Notification({
+        _id: new mongoose.Types.ObjectId(),
+        userId: userId,
+        tripId: tripId,
+        memberId: authorId,
+        date: new Date(),
+        type: "rejection",
+        isRead: false,
+        message: "Your request to join the trip to " + destination + " was rejected."
+    });
+    return notification.save()
+                    .then((doc) => 
+                        User.findOneAndUpdate(
+                            { _id: userId }, 
+                            { $addToSet: { notifications: [doc._id] } }));
+};
 
 exports.trips_update_trip = (req, res, next) => {
     res.status(200).json({
