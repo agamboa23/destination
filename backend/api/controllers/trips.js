@@ -180,7 +180,7 @@ exports.trips_add_trip = (req, res, next) => {
             destination: req.body.destination,
             date_of_trip: req.body.date_of_trip,
             date_of_publish: today,
-            members: req.body.members,
+            members: [userId],
             requests: req.body.requests,
             number_of_members: req.body.number_of_members,
             description: req.body.description
@@ -349,8 +349,6 @@ exports.trip_accept_request = (req, res, next) => {
     makeAcceptNotification(tripId, userId)
 };
 
-
-// TODO: make notification and add it to the accepted user's notifications
 async function makeAcceptNotification(tripId, userId){
     let authorId;
     let destination;
@@ -374,6 +372,9 @@ async function makeAcceptNotification(tripId, userId){
         isRead: false,
         message: "Your request to join the trip to " + destination + " was accepted."
     });
+    await User.findOneAndUpdate(
+        { _id: userId }, 
+        { $addToSet: { joined_trips: [tripId] } });
     return notification.save()
                     .then((doc) => 
                         User.findOneAndUpdate(
