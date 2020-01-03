@@ -17,7 +17,7 @@
     <v-card-text>
       Members:
       <span v-for="(item, index) in members" :key="index">
-        <name :id="item" />
+        <name :id="item" /> /
       </span>
     </v-card-text>
     <v-card-actions>
