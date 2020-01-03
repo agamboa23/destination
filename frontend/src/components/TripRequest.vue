@@ -19,7 +19,6 @@
       <span v-for="(item, index) in members" :key="index">
         <name :id="item" />
       </span>
-      <div></div>
     </v-card-text>
     <v-card-actions>
       <span class="overline">Requests:</span>
@@ -79,7 +78,7 @@ export default {
       this.dataReady = true
     }
   },
-  mounted() {
+  created() {
     this.init()
   }
 }
