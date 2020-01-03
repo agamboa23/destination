@@ -53,7 +53,7 @@ export default new Router({
       component: UpcomingTrips
     },
     {
-      path: '/upcoming-trips/trip-to-:destination',
+      path: '/upcoming-trips/trip-to-:destination-:tripId',
       name: 'detailedTripView',
       component: DetailedTrip
     }
