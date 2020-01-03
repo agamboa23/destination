@@ -1,7 +1,7 @@
 <template>
   <v-row align="center" justify="center">
     <v-col cols="12">
-      <v-card class="mx-auto" max-width="500">
+      <v-card v-if="dataReady" class="mx-auto" max-width="500">
         <v-img
           class="white--text align-end"
           height="200px"
@@ -66,6 +66,7 @@ export default {
   name: 'DetailedTripView',
   data: () => {
     return {
+      dataReady: false,
       loading: false,
       tripUpdated: false,
       buttonText: 'Send Join Request',
@@ -130,6 +131,7 @@ export default {
         this.destination
     )
     this.imgSrc = imgRes.data.items[0].link
+    this.dataReady = true
   }
 }
 </script>
