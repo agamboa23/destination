@@ -13,6 +13,7 @@ router.get('/:tripId', TripsController.trips_get_trip);
 router.patch('/:tripId', TripsController.trips_update_trip);
 router.patch('/addreq/:tripId/:userId', TripsController.trip_add_request);
 router.patch('/accreq/:tripId/:userId', TripsController.trip_accept_request);
+router.patch('/rejectreq/:tripId/:userId', TripsController.trip_reject_request);
 router.delete('/:tripId', TripsController.trips_delete_trip);
 router.delete('/', TripsController.trips_delete_all);
 
