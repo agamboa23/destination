@@ -17,7 +17,7 @@ const destinations = [
   {
     name: 'Tegernsee',
     logo:
-      'https://www.google.com/search?q=tegernsee+wappen&sxsrf=ACYBGNT60egP5-QulD29WlpCwoaJtU2seA:1578067875650&source=lnms&tbm=isch&sa=X&ved=2ahUKEwiYi6P56OfmAhWJyqYKHRpDC1QQ_AUoAXoECAwQAw&biw=1280&bih=610#imgrc=oA4CXd7yWTokmM:'
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Wappen_Tegernsee.svg/878px-Wappen_Tegernsee.svg.png'
   },
   {
     name: 'Garmisch-Partenkirchen',

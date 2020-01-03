@@ -57,7 +57,6 @@ export default {
     const res = await axios.get('http://localhost:3000/trips/' + this.id)
     this.trip = res.data.trip
     let found = destinations.find(elem => elem.name === this.destination)
-    console.log('FOUND', found)
     if (typeof found.logo !== 'undefined') {
       this.logo = found.logo
     }
