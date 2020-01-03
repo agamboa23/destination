@@ -17,8 +17,8 @@
         <v-card-subtitle class="pb-0">Date: {{ date }}</v-card-subtitle>
 
         <v-card-text class="text--primary">
-          <div style="border-bottom: 1px solid grey;">
-            From {{ origin }} => {{ destination }}
+          <div class="pb-1" style="border-bottom: 1px solid grey;">
+            From <code>{{ origin }}</code> to <code>{{ destination }}</code>
           </div>
 
           <div class="mt-1 pb-n3">
@@ -29,7 +29,7 @@
             }}
           </div>
         </v-card-text>
-        <v-row justify="start" no-gutters dense>
+        <v-row justify="start" align="center" no-gutters dense>
           <v-col class="overline ml-4 text-justify-center" cols="5">
             Languages spoken by Host:
           </v-col>
@@ -136,4 +136,4 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped></style>

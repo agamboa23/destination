@@ -16,8 +16,9 @@
           {{ date }}
         </v-list-item-subtitle>
       </v-list-item-content>
-      <v-list-item-avatar tile size="80" color="secondary">
-        Photo To Come
+      <v-list-item-avatar tile size="80" :color="logo ? '' : 'secondary'">
+        <v-img v-if="logo" :src="logo" contain></v-img>
+        <div v-else>No Logo Found</div>
       </v-list-item-avatar>
     </v-list-item>
     <v-card-actions>
@@ -32,6 +33,7 @@
 
 <script>
 import axios from 'axios'
+import destinations from '@/assets/destinations.js'
 
 export default {
   name: 'UpcomingTripCard',
@@ -44,7 +46,8 @@ export default {
   data: () => {
     return {
       dataReady: false,
-      trip: {}
+      trip: {},
+      logo: undefined
     }
   },
   methods: {
@@ -55,9 +58,11 @@ export default {
       })
     }
   },
-  async mounted() {
+  async created() {
     const res = await axios.get('http://localhost:3000/trips/' + this.id)
     this.trip = res.data.trip
+    let found = destinations.find(elem => elem.name === this.destination)
+    this.logo = found.logo
     this.dataReady = true
   }
 }
