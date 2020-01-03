@@ -5,7 +5,11 @@
         <v-img
           class="white--text align-end"
           height="200px"
-          src="https://images.unsplash.com/photo-1517021897933-0e0319cfbc28?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"
+          :src="
+            imgSrc
+              ? imgSrc
+              : 'https://images.unsplash.com/photo-1517021897933-0e0319cfbc28?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80'
+          "
         >
           <v-card-title>Trip to {{ destination }}</v-card-title>
         </v-img>
@@ -72,7 +76,8 @@ export default {
       origin: '',
       destination: '',
       description: '',
-      date: ''
+      date: '',
+      imgSrc: ''
     }
   },
   methods: {
@@ -107,10 +112,8 @@ export default {
       userId: 'id'
     })
   },
-  created() {
+  async created() {
     this.tripId = this.$route.params.tripId
-  },
-  async mounted() {
     const res = await axios.get('http://localhost:3000/trips/' + this.tripId)
     const resData = res.data.trip
     this.numberOfMembers = resData.members.length
@@ -121,6 +124,12 @@ export default {
     this.description = resData.description
     const dateArr = resData.date_of_trip.split('T')
     this.date = dateArr[0]
+    // TODO: Hardcoded Google CSE Parameters
+    const imgRes = await axios.get(
+      'https://www.googleapis.com/customsearch/v1?key=AIzaSyDuwSlA-c6xKWp7K3XPKRhaqE91_iEE5NA&cx=011914005902216404247:ewomagcszot&searchType=image&q=' +
+        this.destination
+    )
+    this.imgSrc = imgRes.data.items[0].link
   }
 }
 </script>
