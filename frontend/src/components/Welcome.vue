@@ -8,8 +8,9 @@
         class="ma-4 elevation-6"
         color="secondary"
         width="600"
+        @click="toCreateTrip()"
       >
-        Create a Trip
+        {{ createTripText }}
       </v-btn>
     </v-row>
     <v-row align="center" justify="center">
@@ -41,13 +42,28 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'Welcome',
   data: () => {
     return {
       hover1: false,
       hover2: false,
-      hover3: false
+      hover3: false,
+      createTripText: 'Create a Trip'
+    }
+  },
+  computed: {
+    ...mapState('auth', ['signedIn'])
+  },
+  methods: {
+    toCreateTrip() {
+      if (this.signedIn) {
+        this.$router.push({ name: 'createTrip' })
+      } else {
+        this.createTripText = 'Not Signed In'
+      }
     }
   }
 }
