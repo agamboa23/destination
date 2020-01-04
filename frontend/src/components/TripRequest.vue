@@ -27,7 +27,7 @@
         <v-btn color="green" small icon @click="accept(name)">
           <v-icon>mdi-check</v-icon>
         </v-btn>
-        <v-btn color="red" small icon>
+        <v-btn color="red" small icon @click="reject(name)">
           <v-icon>mdi-minus</v-icon>
         </v-btn>
       </div>
@@ -62,6 +62,12 @@ export default {
     async accept(id) {
       await axios.patch(
         'http://localhost:3000/trips/accreq/' + this.tripId + '/' + id
+      )
+      this.init()
+    },
+    async reject(id) {
+      await axios.patch(
+        'http://localhost:3000/trips/rejectreq/' + this.tripId + '/' + id
       )
       this.init()
     },
