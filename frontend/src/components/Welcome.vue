@@ -21,6 +21,7 @@
         class="ma-4 elevation-6"
         color="secondary"
         width="600"
+        @click="toDiscoverView()"
       >
         Discover DestiNations
       </v-btn>
@@ -61,6 +62,13 @@ export default {
     toCreateTrip() {
       if (this.signedIn) {
         this.$router.push({ name: 'createTrip' })
+      } else {
+        this.createTripText = 'Not Signed In'
+      }
+    },
+    toDiscoverView() {
+      if (this.signedIn) {
+        this.$router.push({ name: 'discoverView' })
       } else {
         this.createTripText = 'Not Signed In'
       }

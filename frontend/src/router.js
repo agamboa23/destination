@@ -7,6 +7,7 @@ import User from './views/User.vue'
 import UpcomingTrips from './views/UpcomingTrips.vue'
 import DetailedTrip from './views/DetailedTrip.vue'
 import CreateTrip from './views/CreateTrip.vue'
+import DiscoverView from './views/DiscoverView.vue'
 
 Vue.use(Router)
 
@@ -62,6 +63,11 @@ export default new Router({
       path: '/create-trip',
       name: 'createTrip',
       component: CreateTrip
+    },
+    {
+      path: '/discover-destination',
+      name: 'discoverView',
+      component: DiscoverView
     }
   ]
 })
