@@ -1,11 +1,5 @@
 <template>
-  <v-card
-    v-if="dataReady"
-    class="mx-auto"
-    max-width="400"
-    outlined
-    @click="toDetailedTrip()"
-  >
+  <v-card class="mx-auto" max-width="400" outlined @click="toDetailedTrip()">
     <v-list-item three-line>
       <v-list-item-content>
         <div class="overline mb-4">From {{ origin }}</div>
@@ -16,8 +10,11 @@
           {{ date }}
         </v-list-item-subtitle>
       </v-list-item-content>
-      <v-list-item-avatar tile size="80" color="secondary">
-        Photo To Come
+      <v-list-item-avatar v-if="logo" tile size="80">
+        <v-img :src="logo" contain></v-img>
+      </v-list-item-avatar>
+      <v-list-item-avatar v-else tile size="80" color="secondary">
+        No Coat of Arms
       </v-list-item-avatar>
     </v-list-item>
     <v-card-actions>
@@ -32,6 +29,7 @@
 
 <script>
 import axios from 'axios'
+import destinations from '@/assets/destinations.js'
 
 export default {
   name: 'UpcomingTripCard',
@@ -43,8 +41,8 @@ export default {
   },
   data: () => {
     return {
-      dataReady: false,
-      trip: {}
+      trip: {},
+      logo: ''
     }
   },
   methods: {
@@ -55,10 +53,13 @@ export default {
       })
     }
   },
-  async mounted() {
+  async created() {
     const res = await axios.get('http://localhost:3000/trips/' + this.id)
     this.trip = res.data.trip
-    this.dataReady = true
+    let found = destinations.find(elem => elem.name === this.destination)
+    if (typeof found.logo !== 'undefined') {
+      this.logo = found.logo
+    }
   }
 }
 </script>

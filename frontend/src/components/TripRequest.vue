@@ -17,9 +17,8 @@
     <v-card-text>
       Members:
       <span v-for="(item, index) in members" :key="index">
-        <name :id="item" />
+        <name :id="item" /> {{ members.length == 1 ? '' : '/' }}
       </span>
-      <div></div>
     </v-card-text>
     <v-card-actions>
       <span class="overline">Requests:</span>
@@ -28,7 +27,7 @@
         <v-btn color="green" small icon @click="accept(name)">
           <v-icon>mdi-check</v-icon>
         </v-btn>
-        <v-btn color="red" small icon>
+        <v-btn color="red" small icon @click="reject(name)">
           <v-icon>mdi-minus</v-icon>
         </v-btn>
       </div>
@@ -66,6 +65,12 @@ export default {
       )
       this.init()
     },
+    async reject(id) {
+      await axios.patch(
+        'http://localhost:3000/trips/rejectreq/' + this.tripId + '/' + id
+      )
+      this.init()
+    },
     async init() {
       const res = await axios.get('http://localhost:3000/trips/' + this.tripId)
       const resData = res.data.trip
@@ -79,7 +84,7 @@ export default {
       this.dataReady = true
     }
   },
-  mounted() {
+  created() {
     this.init()
   }
 }

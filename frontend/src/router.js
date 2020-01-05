@@ -6,6 +6,7 @@ import Search from './views/Search.vue'
 import User from './views/User.vue'
 import UpcomingTrips from './views/UpcomingTrips.vue'
 import DetailedTrip from './views/DetailedTrip.vue'
+import CreateTrip from './views/CreateTrip.vue'
 
 Vue.use(Router)
 
@@ -53,9 +54,14 @@ export default new Router({
       component: UpcomingTrips
     },
     {
-      path: '/upcoming-trips/trip-to-:destination',
+      path: '/upcoming-trips/trip-to-:destination-:tripId',
       name: 'detailedTripView',
       component: DetailedTrip
+    },
+    {
+      path: '/create-trip',
+      name: 'createTrip',
+      component: CreateTrip
     }
   ]
 })
