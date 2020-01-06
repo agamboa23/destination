@@ -1,11 +1,11 @@
 <template>
   <v-row align="center" justify="center">
-    <v-cols cols="9">
+    <v-col cols="12" sm="10">
       <h1 class="display-3 font-weight-thin">
         Discover a DestiNation
       </h1>
       <discover-card></discover-card>
-    </v-cols>
+    </v-col>
   </v-row>
 </template>
 
