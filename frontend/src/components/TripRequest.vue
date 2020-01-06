@@ -98,7 +98,11 @@ export default {
       maxMembers: 0,
       origin: '',
       destination: '',
-      date: ''
+      date: '',
+      snackbar: false,
+      snackcolor: '',
+      snacktext: '',
+      timeout: 3000
     }
   },
   methods: {

@@ -35,9 +35,15 @@ export default {
     ...mapState('user', ['id'])
   },
   async mounted() {
-    const res = await axios.get('http://localhost:3000/users/' + this.id)
-    const resData = res.data
-    this.trips = resData.user.trips
+    const res = await axios.get(
+      'http://localhost:3000/trips/upcoming/' + this.id
+    )
+    const resData = res.data.trips
+    const tripsArray = []
+    for (let i = 0; i < resData.length; i++) {
+      tripsArray.push(resData[i]._id)
+    }
+    this.trips = tripsArray
     this.dataReady = true
   }
 }
