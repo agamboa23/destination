@@ -9,7 +9,7 @@
         <v-icon>mdi-face</v-icon>
       </v-btn>
     </div>
-    <div v-if="signedIn">
+    <div v-else>
       <v-btn icon :to="{ name: 'search' }">
         <v-icon>mdi-magnify</v-icon>
       </v-btn>

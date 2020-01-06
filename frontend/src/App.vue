@@ -38,12 +38,12 @@
       <bar-icons />
     </v-app-bar>
     <v-content>
-      <v-container fluid fill-height class="pa-0">
+      <v-container fill-height fluid class="pa-0">
         <router-view />
       </v-container>
     </v-content>
     <v-footer color="accent" padless>
-      &copy; 2019 DestiNation Inc.
+      &copy; 2020 DestiNation Inc.
       <v-spacer></v-spacer>
       <v-btn text to="/about">
         About Us
@@ -83,7 +83,8 @@ export default {
   },
   methods: {
     toRoot() {
-      this.$router.push({ name: 'home' })
+      // eslint-disable-next-line no-unused-vars
+      this.$router.push({ name: 'home' }).catch(err => {})
     },
     logOut() {
       this.$store.dispatch('auth/logout')

@@ -1,7 +1,7 @@
 <template>
   <div
     :style="{
-      backgroundImage: 'url(' + require('@/assets/background.png') + ')',
+      backgroundImage: 'url(' + require('@/assets/background.jpg') + ')',
       backgroundSize: 'cover',
       display: 'inherit',
       width: 'inherit',

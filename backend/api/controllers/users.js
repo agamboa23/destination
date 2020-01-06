@@ -125,7 +125,7 @@ exports.users_get_all = (req, res, next) => {
 exports.users_get_user =  (req, res, next) => {
     const id = req.params.userId;
     User.findById(id)
-    .select('email first_name _id last_name gender age languages trips')
+    .select('email first_name _id notifications last_name gender age languages trips joined_trips')
     .exec()
     .then(doc => {
         if(doc){
