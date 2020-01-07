@@ -51,9 +51,9 @@ exports.trips_get_all = (req, res, next) => {
     });
 };
 
-exports.trips_get_all_upcoming_trips = (req, res, next) => {
+exports.trips_get_all_upcoming = (req, res, next) => {
     const now = new Date();
-    Trip.find({ date_of_trip: { $gt: now }, isCancelled: false  }) // added filter
+    Trip.find({ date_of_trip: { $gt: now }, isCancelled: false })
     .select('user _id origin destination date_of_trip')
     .populate('user', 'user _id first_name')
     .exec()
@@ -61,15 +61,19 @@ exports.trips_get_all_upcoming_trips = (req, res, next) => {
         res.status(200).json({
             count: docs.length,
             trips: docs.map(doc => {
-                    return {
-                            _id: doc._id,
-                            origin: doc.origin,
-                            destination: doc.destination,
-                            date: doc.date_of_trip.getFullYear() + "-" + 
-                                  Number(doc.date_of_trip.getMonth() + 1) + "-" +
-                                  doc.date_of_trip.getDate(),
-                            user: doc.user
+                return { 
+                    _id: doc._id,
+                    origin: doc.origin,
+                    destination: doc.destination,
+                    date: doc.date_of_trip.getFullYear() + "-" + 
+                          doc.date_of_trip.getMonth() + "-" +
+                          doc.date_of_trip.getDate(),
+                    user: doc.user,
+                    request: {
+                        type: 'GET',
+                        url: 'http://localhost:3000/trips/' + doc._id
                     }
+                }
             })
         });
     })
@@ -84,8 +88,8 @@ exports.trips_get_upcoming_trips_of_user = (req, res, next) => {
     const now = new Date();
     const userId = req.params.userId;
     Trip.find({ date_of_trip: { $gt: now }, user: userId, isCancelled: false })
-    .select('user _id origin destination date_of_trip date_of_publish members requests number_of_members description')
-    .populate('user', 'user _id first_name')
+    .select('user _id origin destination date_of_trip members requests number_of_members')
+    .populate('user', 'user _id first_name last_name')
     .exec()
     .then(docs => {
         res.status(200).json({
@@ -98,12 +102,10 @@ exports.trips_get_upcoming_trips_of_user = (req, res, next) => {
                             date_of_trip: doc.date_of_trip.getFullYear() + "-" + 
                                   Number(doc.date_of_trip.getMonth() + 1) + "-" +
                                   doc.date_of_trip.getDate(),
-                            user: doc.user,
-                            date_of_publish: doc.date_of_publish,
+                            //user: doc.user,
                             members: doc.members,
                             requests: doc.requests,
                             number_of_members: doc.number_of_members,
-                            description: doc.description,
                     }
             })
         });
@@ -455,9 +457,20 @@ exports.trips_update_trip = (req, res, next) => {
 exports.trips_cancel_trip = (req, res, next) => {
     const tripId = req.params.tripId;
     Trip.findOne({ _id: tripId }, function (err, doc){
-        doc.isCancelled = true;
-        doc.save();
-      });
+            doc.isCancelled = true;
+            doc.save();})
+        .then( result => {
+            res.status(200).json({
+                message: 'Updated trip',
+            });
+        })
+        .catch(
+            err => {
+                res.status(500).json({
+                    error: err
+                });
+            }
+        );
 };
 
 exports.trips_delete_trip = (req, res, next) => {

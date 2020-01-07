@@ -5,8 +5,8 @@ const checkAuth = require('../middleware/check-auth');
 const TripsController = require('../controllers/trips');
 
 router.get('/', TripsController.trips_get_all);
+router.get('/upcoming', TripsController.trips_get_all_upcoming);
 router.get('/:tripId', TripsController.trips_get_trip);
-router.get('/upcoming', TripsController.trips_get_all_upcoming_trips);
 router.get('/upcoming/:userId', TripsController.trips_get_upcoming_trips_of_user);
 router.get('/completed/:userId', TripsController.trips_get_completed_trips_of_user);
 router.post('/', TripsController.trips_add_trip);
