@@ -5,11 +5,14 @@ const Trip = require('../models/trip');
 const User = require('../models/user');
 const Notification = require('../models/notification');
 
+// TODO after trip is deleted remove from user's trips array
+// turn delete request to update req for isCancelled
+
 let transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
-    secure: false,
-    requireTLS: true,
+    secure: false, //
+    requireTLS: false,
     auth: {
         user: 'ddestinnation@gmail.com',
         pass: 'nationdesti15102019'
@@ -50,7 +53,7 @@ exports.trips_get_all = (req, res, next) => {
 
 exports.trips_get_all_upcoming_trips = (req, res, next) => {
     const now = new Date();
-    Trip.find({ date_of_trip: { $gt: now } })
+    Trip.find({ date_of_trip: { $gt: now }, isCancelled: false  }) // added filter
     .select('user _id origin destination date_of_trip')
     .populate('user', 'user _id first_name')
     .exec()
@@ -80,7 +83,7 @@ exports.trips_get_all_upcoming_trips = (req, res, next) => {
 exports.trips_get_upcoming_trips_of_user = (req, res, next) => {
     const now = new Date();
     const userId = req.params.userId;
-    Trip.find({ date_of_trip: { $gt: now }, user: userId})
+    Trip.find({ date_of_trip: { $gt: now }, user: userId, isCancelled: false })
     .select('user _id origin destination date_of_trip')
     .populate('user', 'user _id first_name')
     .exec()
@@ -92,10 +95,15 @@ exports.trips_get_upcoming_trips_of_user = (req, res, next) => {
                             _id: doc._id,
                             origin: doc.origin,
                             destination: doc.destination,
-                            date: doc.date_of_trip.getFullYear() + "-" + 
+                            date_of_trip: doc.date_of_trip.getFullYear() + "-" + 
                                   Number(doc.date_of_trip.getMonth() + 1) + "-" +
                                   doc.date_of_trip.getDate(),
-                            user: doc.user
+                            user: doc.user,
+                            date_of_publish: doc.date_of_publish,
+                            members: doc.members,
+                            requests: doc.requests,
+                            number_of_members: doc.number_of_members,
+                            description: doc.description,
                     }
             })
         });
@@ -140,7 +148,7 @@ exports.trips_get_completed_trips_of_user = (req, res, next) => {
 exports.trips_get_trip = (req, res, next) => {
     Trip.findById(req.params.tripId)
     .populate('user')
-    .select('user _id origin destination date_of_trip date_of_publish description members number_of_members requests')
+    .select('user _id origin destination date_of_trip date_of_publish description members number_of_members requests isCancelled')
     .exec()
     .then(doc => {
         if(!doc) {
@@ -183,9 +191,10 @@ exports.trips_add_trip = (req, res, next) => {
             members: [userId],
             requests: req.body.requests,
             number_of_members: req.body.number_of_members,
-            description: req.body.description
+            description: req.body.description,
+            isCancelled: req.body.isCancelled,
         });
-        sendConfirmation(user, trip);
+        //sendConfirmation(user, trip);
         tripId = trip._id;
         return trip.save()
                     .then((doc) => 
@@ -214,13 +223,15 @@ exports.trips_add_trip = (req, res, next) => {
 async function sendConfirmation(user, trip){
     let membersNames = [];
     let output;
+    console.log(trip.members)
     for(let member of trip.members){
         await User.findById(member, function(err, data){
              return membersNames.push(" " + data.first_name)
         });
     };
+    console.log(membersNames.length)
     switch(membersNames.length) {
-        case 0:
+        case 1:
             output = `<p> You have successfully created a trip</p>
             <h3>Trip details</h3>
             <ul>
@@ -230,13 +241,13 @@ async function sendConfirmation(user, trip){
                 <li>If you wish to see more details please use the web app</li>
             </ul>`;
             break;
-        case 1:
+        case 2:
             output = `<p> You have successfully created a trip</p>
             <h3>Trip details</h3>
             <ul>
                 <li>Your trip from ${trip.origin} to ${trip.destination}
                     unfolds on ${trip.date_of_trip}</li>
-                <li>At the moment ${membersNames} is joining your trip</li>
+                <li>At the moment ${membersNames[1]} is joining your trip</li>
                 <li>If you wish to see more details please use the web app</li>
             </ul>`;
             break;
@@ -418,11 +429,6 @@ async function makeRejectionNotification(tripId, userId){
         authorId = data.user;
         destination = data.destination;
     });
-    console.log(authorId);
-    await User.findById(authorId, function(err, data){
-        console.log(data);
-    });
-    console.log(authorId);
     const notification = new Notification({
         _id: new mongoose.Types.ObjectId(),
         userId: userId,
@@ -446,9 +452,17 @@ exports.trips_update_trip = (req, res, next) => {
     });
 };
 
+exports.trips_cancel_trip = (req, res, next) => {
+    const tripId = req.params.tripId;
+    Trip.findOne({ _id: tripId }, function (err, doc){
+        doc.isCancelled = true;
+        doc.save();
+      });
+};
+
 exports.trips_delete_trip = (req, res, next) => {
-    const id = req.params.tripId;
-    Trip.deleteOne({ _id: id })
+    const tripId = req.params.tripId;
+    Trip.deleteOne({ _id: tripId })
     .exec()
     .then(result => {
         res.status(200).json({
@@ -456,7 +470,6 @@ exports.trips_delete_trip = (req, res, next) => {
             request: {
                 type: 'POST',
                 url: 'http://localhost:3000/trips/',
-                body: { userId: 'ID'}
             }
         });
     })
@@ -465,7 +478,7 @@ exports.trips_delete_trip = (req, res, next) => {
         res.status(500).json({
             error: err
         });
-    })
+    });
 };
 
 exports.trips_delete_all = (req, res, next) => {
