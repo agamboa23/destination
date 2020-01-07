@@ -86,9 +86,6 @@
         </v-card>
       </v-tab-item>
     </v-tabs-items>
-    <v-btn absolute fab bottom right color="info" @click="reload()">
-      <v-icon>mdi-reload</v-icon>
-    </v-btn>
   </v-card>
 </template>
 
@@ -112,10 +109,6 @@ export default {
     }
   },
   methods: {
-    reload() {
-      // TODO Renew API Calls
-      location.reload()
-    },
     beautifyPopulation(pop) {
       let result = pop.slice(1)
       // https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
