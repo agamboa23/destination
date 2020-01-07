@@ -66,7 +66,8 @@ exports.notifications_get_unread_notifications_of_user = (req, res, next) => {
 };
 
 exports.notifications_get_notification = (req, res, next) => {
-    Notification.findById(req.params.notificationId)
+    let notificationId = req.params.notificationId;
+    Notification.findById(notificationId)
     .populate('user')
     .select('_id tripId userId memberId type date isRead message')
     .exec()
@@ -76,6 +77,8 @@ exports.notifications_get_notification = (req, res, next) => {
                 message: 'Notification not found'
             });
         }
+        doc.isRead = true;
+        doc.save();
         res.status(200).json({
             notification: doc,
             request: {
@@ -90,6 +93,9 @@ exports.notifications_get_notification = (req, res, next) => {
     });
 };
 
+async function markAsRead(notificationId){
+
+}
 
 exports.notifications_delete_notification = (req, res, next) => {
     const id = req.params.notificationId;

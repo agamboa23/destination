@@ -5,9 +5,6 @@ const Trip = require('../models/trip');
 const User = require('../models/user');
 const Notification = require('../models/notification');
 
-// TODO after trip is deleted remove from user's trips array
-// turn delete request to update req for isCancelled
-
 let transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
@@ -33,7 +30,7 @@ exports.trips_get_all = (req, res, next) => {
                     origin: doc.origin,
                     destination: doc.destination,
                     date: doc.date_of_trip.getFullYear() + "-" + 
-                          doc.date_of_trip.getMonth() + "-" +
+                          doc.date_of_trip.getMonth()+1 + "-" +
                           doc.date_of_trip.getDate(),
                     user: doc.user,
                     request: {
@@ -194,7 +191,7 @@ exports.trips_add_trip = (req, res, next) => {
             requests: req.body.requests,
             number_of_members: req.body.number_of_members,
             description: req.body.description,
-            isCancelled: req.body.isCancelled,
+            isCancelled: false,
         });
         //sendConfirmation(user, trip);
         tripId = trip._id;

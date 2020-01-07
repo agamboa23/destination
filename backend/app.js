@@ -6,8 +6,6 @@ const mongoose = require('mongoose');
 
 const userRoutes = require('./api/routes/users');
 const tripRoutes = require('./api/routes/trips');
-const profileRoutes = require('./api/routes/profiles');
-const locationRoutes = require('./api/routes/locations');
 const notificationRoutes = require('./api/routes/notifications');
 
 mongoose.connect(
@@ -37,8 +35,6 @@ app.use((req,res,next) => {
 
 app.use('/users', userRoutes);
 app.use('/trips', tripRoutes);
-app.use('/profiles', profileRoutes);
-app.use('/locations', locationRoutes);
 app.use('/notifications', notificationRoutes);
 
 app.use((req,res,next) => {
