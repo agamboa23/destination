@@ -84,7 +84,7 @@ exports.trips_get_upcoming_trips_of_user = (req, res, next) => {
     const now = new Date();
     const userId = req.params.userId;
     Trip.find({ date_of_trip: { $gt: now }, user: userId, isCancelled: false })
-    .select('user _id origin destination date_of_trip')
+    .select('user _id origin destination date_of_trip date_of_publish members requests number_of_members description')
     .populate('user', 'user _id first_name')
     .exec()
     .then(docs => {
