@@ -16,7 +16,8 @@ const tripSchema = mongoose.Schema({
     number_of_members: { type: Number },
     description: { type: String },
     ratings: { type: Array },
-    reviews: { type: Array }
+    reviews: { type: Array },
+    isCancelled: { type: Boolean}
 });
 
 module.exports = mongoose.model('Trip', tripSchema);
