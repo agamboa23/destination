@@ -1,14 +1,8 @@
 <template>
-  <v-card
-    v-if="dataReady"
-    v-show="dataReady"
-    class="mx-auto"
-    min-width="344"
-    outlined
-  >
+  <v-card class="mx-auto" min-width="344" outlined>
     <v-card-title class="title mb-1">
       {{ origin }} -> {{ destination }}
-      <v-dialog v-model="dialog" persistent max-width="290">
+      <!-- <v-dialog v-model="dialog" persistent max-width="290">
         <template v-slot:activator="{ on }">
           <v-btn class="ml-5" color="error" small tile outlined v-on="on">
             <v-icon class="mr-2">mdi-cancel</v-icon>
@@ -36,7 +30,7 @@
             </v-btn>
           </v-card-actions>
         </v-card>
-      </v-dialog>
+      </v-dialog> -->
       <v-spacer />
       {{ members.length }}/{{ maxMembers }}
     </v-card-title>
@@ -61,7 +55,7 @@
         </v-btn>
       </div>
     </v-card-actions>
-    <v-snackbar
+    <!-- <v-snackbar
       v-model="snackbar"
       :color="snackcolor"
       :top="true"
@@ -72,12 +66,11 @@
       <v-btn color="white" text @click="snackbar = false">
         Close
       </v-btn>
-    </v-snackbar>
+    </v-snackbar> -->
   </v-card>
 </template>
 
 <script>
-import axios from 'axios'
 import NameVue from './Name.vue'
 
 export default {
@@ -86,77 +79,64 @@ export default {
     name: NameVue
   },
   props: {
-    tripId: String
-  },
-  data: () => {
-    return {
-      dataReady: false,
-      cancelDisabled: false,
-      dialog: false,
-      requests: [],
-      members: [],
-      maxMembers: 0,
-      origin: '',
-      destination: '',
-      date: '',
-      snackbar: false,
-      snackcolor: '',
-      snacktext: '',
-      timeout: 3000
-    }
+    tripId: String,
+    requests: Array,
+    members: Array,
+    maxMembers: Number,
+    origin: String,
+    destination: String,
+    date: String
   },
   methods: {
-    invokeSnackbar(text, color) {
-      this.snacktext = text
-      this.snackcolor = color
-      this.snackbar = true
-    },
-    async deleteTrip() {
-      //Delete Trip set dialog false reload page
-      try {
-        this.cancelDisabled = true
-        const res = await axios.delete(
-          'http://localhost:3000/trips/' + this.tripId
-        )
-        this.dialog = false
-        this.cancelDisabled = false
-        this.invokeSnackbar(res.data.message, 'success')
-        setTimeout(() => {
-          location.reload()
-        }, 1000)
-      } catch (error) {
-        this.dialog = false
-        this.cancelDisabled = false
-        this.invokeSnackbar(`Couldn't delete trip :(`, 'error')
-      }
-    },
-    async accept(id) {
-      await axios.patch(
-        'http://localhost:3000/trips/accreq/' + this.tripId + '/' + id
-      )
-      this.init()
-    },
-    async reject(id) {
-      await axios.patch(
-        'http://localhost:3000/trips/rejectreq/' + this.tripId + '/' + id
-      )
-      this.init()
-    },
-    async init() {
-      const res = await axios.get('http://localhost:3000/trips/' + this.tripId)
-      const resData = res.data.trip
-      this.requests = resData.requests
-      this.members = resData.members
-      this.maxMembers = resData.number_of_members
-      this.origin = resData.origin
-      this.destination = resData.destination
-      const dateArr = resData.date_of_trip.split('T')
-      this.date = dateArr[0]
-      this.dataReady = true
-    }
-  },
-  created() {
-    this.init()
+    // invokeSnackbar(text, color) {
+    //   this.snacktext = text
+    //   this.snackcolor = color
+    //   this.snackbar = true
+    // },
+    // async deleteTrip() {
+    //   //Delete Trip set dialog false reload page
+    //   //PATCH INSTEAD OF DELETE BITTE
+    //   try {
+    //     this.cancelDisabled = true
+    //     const res = await axios.delete(
+    //       'http://localhost:3000/trips/' + this.tripId
+    //     )
+    //     this.dialog = false
+    //     this.cancelDisabled = false
+    //     this.invokeSnackbar(res.data.message, 'success')
+    //     setTimeout(() => {
+    //       location.reload()
+    //     }, 1000)
+    //   } catch (error) {
+    //     this.dialog = false
+    //     this.cancelDisabled = false
+    //     this.invokeSnackbar(`Couldn't delete trip :(`, 'error')
+    //   }
+    // },
+    // async accept(id) {
+    //   await axios.patch(
+    //     'http://localhost:3000/trips/accreq/' + this.tripId + '/' + id
+    //   )
+    //   this.init()
+    // },
+    // async reject(id) {
+    //   await axios.patch(
+    //     'http://localhost:3000/trips/rejectreq/' + this.tripId + '/' + id
+    //   )
+    //   this.init()
+    // },
+    // async init() {
+    //   const res = await axios.get('http://localhost:3000/trips/' + this.tripId)
+    //   const resData = res.data.trip
+    //   this.requests = resData.requests
+    //   this.members = resData.members
+    //   this.maxMembers = resData.number_of_members
+    //   this.origin = resData.origin
+    //   this.destination = resData.destination
+    //   const dateArr = resData.date_of_trip.split('T')
+    //   this.date = dateArr[0]
+    //   this.dataReady = true
+    // }
   }
 }
 </script>
