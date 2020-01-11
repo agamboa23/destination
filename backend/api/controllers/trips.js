@@ -63,7 +63,7 @@ exports.trips_get_all_upcoming = (req, res, next) => {
                     origin: doc.origin,
                     destination: doc.destination,
                     date: doc.date_of_trip.getFullYear() + "-" + 
-                          doc.date_of_trip.getMonth() + "-" +
+                          Number(doc.date_of_trip.getMonth() + 1) + "-" +
                           doc.date_of_trip.getDate(),
                     user: doc.user,
                     request: {
