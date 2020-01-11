@@ -42,7 +42,7 @@
             :loading="loading"
             :disabled="loading"
             class="mx-2 mb-2"
-            :color="!tripUpdated ? 'secondary' : 'success'"
+            :color="buttonColor"
             depressed
             @click="joinTrip()"
           >
@@ -68,11 +68,12 @@ export default {
     return {
       dataReady: false,
       loading: false,
-      tripUpdated: false,
+      buttonColor: 'secondary',
       buttonText: 'Send Join Request',
       tripId: '',
       numberOfMembers: 0,
       maxMembers: 0,
+      creatorId: '',
       userLangs: [],
       origin: '',
       destination: '',
@@ -86,20 +87,30 @@ export default {
       try {
         this.loading = true
         if (this.userId) {
-          const res = await axios.patch(
-            'http://localhost:3000/trips/addreq/' +
-              this.tripId +
-              '/' +
-              this.userId
-          )
-          const resData = res.data.message
-          if (resData === 'Trip updated') {
-            this.buttonText = 'Request Sent'
-            this.tripUpdated = true
+          // User is signed in
+          if (this.userId !== this.creatorId) {
+            // Trying to join someone else's trip
+            const res = await axios.patch(
+              'http://localhost:3000/trips/addreq/' +
+                this.tripId +
+                '/' +
+                this.userId
+            )
+            const resData = res.data.message
+            if (resData === 'Trip updated') {
+              this.buttonText = 'Request Sent'
+              this.buttonColor = 'success'
+              this.loading = false
+            }
+          } else {
+            // Trying to join own trip
+            this.buttonText = `Can't join your own trip`
+            this.buttonColor = 'error'
             this.loading = false
           }
         } else {
           this.buttonText = 'Not Signed In'
+          this.buttonColor = 'error'
           this.loading = false
         }
       } catch (error) {
@@ -119,6 +130,7 @@ export default {
     const resData = res.data.trip
     this.numberOfMembers = resData.members.length
     this.maxMembers = resData.number_of_members
+    this.creatorId = resData.user._id
     this.userLangs = resData.user.languages
     this.origin = resData.origin
     this.destination = resData.destination
