@@ -48,7 +48,7 @@ export default {
   methods: {
     toDetailedTrip() {
       this.$router.push({
-        name: 'detailedTripView',
+        name: 'upcomingTripDetailed',
         params: { destination: this.destination, tripId: this.id }
       })
     }

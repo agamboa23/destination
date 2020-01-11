@@ -5,7 +5,7 @@ import Authentication from './views/Authentication.vue'
 import Search from './views/Search.vue'
 import User from './views/User.vue'
 import UpcomingTrips from './views/UpcomingTrips.vue'
-import DetailedTrip from './views/DetailedTrip.vue'
+import UpcomingTripDetailed from './views/UpcomingTripDetailed.vue'
 import CreateTrip from './views/CreateTrip.vue'
 import DiscoverView from './views/DiscoverView.vue'
 
@@ -56,8 +56,8 @@ export default new Router({
     },
     {
       path: '/upcoming-trips/trip-to-:destination-:tripId',
-      name: 'detailedTripView',
-      component: DetailedTrip
+      name: 'upcomingTripDetailed',
+      component: UpcomingTripDetailed
     },
     {
       path: '/create-trip',
