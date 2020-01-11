@@ -60,6 +60,38 @@
             :items="langSelection"
             :rules="[langRule]"
           ></v-autocomplete>
+          <v-row align="center" justify="space-between">
+            <v-col cols="4">
+              <v-select
+                outlined
+                color="secondary"
+                label="Country Code"
+                prepend-inner-icon="mdi-flag"
+                :rules="[rules.required]"
+                v-model="countryCode"
+                :items="countryCodes"
+              >
+                <template v-slot:selection="data">
+                  {{ data.item.code }}
+                </template>
+                <template v-slot:item="data">
+                  {{ data.item.name }} ({{ data.item.code }})
+                </template>
+              </v-select>
+            </v-col>
+            <v-col cols="8">
+              <v-text-field
+                outlined
+                color="secondary"
+                v-model="number"
+                label="Phone Number"
+                prepend-inner-icon="mdi-phone"
+                @change="beautifyNumber()"
+                :rules="[rules.required, rules.spaceyNumber]"
+                :hint="phoneNumber"
+              ></v-text-field>
+            </v-col>
+          </v-row>
           <v-text-field
             color="secondary"
             v-model="email"
@@ -119,6 +151,7 @@
 <script>
 import axios from 'axios'
 import langPack from '@/assets/languages'
+import countryCodes from '@/assets/countrycodes'
 
 export default {
   name: 'Login',
@@ -135,6 +168,12 @@ export default {
       genderSelection: ['Male', 'Female', 'Non-Binary'],
       age: 18,
       languages: [],
+      countryCodes: countryCodes,
+      countryCode: {
+        code: '+49',
+        name: 'Germany'
+      },
+      number: '',
       search: null,
       rules: {
         required: v => !!v || 'Required',
@@ -143,7 +182,9 @@ export default {
         password: v =>
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(v) ||
           'Minimum eight characters, at least one uppercase letter, one lowercase letter and one number',
-        noDigit: v => /^([^0-9]*)$/.test(v) || 'No digits are allowed'
+        noDigit: v => /^([^0-9]*)$/.test(v) || 'No digits are allowed',
+        spaceyNumber: v =>
+          /^[\s\d]+$/.test(v) || 'Only digits and whitespaces are allowed'
       },
       snackbar: false,
       snackcolor: '',
@@ -152,6 +193,16 @@ export default {
     }
   },
   methods: {
+    beautifyNumber() {
+      // No special characters
+      // eslint-disable-next-line no-control-regex
+      this.number = this.number.replace(/[^\x00-\x7F]+/g, '')
+      // No latin characters
+      this.number = this.number.replace(/[^0-9 ]+/g, '')
+      // No extra spaces
+      this.number = this.number.replace(/\s\s+/g, ' ')
+      this.number = this.number.trim()
+    },
     invokeSnackbar(text, color) {
       this.snacktext = text
       this.snackcolor = color
@@ -185,7 +236,8 @@ export default {
             last_name: this.lastName,
             gender: this.gender,
             age: this.age,
-            languages: this.languages
+            languages: this.languages,
+            phone_number: this.phoneNumber
           }
           const res = await axios.post(
             'http://localhost:3000/users/signup',
@@ -207,6 +259,9 @@ export default {
     }
   },
   computed: {
+    phoneNumber() {
+      return this.countryCode.code + ' ' + this.number
+    },
     passwordConfirmationRule() {
       return () => this.password === this.rePassword || 'Password must match'
     },
