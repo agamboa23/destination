@@ -1,6 +1,6 @@
 <template>
   <v-row align="start" justify="center">
-    <v-col cols="12" sm="10" md="8">
+    <v-col cols="12" sm="12" md="10">
       <user-card :userId="id" />
     </v-col>
     <v-col cols="12">
