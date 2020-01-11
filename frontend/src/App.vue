@@ -43,7 +43,7 @@
       </v-container>
     </v-content>
     <v-footer color="accent" padless>
-      &copy; 2020 DestiNation Inc.
+      &copy; 2020 DestiNation GmbH
       <v-spacer></v-spacer>
       <v-btn text to="/about">
         About Us
