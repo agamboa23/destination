@@ -57,7 +57,8 @@ export default new Router({
     {
       path: '/upcoming-trips/trip-to-:destination-:tripId',
       name: 'upcomingTripDetailed',
-      component: UpcomingTripDetailed
+      component: UpcomingTripDetailed,
+      props: true
     },
     {
       path: '/create-trip',

@@ -70,7 +70,6 @@ export default {
       loading: false,
       buttonColor: 'secondary',
       buttonText: 'Send Join Request',
-      tripId: '',
       numberOfMembers: 0,
       maxMembers: 0,
       creatorId: '',
@@ -124,8 +123,13 @@ export default {
       userId: 'id'
     })
   },
+  props: {
+    tripId: {
+      type: String,
+      required: true
+    }
+  },
   async created() {
-    this.tripId = this.$route.params.tripId
     const res = await axios.get('http://localhost:3000/trips/' + this.tripId)
     const resData = res.data.trip
     this.numberOfMembers = resData.members.length
