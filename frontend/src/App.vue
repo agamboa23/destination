@@ -32,7 +32,9 @@
           contain
           width="50"
         />
-        <span class="display-1 font-weight-light">DestiNation</span>
+        <span class="display-1 font-weight-light hidden-xs-only">
+          DestiNation
+        </span>
       </div>
       <v-spacer></v-spacer>
       <bar-icons />
