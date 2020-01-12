@@ -6,7 +6,7 @@
     <v-col cols="12">
       <v-row align="center" justify="center">
         <v-col cols="5" v-for="(item, index) in trips" :key="index">
-          <trip-request
+          <trip-overview
             :tripId="item._id"
             :requests="item.requests"
             :members="item.members"
@@ -24,14 +24,14 @@
 <script>
 import { mapState } from 'vuex'
 import UserCard from '@/components/UserCard.vue'
-import TripRequest from '@/components/TripRequest.vue'
+import MiniTripOverview from '@/components/MiniTripOverview.vue'
 import axios from 'axios'
 
 export default {
   name: 'User',
   components: {
     'user-card': UserCard,
-    'trip-request': TripRequest
+    'trip-overview': MiniTripOverview
   },
   data: () => {
     return {

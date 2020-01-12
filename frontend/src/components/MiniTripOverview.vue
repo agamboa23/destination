@@ -74,7 +74,7 @@
 import NameVue from './Name.vue'
 
 export default {
-  name: 'TripRequest',
+  name: 'MiniTripOverview',
   components: {
     name: NameVue
   },
