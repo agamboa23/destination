@@ -25,7 +25,7 @@ export default {
   props: {
     type: {
       type: String,
-      default: ''
+      required: true
     }
   }
 }

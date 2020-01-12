@@ -21,7 +21,7 @@
       <v-btn text>Click for Details</v-btn>
       <v-spacer></v-spacer>
       <span class="subtitle-1 mx-2">
-        {{ trip.members.length }}/{{ trip.number_of_members }}
+        {{ joinedMembers }}/{{ maxMembers }}
       </span>
     </v-card-actions>
   </v-card>
@@ -41,7 +41,8 @@ export default {
   },
   data: () => {
     return {
-      trip: {},
+      joinedMembers: 0,
+      maxMembers: 0,
       logo: ''
     }
   },
@@ -55,7 +56,9 @@ export default {
   },
   async created() {
     const res = await axios.get('http://localhost:3000/trips/' + this.id)
-    this.trip = res.data.trip
+    const resData = res.data
+    this.joinedMembers = resData.trip.members.length
+    this.maxMembers = resData.trip.number_of_members
     let found = destinations.find(elem => elem.name === this.destination)
     if (typeof found.logo !== 'undefined') {
       this.logo = found.logo
