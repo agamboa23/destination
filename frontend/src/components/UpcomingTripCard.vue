@@ -1,5 +1,11 @@
 <template>
-  <v-card class="mx-auto" max-width="400" outlined @click="toDetailedTrip()">
+  <v-card
+    v-show="dataReady"
+    class="mx-auto"
+    max-width="400"
+    outlined
+    @click="toDetailedTrip()"
+  >
     <v-list-item three-line>
       <v-list-item-content>
         <div class="overline mb-4">From {{ origin }}</div>
@@ -21,28 +27,28 @@
       <v-btn text>Click for Details</v-btn>
       <v-spacer></v-spacer>
       <span class="subtitle-1 mx-2">
-        {{ joinedMembers }}/{{ maxMembers }}
+        {{ membersLength }}/{{ maxMembers }}
       </span>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
-import axios from 'axios'
 import destinations from '@/assets/destinations.js'
 
 export default {
   name: 'UpcomingTripCard',
   props: {
+    id: String,
     origin: String,
     destination: String,
     date: String,
-    id: String
+    membersLength: Number,
+    maxMembers: Number
   },
   data: () => {
     return {
-      joinedMembers: 0,
-      maxMembers: 0,
+      dataReady: false,
       logo: ''
     }
   },
@@ -55,14 +61,11 @@ export default {
     }
   },
   async created() {
-    const res = await axios.get('http://localhost:3000/trips/' + this.id)
-    const resData = res.data
-    this.joinedMembers = resData.trip.members.length
-    this.maxMembers = resData.trip.number_of_members
     let found = destinations.find(elem => elem.name === this.destination)
     if (typeof found.logo !== 'undefined') {
       this.logo = found.logo
     }
+    this.dataReady = true
   }
 }
 </script>
