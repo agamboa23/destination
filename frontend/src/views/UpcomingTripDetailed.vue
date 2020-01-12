@@ -89,16 +89,23 @@ export default {
           // User is signed in
           if (this.userId !== this.creatorId) {
             // Trying to join someone else's trip
-            const res = await axios.patch(
-              'http://localhost:3000/trips/addreq/' +
-                this.tripId +
-                '/' +
-                this.userId
-            )
-            const resData = res.data.message
-            if (resData === 'Trip updated') {
-              this.buttonText = 'Request Sent'
-              this.buttonColor = 'success'
+            if (this.numberOfMembers < this.maxMembers) {
+              // Member limit is not reached
+              const res = await axios.patch(
+                'http://localhost:3000/trips/addreq/' +
+                  this.tripId +
+                  '/' +
+                  this.userId
+              )
+              const resData = res.data.message
+              if (resData === 'Trip updated') {
+                this.buttonText = 'Request Sent'
+                this.buttonColor = 'success'
+                this.loading = false
+              }
+            } else {
+              this.buttonText = 'Member limit is reached'
+              this.buttonColor = 'error'
               this.loading = false
             }
           } else {
