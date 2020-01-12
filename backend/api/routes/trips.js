@@ -9,6 +9,8 @@ router.get('/upcoming', TripsController.trips_get_all_upcoming);
 router.get('/:tripId', TripsController.trips_get_trip);
 router.get('/upcoming/:userId', TripsController.trips_get_upcoming_trips_of_user);
 router.get('/completed/:userId', TripsController.trips_get_completed_trips_of_user);
+router.get('/joinedupcoming/:userId', TripsController.trips_get_joined_upcoming_trips_of_user);
+router.get('/joinedcompleted/:userId', TripsController.trips_get_joined_completed_trips_of_user);
 router.post('/', TripsController.trips_add_trip);
 router.patch('/:tripId', TripsController.trips_update_trip);
 router.patch('/cancel/:tripId', TripsController.trips_cancel_trip);
