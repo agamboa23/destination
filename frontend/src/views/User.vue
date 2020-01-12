@@ -30,6 +30,7 @@
               :date="item.date_of_trip"
             />
           </v-col>
+          <v-col v-if="isUneven(createdTrips)" cols="10" md="5" />
         </template>
         <template v-else>
           <v-col class="text-sm-left text-md-center" cols="10">
@@ -63,6 +64,7 @@
               :date="item.date_of_trip"
             />
           </v-col>
+          <v-col v-if="isUneven(joinedtrips)" cols="10" md="5" />
         </template>
         <template v-else>
           <v-col class="text-sm-left text-md-center" cols="10">
@@ -94,9 +96,10 @@
               :origin="item.origin"
               :destination="item.destination"
               :date="item.date_of_trip"
-              :completed="true"
+              completed
             />
           </v-col>
+          <v-col v-if="isUneven(completedTrips)" cols="10" md="5" />
         </template>
         <template v-else>
           <v-col class="text-sm-left text-md-center" cols="10">
@@ -125,6 +128,11 @@ export default {
       createdTrips: [],
       joinedtrips: [],
       completedTrips: []
+    }
+  },
+  methods: {
+    isUneven(arr) {
+      return arr.length % 2 !== 0
     }
   },
   computed: {
