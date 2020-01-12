@@ -1,10 +1,14 @@
 <template>
-  <v-card>
+  <v-card class="elevation-24">
     <v-card-title>
       {{ computedTitleText }}
       <v-spacer />
+      <v-btn class="mr-4" outlined>
+        <v-icon class="mr-2">mdi-account-card-details-outline</v-icon>
+        Profile
+      </v-btn>
       <v-btn outlined>
-        <v-icon class="mr-1">mdi-settings</v-icon>
+        <v-icon class="mr-2">mdi-settings</v-icon>
         Settings
       </v-btn>
     </v-card-title>

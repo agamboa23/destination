@@ -5,6 +5,12 @@
     </v-col>
     <v-col cols="12">
       <v-row align="center" justify="center">
+        <v-col cols="10">
+          <div class="display-1 font-weight-thin">Created Trips</div>
+          <v-divider />
+        </v-col>
+      </v-row>
+      <v-row align="center" justify="center">
         <v-col cols="5" v-for="(item, index) in trips" :key="index">
           <trip-overview
             :tripId="item._id"
