@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import Authentication from './views/Authentication.vue'
 import Search from './views/Search.vue'
 import User from './views/User.vue'
+import UserTripDetailed from './views/UserTripDetailed.vue'
 import UpcomingTrips from './views/UpcomingTrips.vue'
 import UpcomingTripDetailed from './views/UpcomingTripDetailed.vue'
 import CreateTrip from './views/CreateTrip.vue'
@@ -48,6 +49,12 @@ export default new Router({
       path: '/my-profile',
       name: 'user',
       component: User
+    },
+    {
+      path: '/my-profile/trip-to-:destination-:tripId',
+      name: 'userTripDetailed',
+      component: UserTripDetailed,
+      props: true
     },
     {
       path: '/upcoming-trips',

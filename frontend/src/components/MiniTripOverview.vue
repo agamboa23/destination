@@ -1,9 +1,13 @@
 <template>
   <v-card class="mx-auto" outlined :disabled="completed" @click="toDetail()">
     <v-card-title class="title mb-1">
-      {{ origin }} -> {{ destination }}
+      {{ origin }}
+      <v-icon class="mx-2">mdi-arrow-right</v-icon>
+      {{ destination }}
       <v-spacer />
-      {{ members.length }}/{{ maxMembers }}
+      <span class="font-italic font-weight-light">
+        {{ members.length }}/{{ maxMembers }}
+      </span>
     </v-card-title>
     <v-card-subtitle class="overline">
       {{ date }}
@@ -45,8 +49,10 @@ export default {
   },
   methods: {
     toDetail() {
-      // TODO: Routing
-      console.log(this.tripId)
+      this.$router.push({
+        name: 'userTripDetailed',
+        params: { destination: this.destination, tripId: this.tripId }
+      })
     }
   }
 }
