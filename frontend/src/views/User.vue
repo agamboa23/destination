@@ -1,8 +1,10 @@
 <template>
-  <v-row align="start" justify="center">
-    <v-col cols="12" sm="12" md="10">
+  <v-row align="center" justify="center">
+    <!-- Header Col -->
+    <v-col sm="11" md="10">
       <user-card :userId="id" />
     </v-col>
+    <!-- Content Col -->
     <v-col cols="12">
       <v-row align="center" justify="center">
         <v-col cols="10">
@@ -11,17 +13,96 @@
         </v-col>
       </v-row>
       <v-row align="center" justify="center">
-        <v-col cols="5" v-for="(item, index) in trips" :key="index">
-          <trip-overview
-            :tripId="item._id"
-            :requests="item.requests"
-            :members="item.members"
-            :maxMembers="item.number_of_members"
-            :origin="item.origin"
-            :destination="item.destination"
-            :date="item.date_of_trip"
-          />
+        <template v-if="createdTrips.length !== 0">
+          <v-col
+            cols="10"
+            md="5"
+            v-for="(item, index) in createdTrips"
+            :key="index"
+          >
+            <trip-overview
+              :tripId="item._id"
+              :requests="item.requests"
+              :members="item.members"
+              :maxMembers="item.number_of_members"
+              :origin="item.origin"
+              :destination="item.destination"
+              :date="item.date_of_trip"
+            />
+          </v-col>
+        </template>
+        <template v-else>
+          <v-col class="text-sm-left text-md-center" cols="10">
+            <span class="title font-italic">Nothing to show here</span>
+          </v-col>
+        </template>
+      </v-row>
+      <!-- eslint-disable-next-line prettier/prettier -->
+
+      <v-row align="center" justify="center">
+        <v-col cols="10">
+          <div class="display-1 font-weight-thin">Joined Trips</div>
+          <v-divider />
         </v-col>
+      </v-row>
+      <v-row align="center" justify="center">
+        <template v-if="joinedtrips.length !== 0">
+          <v-col
+            cols="10"
+            md="5"
+            v-for="(item, index) in joinedtrips"
+            :key="index"
+          >
+            <trip-overview
+              :tripId="item._id"
+              :requests="item.requests"
+              :members="item.members"
+              :maxMembers="item.number_of_members"
+              :origin="item.origin"
+              :destination="item.destination"
+              :date="item.date_of_trip"
+            />
+          </v-col>
+        </template>
+        <template v-else>
+          <v-col class="text-sm-left text-md-center" cols="10">
+            <span class="title font-italic">Nothing to show here</span>
+          </v-col>
+        </template>
+      </v-row>
+      <!-- eslint-disable-next-line prettier/prettier -->
+
+      <v-row align="center" justify="center">
+        <v-col cols="10">
+          <div class="display-1 font-weight-thin">Completed Trips</div>
+          <v-divider />
+        </v-col>
+      </v-row>
+      <v-row align="center" justify="center">
+        <template v-if="completedTrips.length !== 0">
+          <v-col
+            cols="10"
+            md="5"
+            v-for="(item, index) in completedTrips"
+            :key="index"
+          >
+            <!-- TODO: make this kinda disabled -->
+            <trip-overview
+              :requests="item.requests"
+              :members="item.members"
+              :maxMembers="item.number_of_members"
+              :origin="item.origin"
+              :destination="item.destination"
+              :date="item.date_of_trip"
+              :completed="true"
+            />
+          </v-col>
+        </template>
+        <template v-else>
+          <v-col class="text-sm-left text-md-center" cols="10">
+            <span class="title font-italic">Nothing to show here</span>
+          </v-col>
+        </template>
       </v-row>
     </v-col>
   </v-row>
@@ -41,18 +122,32 @@ export default {
   },
   data: () => {
     return {
-      trips: []
+      createdTrips: [],
+      joinedtrips: [],
+      completedTrips: []
     }
   },
   computed: {
     ...mapState('user', ['id'])
   },
   async created() {
-    const res = await axios.get(
+    const createdRes = await axios.get(
       'http://localhost:3000/trips/upcoming/' + this.id
     )
-    const resData = res.data.trips
-    this.trips = resData
+    this.createdTrips = createdRes.data.trips
+    const joinedRes = await axios.get(
+      'http://localhost:3000/trips/joinedupcoming/' + this.id
+    )
+    this.joinedtrips = joinedRes.data.trips
+    const completedRes = await axios.get(
+      'http://localhost:3000/trips/completed/' + this.id
+    )
+    const completedArr = completedRes.data.trips
+    const joinedCompletedRes = await axios.get(
+      'http://localhost:3000/trips/joinedcompleted/' + this.id
+    )
+    const joinedCompletedArr = joinedCompletedRes.data.trips
+    this.completedTrips = completedArr.concat(joinedCompletedArr)
   }
 }
 </script>

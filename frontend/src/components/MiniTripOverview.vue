@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" min-width="344" outlined @click="toDetail()">
+  <v-card class="mx-auto" outlined :disabled="completed" @click="toDetail()">
     <v-card-title class="title mb-1">
       {{ origin }} -> {{ destination }}
       <v-spacer />
@@ -40,11 +40,13 @@ export default {
     maxMembers: Number,
     origin: String,
     destination: String,
-    date: String
+    date: String,
+    completed: Boolean
   },
   methods: {
     toDetail() {
-      this.$router.push()
+      // TODO: Routing
+      console.log(this.tripId)
     }
   }
 }

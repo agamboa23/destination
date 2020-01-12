@@ -1,6 +1,6 @@
 <template>
   <v-row align="center" justify="center">
-    <v-col cols="12">
+    <v-col cols="10">
       <v-card v-if="dataReady" class="mx-auto" max-width="500">
         <v-img
           class="white--text align-end"
