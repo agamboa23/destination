@@ -16,13 +16,13 @@
       <div>
         Members:
         <span v-for="(item, index) in members" :key="index">
-          <name :id="item" /> {{ members.length == 1 ? '' : '/' }}
+          <name :id="item" /> {{ getConditionalSlash(members, index) }}
         </span>
       </div>
       <div>
         Requests:
         <span v-for="(name, index) in requests" :key="index">
-          <name :id="name" /> {{ members.length == 1 ? '' : '/' }}
+          <name :id="name" /> {{ getConditionalSlash(members, index) }}
         </span>
       </div>
     </v-card-text>
@@ -48,6 +48,17 @@ export default {
     completed: Boolean
   },
   methods: {
+    getConditionalSlash(arr, i) {
+      if (arr.length !== 1) {
+        if (i + 1 === arr.length) {
+          return ''
+        } else {
+          return '/'
+        }
+      } else {
+        return ''
+      }
+    },
     toDetail() {
       this.$router.push({
         name: 'userTripDetailed',
