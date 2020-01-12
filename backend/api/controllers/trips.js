@@ -51,7 +51,7 @@ exports.trips_get_all = (req, res, next) => {
 exports.trips_get_all_upcoming = (req, res, next) => {
     const now = new Date();
     Trip.find({ date_of_trip: { $gt: now }, isCancelled: false })
-        .select('user _id origin destination date_of_trip')
+        .select('user _id origin destination date_of_trip members number_of_members')
         .populate('user', 'user _id first_name')
         .exec()
         .then(docs => {
@@ -66,6 +66,8 @@ exports.trips_get_all_upcoming = (req, res, next) => {
                             Number(doc.date_of_trip.getMonth() + 1) + "-" +
                             doc.date_of_trip.getDate(),
                         user: doc.user,
+                        members_length: doc.members.length,
+                        number_of_members: doc.number_of_members,
                         request: {
                             type: 'GET',
                             url: 'http://localhost:3000/trips/' + doc._id
