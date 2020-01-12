@@ -13,12 +13,13 @@
         >
           <v-card-title>Trip to {{ destination }}</v-card-title>
         </v-img>
-
-        <v-card-subtitle class="pb-0">Date: {{ date }}</v-card-subtitle>
-
+        <v-card-subtitle class="pb-2">Date: {{ date }}</v-card-subtitle>
         <v-card-text class="text--primary">
-          <div class="pb-1" style="border-bottom: 1px solid grey;">
-            From <code>{{ origin }}</code> to <code>{{ destination }}</code>
+          <div class="pb-2" style="border-bottom: 1px solid grey;">
+            From
+            <code class="mx-2">{{ origin }}</code>
+            to
+            <code class="mx-2">{{ destination }}</code>
           </div>
 
           <div class="mt-1 pb-n3">
@@ -49,9 +50,14 @@
             {{ buttonText }}
           </v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="secondary" icon>
-            <v-icon>mdi-share</v-icon>
-          </v-btn>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn color="secondary" icon v-on="on">
+                <v-icon>mdi-share</v-icon>
+              </v-btn>
+            </template>
+            <span>Share this trip</span>
+          </v-tooltip>
         </v-card-actions>
       </v-card>
     </v-col>
