@@ -1,6 +1,6 @@
 <template>
   <v-row v-if="isEven" align="center" justify="center">
-    <v-col cols="5" v-for="(item, index) in items.trips" :key="index">
+    <v-col cols="10" md="5" v-for="(item, index) in items.trips" :key="index">
       <trip-card
         :id="item._id"
         :origin="item.origin"
@@ -14,7 +14,7 @@
 
   <div v-else>
     <v-row align="center" justify="center">
-      <v-col cols="5" v-for="(item, index) in evenTrips" :key="index">
+      <v-col cols="10" md="5" v-for="(item, index) in evenTrips" :key="index">
         <trip-card
           :id="item._id"
           :origin="item.origin"
@@ -26,7 +26,7 @@
       </v-col>
     </v-row>
     <v-row align="center" justify="center">
-      <v-col cols="5">
+      <v-col cols="10" md="5">
         <trip-card
           :id="items.trips[items.count - 1]._id"
           :origin="items.trips[items.count - 1].origin"
