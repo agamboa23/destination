@@ -62,7 +62,7 @@
                     </v-btn>
                     <v-btn
                       text
-                      color="primary"
+                      color="success"
                       @click="$refs.dialog.save(date)"
                     >
                       OK
