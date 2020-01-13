@@ -44,6 +44,7 @@
         <router-view />
       </v-container>
     </v-content>
+    <notifications position="bottom right" />
     <v-footer color="accent" padless>
       &copy; 2020 DestiNation GmbH
       <v-spacer></v-spacer>
