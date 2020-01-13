@@ -269,7 +269,7 @@ export default {
       try {
         this.cancelDisabled = true
         const res = await axios.patch(
-          'http://localhost:3000/trips/' + this.tripId
+          'http://localhost:3000/trips/cancel/' + this.tripId
         )
         this.cancelDialog = false
         this.cancelDisabled = false
