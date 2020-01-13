@@ -108,6 +108,14 @@
         </template>
       </v-row>
     </v-col>
+    <v-overlay v-model="overlay">
+      <v-progress-circular
+        size="150"
+        width="10"
+        color="secondary"
+        indeterminate
+      ></v-progress-circular>
+    </v-overlay>
   </v-row>
 </template>
 
@@ -125,6 +133,7 @@ export default {
   },
   data: () => {
     return {
+      overlay: false,
       createdTrips: [],
       joinedtrips: [],
       completedTrips: []
@@ -139,6 +148,7 @@ export default {
     ...mapState('user', ['id'])
   },
   async created() {
+    this.overlay = true
     const createdRes = await axios.get(
       'http://localhost:3000/trips/upcoming/' + this.id
     )
@@ -156,6 +166,7 @@ export default {
     )
     const joinedCompletedArr = joinedCompletedRes.data.trips
     this.completedTrips = completedArr.concat(joinedCompletedArr)
+    this.overlay = false
   }
 }
 </script>
