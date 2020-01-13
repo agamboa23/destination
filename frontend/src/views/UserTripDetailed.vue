@@ -1,7 +1,78 @@
 <template>
-  <v-row align="center" justify="space-around">
+  <v-row align="center" justify="center">
     <v-col cols="11" md="5">
-      <v-card>{{ tripId }}</v-card>
+      <v-card max-width="500">
+        <v-img
+          class="white--text align-end"
+          height="200px"
+          :src="
+            imgSrc
+              ? imgSrc
+              : 'https://images.unsplash.com/photo-1517021897933-0e0319cfbc28?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80'
+          "
+        >
+          <v-card-title>Trip to {{ destination }}</v-card-title>
+        </v-img>
+        <v-card-subtitle class="pb-2">Date: {{ date }}</v-card-subtitle>
+        <v-card-text class="text--primary">
+          <div class="pb-2" style="border-bottom: 1px solid grey;">
+            From
+            <code class="mx-2">{{ origin }}</code>
+            to
+            <code class="mx-2">{{ destination }}</code>
+          </div>
+
+          <div class="mt-1 pb-n3">
+            {{
+              description
+                ? description
+                : 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione quasi aperiam provident cumque blanditiis ipsum, officiis facere, animi et veritatis eum perspiciatis quaerat? Doloremque culpa nihil error, totam dolor aspernatur?'
+            }}
+          </div>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            v-if="isAdmin"
+            class="ml-5"
+            color="error"
+            small
+            outlined
+            @click="cancelDialog = true"
+          >
+            <v-icon class="mr-2">mdi-cancel</v-icon>
+            Cancel Trip
+          </v-btn>
+          <v-dialog v-model="cancelDialog" persistent max-width="550">
+            <v-card>
+              <v-card-title class="headline">
+                Cancel Trip from {{ origin }} to {{ destination }}?
+              </v-card-title>
+              <v-card-text>
+                By clicking on "Cancel Trip" you're irreversibly deleting the
+                trip.
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="green darken-1"
+                  text
+                  @click="cancelDialog = false"
+                >
+                  Back
+                </v-btn>
+                <v-btn
+                  color="error"
+                  :disabled="cancelDisabled"
+                  @click="deleteTrip()"
+                >
+                  Cancel Trip
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-card-actions>
+      </v-card>
     </v-col>
     <v-divider class="mx-2 hidden-sm-and-down" vertical inset />
     <v-col cols="11" md="5">
@@ -149,6 +220,8 @@ export default {
   },
   data: () => {
     return {
+      cancelDialog: false,
+      cancelDisabled: false,
       joinDialog: false,
       overlay: false,
       snackbar: false,
@@ -156,7 +229,12 @@ export default {
       snacktext: '',
       members: [],
       requests: [],
-      tripCreator: ''
+      tripCreator: '',
+      imgSrc: '',
+      origin: '',
+      destination: '',
+      date: '',
+      description: ''
     }
   },
   props: {
@@ -186,6 +264,24 @@ export default {
       return arr.filter(ele => {
         return ele !== item
       })
+    },
+    async deleteTrip() {
+      try {
+        this.cancelDisabled = true
+        const res = await axios.patch(
+          'http://localhost:3000/trips/' + this.tripId
+        )
+        this.cancelDialog = false
+        this.cancelDisabled = false
+        this.invokeSnackbar(res.data.message, 'success')
+        setTimeout(() => {
+          this.$router.push({ name: 'user' })
+        }, 1000)
+      } catch (error) {
+        this.cancelDialog = false
+        this.cancelDisabled = false
+        this.invokeSnackbar(`Couldn't delete trip :(`, 'error')
+      }
     },
     async acceptJoin(id) {
       try {
@@ -226,6 +322,16 @@ export default {
     this.members = resData.members
     this.requests = resData.requests
     this.tripCreator = resData.user._id
+    this.origin = resData.origin
+    this.destination = resData.destination
+    this.description = resData.description
+    const dateArr = resData.date_of_trip.split('T')
+    this.date = dateArr[0]
+    const imgRes = await axios.get(
+      'https://www.googleapis.com/customsearch/v1?key=AIzaSyDuwSlA-c6xKWp7K3XPKRhaqE91_iEE5NA&cx=011914005902216404247:ewomagcszot&searchType=image&q=' +
+        this.destination
+    )
+    this.imgSrc = imgRes.data.items[0].link
     this.overlay = false
   }
 }
