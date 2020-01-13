@@ -22,7 +22,7 @@
       <div>
         Requests:
         <span v-for="(name, index) in requests" :key="index">
-          <name :id="name" /> {{ getConditionalSlash(members, index) }}
+          <name :id="name" /> {{ getConditionalSlash(requests, index) }}
         </span>
       </div>
     </v-card-text>
