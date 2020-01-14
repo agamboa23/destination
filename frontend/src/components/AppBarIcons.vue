@@ -75,24 +75,23 @@ export default {
       const userResData = userRes.data.user.notifications
       this.notifIds = userResData
     },
-    async showNotification(id) {
-      const notRes = await axios.get(
-        'http://localhost:3000/notifications/' + id
-      )
-      const notResData = notRes.data.notification
-      const message = {
-        text: notResData.message,
-        isRead: notResData.isRead
-      }
-      if (!message.isRead) {
-        this.notify(message.text)
-      }
-    },
-    checkUpdates() {
+    async checkUpdates() {
       const temp = this.notifIds
-      this.getNotifIds()
-      if (this.notifIds.length === temp.length + 1) {
-        this.showNotification(this.notifIds[this.notifIds.length - 1])
+      const userRes = await axios.get(
+        'http://localhost:3000/users/' + this.userId
+      )
+      const userResData = userRes.data.user.notifications
+      this.notifIds = userResData
+      const diff = this.notifIds.length - temp.length
+      if (diff !== 0) {
+        for (let i = diff; i > 0; i--) {
+          const newNotif = this.notifIds[this.notifIds.length - i]
+          const notRes = await axios.get(
+            'http://localhost:3000/notifications/' + newNotif
+          )
+          const notResData = notRes.data.notification
+          this.notify(notResData.message)
+        }
       } else {
         this.invokeSnackbar('No Updates', 'info')
       }
