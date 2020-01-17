@@ -1,8 +1,8 @@
-const express = require('express');
-const router = express.Router();
+import { Router } from 'express';
+const router = Router();
 
-const ProvincesController = require('../controllers/provinces');
+import { provinces_get_aggregated } from '../controllers/provinces';
 
-router.get('/:sort_by?/:sort_criteria?/:include_image?', ProvincesController.provinces_get_aggregated);
+router.get('/:sort_by?/:sort_criteria?/:include_image?', provinces_get_aggregated);
 
-module.exports = router;
+export default router;
