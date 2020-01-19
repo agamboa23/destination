@@ -65,6 +65,8 @@ exports.trips_get_all_upcoming = (req, res, next) => {
                         date: doc.date_of_trip.getFullYear() + "-" +
                             Number(doc.date_of_trip.getMonth() + 1) + "-" +
                             doc.date_of_trip.getDate(),
+                        time_of_trip: doc.date_of_trip.getHours() + ":" + 
+                            doc.date_of_trip.getMinutes(),
                         user: doc.user,
                         members_length: doc.members.length,
                         number_of_members: doc.number_of_members,
@@ -101,6 +103,8 @@ exports.trips_get_upcoming_trips_of_user = (req, res, next) => {
                         date_of_trip: doc.date_of_trip.getFullYear() + "-" +
                             Number(doc.date_of_trip.getMonth() + 1) + "-" +
                             doc.date_of_trip.getDate(),
+                        time_of_trip: doc.date_of_trip.getHours() + ":" + 
+                            doc.date_of_trip.getMinutes(),
                         //user: doc.user,
                         members: doc.members,
                         requests: doc.requests,
@@ -134,6 +138,8 @@ exports.trips_get_completed_trips_of_user = (req, res, next) => {
                         date_of_trip: doc.date_of_trip.getFullYear() + "-" +
                             Number(doc.date_of_trip.getMonth() + 1) + "-" +
                             doc.date_of_trip.getDate(),
+                        time_of_trip: doc.date_of_trip.getHours() + ":" + 
+                            doc.date_of_trip.getMinutes(),
                         members: doc.members,
                         requests: doc.requests,
                         number_of_members: doc.number_of_members,
@@ -154,7 +160,7 @@ exports.trips_get_joined_upcoming_trips_of_user = (req, res, next) => {
     User.findById(userId)
         .then(docs => {
             trips = docs.joined_trips;
-            console.log("trips: " + trips);
+            //console.log("trips: " + trips);
             Trip.find({
                 _id: { $in: trips },
                 date_of_trip: { $gt: now },
@@ -170,6 +176,8 @@ exports.trips_get_joined_upcoming_trips_of_user = (req, res, next) => {
                             date_of_trip: doc.date_of_trip.getFullYear() + "-" +
                                 Number(doc.date_of_trip.getMonth() + 1) + "-" +
                                 doc.date_of_trip.getDate(),
+                            time_of_trip: doc.date_of_trip.getHours() + ":" + 
+                                          doc.date_of_trip.getMinutes(),
                             members: doc.members,
                             requests: doc.requests,
                             number_of_members: doc.number_of_members,
@@ -187,7 +195,7 @@ exports.trips_get_joined_completed_trips_of_user = (req, res, next) => {
     User.findById(userId)
         .then(docs => {
             trips = docs.joined_trips;
-            console.log("trips: " + trips);
+            //console.log("trips: " + trips);
             Trip.find({
                 _id: { $in: trips },
                 date_of_trip: { $lt: now },
@@ -203,6 +211,8 @@ exports.trips_get_joined_completed_trips_of_user = (req, res, next) => {
                             date_of_trip: doc.date_of_trip.getFullYear() + "-" +
                                 Number(doc.date_of_trip.getMonth() + 1) + "-" +
                                 doc.date_of_trip.getDate(),
+                            time_of_trip: doc.date_of_trip.getHours() + ":" + 
+                                          doc.date_of_trip.getMinutes(),
                             members: doc.members,
                             requests: doc.requests,
                             number_of_members: doc.number_of_members,
