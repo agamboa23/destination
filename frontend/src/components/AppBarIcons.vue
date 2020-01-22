@@ -44,6 +44,7 @@ export default {
   name: 'AppBarIcons',
   data: () => {
     return {
+      backendUrl: process.env.VUE_APP_BACKENDURL,
       notifIds: [],
       snackbar: false,
       snackcolor: '',
@@ -69,17 +70,13 @@ export default {
       })
     },
     async getNotifIds() {
-      const userRes = await axios.get(
-        'http://localhost:3000/users/' + this.userId
-      )
+      const userRes = await axios.get(this.backendUrl + 'users/' + this.userId)
       const userResData = userRes.data.user.notifications
       this.notifIds = userResData
     },
     async checkUpdates() {
       const temp = this.notifIds
-      const userRes = await axios.get(
-        'http://localhost:3000/users/' + this.userId
-      )
+      const userRes = await axios.get(this.backendUrl + 'users/' + this.userId)
       const userResData = userRes.data.user.notifications
       this.notifIds = userResData
       const diff = this.notifIds.length - temp.length
@@ -87,7 +84,7 @@ export default {
         for (let i = diff; i > 0; i--) {
           const newNotif = this.notifIds[this.notifIds.length - i]
           const notRes = await axios.get(
-            'http://localhost:3000/notifications/' + newNotif
+            this.backendUrl + 'notifications/' + newNotif
           )
           const notResData = notRes.data.notification
           this.notify(notResData.message)

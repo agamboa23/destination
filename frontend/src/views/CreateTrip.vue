@@ -170,6 +170,7 @@ export default {
   name: 'CreateTrip',
   data: () => {
     return {
+      backendUrl: process.env.VUE_APP_BACKENDURL,
       valid: true,
       rules: {
         required: v => !!v || 'Required'
@@ -249,7 +250,7 @@ export default {
             requests: []
           }
           //POST Request
-          const res = await axios.post('http://localhost:3000/trips', trip)
+          const res = await axios.post(this.backendUrl + 'trips', trip)
           this.invokeSnackbar(res.data.message, 'success')
           this.loading = false
           setTimeout(() => {

@@ -72,6 +72,7 @@ export default {
   name: 'UpcomingTripDetailed',
   data: () => {
     return {
+      backendUrl: process.env.VUE_APP_BACKENDURL,
       dataReady: false,
       loading: false,
       buttonColor: 'secondary',
@@ -98,7 +99,8 @@ export default {
             if (this.numberOfMembers < this.maxMembers) {
               // Member limit is not reached
               const res = await axios.patch(
-                'http://localhost:3000/trips/addreq/' +
+                this.backendUrl +
+                  'trips/addreq/' +
                   this.tripId +
                   '/' +
                   this.userId
@@ -143,7 +145,7 @@ export default {
     }
   },
   async created() {
-    const res = await axios.get('http://localhost:3000/trips/' + this.tripId)
+    const res = await axios.get(this.backendUrl + 'trips/' + this.tripId)
     const resData = res.data.trip
     this.numberOfMembers = resData.members.length
     this.maxMembers = resData.number_of_members

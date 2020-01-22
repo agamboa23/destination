@@ -58,6 +58,7 @@ export default {
   name: 'Login',
   data: () => {
     return {
+      backendUrl: process.env.VUE_APP_BACKENDURL,
       valid: true,
       loading: false,
       email: '',
@@ -86,14 +87,11 @@ export default {
             email: this.email,
             password: this.password
           }
-          const res = await axios.post(
-            'http://localhost:3000/users/login',
-            cred
-          )
+          const res = await axios.post(this.backendUrl + 'users/login', cred)
           this.$store.commit('auth/login', res.data.token)
           const userId = res.data.userId
           const userResponse = await axios.get(
-            'http://localhost:3000/users/' + userId
+            this.backendUrl + 'users/' + userId
           )
           const firstName = userResponse.data.user.first_name
           this.$store.commit('user/setUser', {

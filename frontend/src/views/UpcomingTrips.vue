@@ -25,6 +25,7 @@ export default {
   },
   data: () => {
     return {
+      backendUrl: process.env.VUE_APP_BACKENDURL,
       items: {
         count: 0,
         trips: []
@@ -37,7 +38,7 @@ export default {
     }
   },
   async created() {
-    const res = await axios.get('http://localhost:3000/trips/upcoming')
+    const res = await axios.get(this.backendUrl + 'trips/upcoming')
     this.items = res.data
   }
 }
