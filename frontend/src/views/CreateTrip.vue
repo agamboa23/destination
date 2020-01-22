@@ -54,6 +54,7 @@
                   <v-date-picker
                     v-model="date"
                     scrollable
+                    :first-day-of-week="1"
                     :allowed-dates="allowedDates"
                   >
                     <v-spacer></v-spacer>
