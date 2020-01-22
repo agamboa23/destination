@@ -1,0 +1,21 @@
+version: '3'
+services:
+
+  backend:
+    build: ./backend
+    container_name: backend
+    ports:
+        - 9000:3000
+    
+  recommender:
+    build: ./recommender
+    container_name: recommender
+    ports:
+        - 9001:3001
+    
+    
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+        - 9080:8080

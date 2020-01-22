@@ -1,0 +1,15 @@
+#Docker
+
+1. sudo docker build -t backend . 
+2. docker run -it -p 9000:3000 backend
+
+3. docker-compose up -d --force-recreate (-d detach mode plus create from scratch)
+4. docker-compose down --rmi all
+
+docker system prune -a (removes all stopped containers and images)
+
+
+commented out console.log lint error I believe
+components Login 107, Signup 250 
+views CreateTrip 261, Search 100,
+        UpcomingTripDetailed 132 UserTripDetailed 257 added id to avoid error

@@ -97,7 +97,7 @@ export default {
   methods: {
     async go() {
       if (this.$refs.form.validate()) {
-        console.log('ARAMA')
+        //console.log('ARAMA')
       }
     },
     random() {
