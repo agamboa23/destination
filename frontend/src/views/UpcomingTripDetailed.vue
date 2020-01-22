@@ -13,7 +13,7 @@
         >
           <v-card-title>Trip to {{ destination }}</v-card-title>
         </v-img>
-        <v-card-subtitle class="pb-2">Date: {{ date }}</v-card-subtitle>
+        <v-card-subtitle class="pb-2">{{ date }}</v-card-subtitle>
         <v-card-text class="text--primary">
           <div class="pb-2" style="border-bottom: 1px solid grey;">
             From
@@ -152,8 +152,11 @@ export default {
     this.origin = resData.origin
     this.destination = resData.destination
     this.description = resData.description
-    const dateArr = resData.date_of_trip.split('T')
-    this.date = dateArr[0]
+    const dateObj = new Date(resData.date_of_trip)
+    this.date = dateObj.toLocaleString('en-DE', {
+      dateStyle: 'full',
+      timeStyle: 'short'
+    })
     // TODO: Hardcoded Google CSE Parameters
     const imgRes = await axios.get(
       'https://www.googleapis.com/customsearch/v1?key=AIzaSyDuwSlA-c6xKWp7K3XPKRhaqE91_iEE5NA&cx=011914005902216404247:ewomagcszot&searchType=image&q=' +

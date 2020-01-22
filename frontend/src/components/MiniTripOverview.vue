@@ -10,7 +10,7 @@
       </span>
     </v-card-title>
     <v-card-subtitle class="overline">
-      {{ date }}
+      {{ betterDate }}
     </v-card-subtitle>
     <v-card-text>
       <div>
@@ -46,6 +46,15 @@ export default {
     destination: String,
     date: String,
     completed: Boolean
+  },
+  computed: {
+    betterDate() {
+      const dateObj = new Date(this.date)
+      return dateObj.toLocaleString('en-DE', {
+        dateStyle: 'short',
+        timeStyle: 'short'
+      })
+    }
   },
   methods: {
     getConditionalSlash(arr, i) {

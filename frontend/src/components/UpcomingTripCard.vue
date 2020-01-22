@@ -13,7 +13,7 @@
           {{ destination }}
         </v-list-item-title>
         <v-list-item-subtitle>
-          {{ date }}
+          {{ betterDate }}
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-avatar v-if="logo" tile size="80">
@@ -50,6 +50,15 @@ export default {
     return {
       dataReady: false,
       logo: ''
+    }
+  },
+  computed: {
+    betterDate() {
+      const dateObj = new Date(this.date)
+      return dateObj.toLocaleString('en-DE', {
+        dateStyle: 'short',
+        timeStyle: 'short'
+      })
     }
   },
   methods: {
