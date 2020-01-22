@@ -34,9 +34,9 @@
               v-model="destination"
             ></v-autocomplete>
             <v-row align="center" justify="space-around">
-              <v-col cols="5">
+              <v-col cols="4">
                 <v-dialog
-                  ref="dialog"
+                  ref="dialog1"
                   v-model="modal"
                   :return-value.sync="date"
                   persistent
@@ -64,18 +64,54 @@
                     <v-btn
                       text
                       color="success"
-                      @click="$refs.dialog.save(date)"
+                      @click="$refs.dialog1.save(date)"
                     >
                       OK
                     </v-btn>
                   </v-date-picker>
                 </v-dialog>
               </v-col>
-              <v-col cols="5">
+              <v-col cols="4">
+                <v-dialog
+                  ref="dialog2"
+                  v-model="modal2"
+                  :return-value.sync="time"
+                  persistent
+                  width="290px"
+                >
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      v-model="time"
+                      label="Time of Trip"
+                      prepend-icon="mdi-clock-outline"
+                      readonly
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-time-picker
+                    v-if="modal2"
+                    v-model="time"
+                    scrollable
+                    format="24hr"
+                  >
+                    <v-spacer></v-spacer>
+                    <v-btn text color="primary" @click="modal2 = false">
+                      Cancel
+                    </v-btn>
+                    <v-btn
+                      text
+                      color="success"
+                      @click="$refs.dialog2.save(time)"
+                      >OK</v-btn
+                    >
+                  </v-time-picker>
+                </v-dialog>
+              </v-col>
+              <v-col cols="4">
                 <v-text-field
                   color="secondary"
                   v-model="numberOfMembers"
-                  label="Maximum Number of Participants"
+                  label="Number of Participants"
                   type="number"
                   prepend-icon="mdi-nature-people"
                   :rules="[moreThanTwoRule]"
@@ -141,9 +177,11 @@ export default {
       origin: '',
       destination: '',
       date: '',
+      time: '08:00',
       numberOfMembers: 2,
       description: 'An awesome trip to an awesome DestiNation!',
       modal: false,
+      modal2: false,
       loading: false,
       snackbar: false,
       snackcolor: '',
@@ -165,6 +203,9 @@ export default {
         result.push(placesPack[i].name)
       }
       return result
+    },
+    betterDate() {
+      return this.date + ' ' + this.time + ':00'
     }
   },
   methods: {
@@ -199,7 +240,8 @@ export default {
             userId: this.userId,
             destination: this.destination,
             origin: this.origin,
-            date_of_trip: this.date,
+            // "year-month-day hour:minute:second"
+            date_of_trip: this.betterDate,
             number_of_members: this.numberOfMembers,
             isOpen: true,
             description: this.description,
