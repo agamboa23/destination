@@ -1,8 +1,14 @@
 <template>
   <v-card>
     <v-tabs v-model="tab" background-color="secondary" grow>
-      <v-tab v-for="item in items" :key="item">
-        {{ item }}
+      <v-tab>
+        Stereotypes
+      </v-tab>
+      <v-tab :disabled="stereotypeSelection.length === 0">
+        Options
+      </v-tab>
+      <v-tab disabled>
+        Destinations
       </v-tab>
     </v-tabs>
     <v-overlay v-model="overlay">
@@ -18,50 +24,41 @@
       <v-tab-item>
         <v-card flat>
           <v-card-text>
-            <v-row align="start" justify="center">
-              <v-col v-for="province in provinces" :key="province.osm_id">
-                <discover-detail-card
-                  type="province"
-                  :itemId="province.osm_id"
-                  :avatarURL="province.wappen_url"
-                  :isImg="true"
-                  :name="province.name_eng"
-                  :subName="province.name"
-                  @click.native="getDistricts(province.osm_id)"
-                ></discover-detail-card>
-              </v-col>
-            </v-row>
+            <v-item-group v-model="stereotypeSelection" multiple mandatory>
+              <v-container>
+                <v-row align="start" justify="center">
+                  <v-col v-for="stereotype in stereotypes" :key="stereotype.id">
+                    <v-item
+                      v-slot:default="{ active, toggle }"
+                      :value="stereotype.id"
+                    >
+                      <discover-detail-card
+                        @click.native="toggle"
+                        :active="active"
+                        :itemId="stereotype.id"
+                        :avatarURL="stereotype.image_url"
+                        :isImg="true"
+                        :name="stereotype.name"
+                        :subName="stereotype.description"
+                      ></discover-detail-card>
+                    </v-item>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-item-group>
           </v-card-text>
         </v-card>
+      </v-tab-item>
+      <v-tab-item>
+        <discover-options-card v-model="options" />
+        <v-btn class="elevation-12" block color="secondary">Next</v-btn>
       </v-tab-item>
       <v-tab-item>
         <v-card flat>
           <v-card-text>
             <v-row align="start" justify="center">
-              <v-col v-for="district in districts" :key="district.osm_id">
+              <!-- <v-col v-for="destination in destinations" :key="destination.id">
                 <discover-detail-card
-                  type="district"
-                  :itemId="district.osm_id"
-                  :avatarURL="district.wappen_url"
-                  :isImg="true"
-                  :name="district.name"
-                  :subName="
-                    'Population: ' + beautifyPopulation(district.population)
-                  "
-                  @click.native="getDestinations(district.osm_id)"
-                ></discover-detail-card>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-      </v-tab-item>
-      <v-tab-item>
-        <v-card flat>
-          <v-card-text>
-            <v-row align="start" justify="center">
-              <v-col v-for="destination in destinations" :key="destination.id">
-                <discover-detail-card
-                  type="destination"
                   :isImg="false"
                   :lat="destination.lat"
                   :lon="destination.lon"
@@ -80,7 +77,7 @@
                       : randomProperty(destination.tags)
                   "
                 ></discover-detail-card>
-              </v-col>
+              </v-col> -->
             </v-row>
           </v-card-text>
         </v-card>
@@ -92,69 +89,43 @@
 <script>
 import axios from 'axios'
 import DiscoverDetailCardVue from './DiscoverDetailCard.vue'
+import DiscoverOptionsCardVue from './DiscoverOptionsCard.vue'
 
 export default {
   name: 'DiscoverCard',
   components: {
-    'discover-detail-card': DiscoverDetailCardVue
+    'discover-detail-card': DiscoverDetailCardVue,
+    'discover-options-card': DiscoverOptionsCardVue
   },
   data: () => {
     return {
       recommenderUrl: process.env.VUE_APP_RECOMMENDERURL,
       overlay: false,
       tab: null,
-      items: ['Provinces', 'Districts', 'DestiNations'],
-      provinces: [],
-      districts: [],
+      stereotypes: [],
+      stereotypeSelection: [],
+      options: {},
       destinations: []
     }
   },
   methods: {
-    beautifyPopulation(pop) {
-      let result = pop.slice(1)
-      // https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
-      return result.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-    },
     randomProperty(obj) {
       // https://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
       var keys = Object.keys(obj)
       return obj[keys[(keys.length * Math.random()) << 0]]
     },
-    async getProvinces() {
+    async getStereotypes() {
       // TODO Try Catch
       this.overlay = true
-      const res = await axios.get(
-        this.recommenderUrl + 'recsys/recommendations/00'
-      )
-      const provinces = res.data.provinces
-      this.provinces = provinces
+      const res = await axios.get(this.recommenderUrl + 'recsys/stereotypes/')
+      const stereotypes = res.data.Stereotypes
+      this.stereotypes = stereotypes
       this.overlay = false
     },
-    async getDistricts(province) {
-      // TODO Try Catch
-      this.overlay = true
-      const res = await axios.get(
-        this.recommenderUrl + 'recsys/recommendations/00/province/' + province
-      )
-      const districts = res.data.districts
-      this.districts = districts
-      this.tab = 1
-      this.overlay = false
-    },
-    async getDestinations(district) {
-      // TODO Try Catch
-      this.overlay = true
-      const res = await axios.get(
-        this.recommenderUrl + 'recsys/recommendations/00/district/' + district
-      )
-      const destinations = res.data.destinations
-      this.destinations = destinations
-      this.tab = 2
-      this.overlay = false
-    }
+    async getDestination() {}
   },
   created() {
-    this.getProvinces()
+    this.getStereotypes()
   }
 }
 </script>

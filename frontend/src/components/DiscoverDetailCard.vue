@@ -3,9 +3,10 @@
     class="mx-auto"
     max-width="400"
     outlined
-    :color="hover ? 'info' : ''"
+    :color="active ? 'info' : hover ? 'info' : ''"
     @mouseover="hover = true"
     @mouseleave="hover = false"
+    :style="hover ? 'cursor: pointer;' : ''"
   >
     <v-list-item three-line>
       <v-list-item-content>
@@ -14,7 +15,9 @@
           {{ name }}
         </v-list-item-title>
         <v-list-item-subtitle>
-          <v-btn x-small outlined color="black">More Information</v-btn>
+          <v-btn v-if="moreInfo" x-small outlined color="black">
+            More Information
+          </v-btn>
         </v-list-item-subtitle>
       </v-list-item-content>
 
@@ -32,14 +35,15 @@
 export default {
   name: 'DiscoverDetailCard',
   props: {
-    type: String,
     itemId: Number,
     avatarURL: String,
-    isImg: Boolean,
-    name: String,
-    subName: String,
+    isImg: { type: Boolean, required: true },
+    name: { type: String, required: true },
+    subName: { type: String, required: true },
     lat: String,
-    lon: String
+    lon: String,
+    moreInfo: Boolean,
+    active: Boolean
   },
   data: () => {
     return {
