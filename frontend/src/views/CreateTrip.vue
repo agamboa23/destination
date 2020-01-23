@@ -257,8 +257,6 @@ export default {
             this.$router.push({ name: 'home' })
           }, 1500)
         } catch (error) {
-          // this.$refs.form.reset()
-          //console.log(error)
           this.invokeSnackbar("Couldn't create Trip :(", 'error')
           this.loading = false
         }

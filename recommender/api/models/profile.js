@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
-const profileSchema = mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
+const profileSchema = Schema({
+    _id: Schema.Types.ObjectId,
     user_id: {type: Number},
     arts: {type: Number},
     wikidata_code: { type: String },
@@ -20,6 +20,6 @@ const profileSchema = mongoose.Schema({
             required: true
         }
     }
-})
+});
 
-module.exports = mongoose.model('Profiles', profileSchema,'profiles');
+export default model('Profiles', profileSchema,'profiles');

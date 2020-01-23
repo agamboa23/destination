@@ -96,9 +96,8 @@ export default {
   },
   methods: {
     async go() {
-      if (this.$refs.form.validate()) {
-        //console.log('ARAMA')
-      }
+      // No search functionality implemented
+      this.$refs.form.validate()
     },
     random() {
       const max = this.destSelection.length
