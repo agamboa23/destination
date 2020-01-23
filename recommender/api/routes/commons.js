@@ -1,8 +1,8 @@
 import Router from 'express';
 const router = Router();
 
-import { districts_get_aggregated } from '../controllers/commons';
+import { get_images_by_locations } from '../controllers/commons';
 
-router.get('/commons/images/:locations', districts_get_aggregated);
+router.get('/images/:locations', get_images_by_locations);
 
 export default router;

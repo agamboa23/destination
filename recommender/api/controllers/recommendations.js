@@ -155,9 +155,7 @@ export async function get_dstn_by_stereotype(req, res, next) {
         queryString=opQueryBuilder.get_area_query(overpassAreaCode,filters,pBtReachable);
     }
     try {
-        console.log(queryString);
         const destinations = await queryOverpass(queryString);
-        console.log(destinations.length);
         res.status(200).json({destinations});
     }
     catch(err){
