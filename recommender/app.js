@@ -8,6 +8,7 @@ import recommendationRoutes from './api/routes/recommendations';
 import provincesRoutes from './api/routes/provinces';
 import districtsRoutes from './api/routes/districts';
 import stereotypeRoutes from './api/routes/stereotypes';
+import commonsRoutes from './api/routes/commons';
 
 mongoose.connect(
     "mongodb+srv://destination:n43f8c5bgu5v15bO@cluster0-ncgh8.gcp.mongodb.net/destinationRecSysDB?retryWrites=true&w=majority",
@@ -37,6 +38,7 @@ app.use('/recsys/recommendations', recommendationRoutes);
 app.use('/recsys/provinces', provincesRoutes);
 app.use('/recsys/districts', districtsRoutes);
 app.use('/recsys/stereotypes', stereotypeRoutes);
+app.use('/recsys/commons', commonsRoutes);
 
 app.use((req,res,next) => {
     const error = new Error('Not found');

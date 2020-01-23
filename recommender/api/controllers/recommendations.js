@@ -93,36 +93,6 @@ export async function get_dstn_recommendations(req, res, next) {
         // return node, ways, relations as determined above
         out geom meta;
         `);
-        console.log(`
-        [out:json][timeout:800];
-        area(`+overpassAreaCode+`)->.searchArea;
-        // determine set public transportation stations
-        (
-          node[public_transport=station](`+overpassAreaCode+`);
-          way[public_transport=station](`+overpassAreaCode+`);
-          rel[public_transport=station](`+overpassAreaCode+`);
-        )->.stations; // put them into the set "stations"
-        
-        // determine set of locations, in this case tourism
-        (
-          node[tourism](`+overpassAreaCode+`);
-          way[tourism](`+overpassAreaCode+`);
-          rel[tourism](`+overpassAreaCode+`);
-        )->.destinations; // put them into the set "destinations"
-        
-        // determine set of banks near police stations
-        (
-          node.destinations(around.stations:1000);
-          way.destinations(around.stations:1000);
-          rel.destinations(around.stations:1000);
-        )->.destinationsNearStations; // put them into the set "banksNearPolices"
-        
-        // determine destinations far from stations
-        //(.destinations; - .destinationsNearStations;);
-        (.destinationsNearStations;);
-        // return node, ways, relations as determined above
-        out geom meta;
-        `)
         res.status(200).json({destinations});
     }
     catch(err){
@@ -140,7 +110,6 @@ export async function get_dstn_by_stereotype(req, res, next) {
     const qLocation = req.query.location;
     const pBtReachable = req.params.bt_reachable=="false"? false : true;
     var overpassAreaCode,maxDistance,minDistance,location,queryString,filters;
-    console.log(qFilter)
     filters=qFilter+"&&("+Stereotypes.get_stereotypes_filters(pStereotypes)+")";
     if (qLocation){
         location = qLocation.split('|');
