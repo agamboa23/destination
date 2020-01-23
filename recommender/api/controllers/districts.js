@@ -1,4 +1,4 @@
-import { find } from '../models/district';
+import District from '../models/district';
 import { get } from "axios";
 import { wikidata_extractor_helper } from '../utils/wikidata';
 var wiki_url = "https://www.wikidata.org/w/api.php?action=wbgetentities&props=claims&format=json&ids=";
@@ -28,7 +28,7 @@ export async function districts_get_aggregated(req, res, next) {
     var districts_qids="";
 
     try {
-        const districts = await find(findQuery).skip(qSkip).limit(qLimit).lean().sort([[qSortBy,qSortCriteria]]).exec();
+        const districts = await District.find(findQuery).skip(qSkip).limit(qLimit).lean().sort([[qSortBy,qSortCriteria]]).exec();
         if (includeImage){
             districts.forEach(district=>districts_qids+=district.wikidata_code+'|');
             districts_qids=districts_qids.slice(0,-1);

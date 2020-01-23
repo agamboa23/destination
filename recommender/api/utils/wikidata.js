@@ -6,7 +6,7 @@ import axios from "axios";
 var media_url = "https://upload.wikimedia.org/wikipedia/commons/";
 
 export function wikidata_extractor_helper(place_reference,wikidata) {
-    var wappen,image, image_md,wappen_md,image_name,wappen_name;
+    var wappen,image, image_md,wappen_md,image_name,wappen_name,population,area;
     image = wikidata.data.entities[place_reference.wikidata_code].claims.P18;
     wappen = wikidata.data.entities[place_reference.wikidata_code].claims.P94;
     if (image){
@@ -30,4 +30,3 @@ export function wikidata_extractor_helper(place_reference,wikidata) {
     place_reference.population= population ? population[0].mainsnak.datavalue.value.amount : "NA";
     place_reference.area= area ? area[0].mainsnak.datavalue.value.amount : "NA";
 }
-

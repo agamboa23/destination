@@ -1,4 +1,4 @@
-import { find } from '../models/province';
+import Province from '../models/province';
 var wiki_url = "https://www.wikidata.org/w/api.php?action=wbgetentities&props=claims&format=json&ids=";
 var provinces_qids= "Q10559|Q10547|Q10551|Q10557|Q10562|Q10554|Q10555";
 import { get } from "axios";
@@ -24,7 +24,7 @@ export async function provinces_get_aggregated(req, res, next) {
     const includeImage = req.query.include_image || false;
     var wappen,image, image_md,wappen_md,image_name,wappen_name,population,area;
     try {
-        const provinces = await find().lean().sort([[qSortBy,qSortCriteria]]).exec();
+        const provinces = await Province.find().lean().sort([[qSortBy,qSortCriteria]]).exec();
         if (includeImage){
             wikidata = await get(wiki_url+provinces_qids);
             for await( var province of provinces){

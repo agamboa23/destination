@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import Router from 'express';
 const router = Router();
 
 import { districts_get_aggregated } from '../controllers/districts';
