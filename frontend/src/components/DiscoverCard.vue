@@ -100,6 +100,7 @@ export default {
   },
   data: () => {
     return {
+      recommenderUrl: process.env.VUE_APP_RECOMMENDERURL,
       overlay: false,
       tab: null,
       items: ['Provinces', 'Districts', 'DestiNations'],
@@ -123,7 +124,7 @@ export default {
       // TODO Try Catch
       this.overlay = true
       const res = await axios.get(
-        'http://localhost:3001/recsys/recommendations/00'
+        this.recommenderUrl + 'recsys/recommendations/00'
       )
       const provinces = res.data.provinces
       this.provinces = provinces
@@ -133,7 +134,7 @@ export default {
       // TODO Try Catch
       this.overlay = true
       const res = await axios.get(
-        'http://localhost:3001/recsys/recommendations/00/province/' + province
+        this.recommenderUrl + 'recsys/recommendations/00/province/' + province
       )
       const districts = res.data.districts
       this.districts = districts
@@ -144,7 +145,7 @@ export default {
       // TODO Try Catch
       this.overlay = true
       const res = await axios.get(
-        'http://localhost:3001/recsys/recommendations/00/district/' + district
+        this.recommenderUrl + 'recsys/recommendations/00/district/' + district
       )
       const destinations = res.data.destinations
       this.destinations = destinations

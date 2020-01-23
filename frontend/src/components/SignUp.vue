@@ -157,6 +157,7 @@ export default {
   name: 'Login',
   data: () => {
     return {
+      backendUrl: process.env.VUE_APP_BACKENDURL,
       valid: true,
       loading: false,
       email: '',
@@ -213,12 +214,10 @@ export default {
         email: this.email,
         password: this.password
       }
-      const res = await axios.post('http://localhost:3000/users/login', cred)
+      const res = await axios.post(this.backendUrl + 'users/login', cred)
       this.$store.commit('auth/login', res.data.token)
       const userId = res.data.userId
-      const userResponse = await axios.get(
-        'http://localhost:3000/users/' + userId
-      )
+      const userResponse = await axios.get(this.backendUrl + 'users/' + userId)
       const firstName = userResponse.data.user.first_name
       this.$store.commit('user/setUser', {
         id: userId,
@@ -239,10 +238,7 @@ export default {
             languages: this.languages,
             phone_number: this.phoneNumber
           }
-          const res = await axios.post(
-            'http://localhost:3000/users/signup',
-            user
-          )
+          const res = await axios.post(this.backendUrl + 'users/signup', user)
           this.login()
           this.invokeSnackbar(res.data.message, 'success')
           this.loading = false
@@ -251,7 +247,7 @@ export default {
           }, 1500)
         } catch (error) {
           // this.$refs.form.reset()
-          console.log(error)
+          //console.log(error)
           this.invokeSnackbar('Authorization Error', 'error')
           this.loading = false
         }

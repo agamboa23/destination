@@ -133,6 +133,7 @@ export default {
   },
   data: () => {
     return {
+      backendUrl: process.env.VUE_APP_BACKENDURL,
       overlay: false,
       createdTrips: [],
       joinedtrips: [],
@@ -150,19 +151,19 @@ export default {
   async created() {
     this.overlay = true
     const createdRes = await axios.get(
-      'http://localhost:3000/trips/upcoming/' + this.id
+      this.backendUrl + 'trips/upcoming/' + this.id
     )
     this.createdTrips = createdRes.data.trips
     const joinedRes = await axios.get(
-      'http://localhost:3000/trips/joinedupcoming/' + this.id
+      this.backendUrl + 'trips/joinedupcoming/' + this.id
     )
     this.joinedtrips = joinedRes.data.trips
     const completedRes = await axios.get(
-      'http://localhost:3000/trips/completed/' + this.id
+      this.backendUrl + 'trips/completed/' + this.id
     )
     const completedArr = completedRes.data.trips
     const joinedCompletedRes = await axios.get(
-      'http://localhost:3000/trips/joinedcompleted/' + this.id
+      this.backendUrl + 'trips/joinedcompleted/' + this.id
     )
     const joinedCompletedArr = joinedCompletedRes.data.trips
     this.completedTrips = completedArr.concat(joinedCompletedArr)

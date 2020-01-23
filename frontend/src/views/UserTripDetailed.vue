@@ -220,6 +220,7 @@ export default {
   },
   data: () => {
     return {
+      backendUrl: process.env.VUE_APP_BACKENDURL,
       cancelDialog: false,
       cancelDisabled: false,
       joinDialog: false,
@@ -253,7 +254,8 @@ export default {
   },
   methods: {
     toUser(id) {
-      console.log('USER ID ', id)
+      //console.log('USER ID ', id)
+      id ///////////////////////////added it to avoid lint error
     },
     invokeSnackbar(text, color) {
       this.snacktext = text
@@ -269,7 +271,7 @@ export default {
       try {
         this.cancelDisabled = true
         const res = await axios.patch(
-          'http://localhost:3000/trips/cancel/' + this.tripId
+          this.backendUrl + 'trips/cancel/' + this.tripId
         )
         this.cancelDialog = false
         this.cancelDisabled = false
@@ -288,7 +290,7 @@ export default {
         this.overlay = true
         this.dialog = false
         await axios.patch(
-          'http://localhost:3000/trips/accreq/' + this.tripId + '/' + id
+          this.backendUrl + 'trips/accreq/' + this.tripId + '/' + id
         )
         // No more complete refresh of state with killing DOM
         this.members.push(id)
@@ -304,7 +306,7 @@ export default {
       try {
         this.overlay = true
         await axios.patch(
-          'http://localhost:3000/trips/rejectreq/' + this.tripId + '/' + id
+          this.backendUrl + 'trips/rejectreq/' + this.tripId + '/' + id
         )
         this.requests = this.removeFromArray(this.requests, id)
         this.overlay = false
@@ -317,7 +319,7 @@ export default {
   },
   async created() {
     this.overlay = true
-    const res = await axios.get('http://localhost:3000/trips/' + this.tripId)
+    const res = await axios.get(this.backendUrl + 'trips/' + this.tripId)
     const resData = res.data.trip
     this.members = resData.members
     this.requests = resData.requests

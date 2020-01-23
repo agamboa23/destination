@@ -13,7 +13,7 @@
         >
           <v-card-title>Trip to {{ destination }}</v-card-title>
         </v-img>
-        <v-card-subtitle class="pb-2">Date: {{ date }}</v-card-subtitle>
+        <v-card-subtitle class="pb-2">{{ date }}</v-card-subtitle>
         <v-card-text class="text--primary">
           <div class="pb-2" style="border-bottom: 1px solid grey;">
             From
@@ -72,6 +72,7 @@ export default {
   name: 'UpcomingTripDetailed',
   data: () => {
     return {
+      backendUrl: process.env.VUE_APP_BACKENDURL,
       dataReady: false,
       loading: false,
       buttonColor: 'secondary',
@@ -98,7 +99,8 @@ export default {
             if (this.numberOfMembers < this.maxMembers) {
               // Member limit is not reached
               const res = await axios.patch(
-                'http://localhost:3000/trips/addreq/' +
+                this.backendUrl +
+                  'trips/addreq/' +
                   this.tripId +
                   '/' +
                   this.userId
@@ -127,7 +129,7 @@ export default {
         }
       } catch (error) {
         this.loading = false
-        console.log(error)
+        //console.log(error)
       }
     }
   },
@@ -143,7 +145,7 @@ export default {
     }
   },
   async created() {
-    const res = await axios.get('http://localhost:3000/trips/' + this.tripId)
+    const res = await axios.get(this.backendUrl + 'trips/' + this.tripId)
     const resData = res.data.trip
     this.numberOfMembers = resData.members.length
     this.maxMembers = resData.number_of_members
@@ -152,8 +154,11 @@ export default {
     this.origin = resData.origin
     this.destination = resData.destination
     this.description = resData.description
-    const dateArr = resData.date_of_trip.split('T')
-    this.date = dateArr[0]
+    const dateObj = new Date(resData.date_of_trip)
+    this.date = dateObj.toLocaleString('en-DE', {
+      dateStyle: 'full',
+      timeStyle: 'short'
+    })
     // TODO: Hardcoded Google CSE Parameters
     const imgRes = await axios.get(
       'https://www.googleapis.com/customsearch/v1?key=AIzaSyDuwSlA-c6xKWp7K3XPKRhaqE91_iEE5NA&cx=011914005902216404247:ewomagcszot&searchType=image&q=' +
