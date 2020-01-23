@@ -19,3 +19,6 @@ services:
     container_name: frontend
     ports:
         - 9080:8080
+    links: 
+        - backend
+        - recommender
