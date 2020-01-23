@@ -253,9 +253,11 @@ export default {
     }
   },
   methods: {
-    toUser(id) {
-      //console.log('USER ID ', id)
-      id ///////////////////////////added it to avoid lint error
+    toUser(userId) {
+      this.$router.push({
+        name: 'foreignProfile',
+        params: { id: userId }
+      })
     },
     invokeSnackbar(text, color) {
       this.snacktext = text
