@@ -110,7 +110,8 @@ export async function get_dstn_by_stereotype(req, res, next) {
     const qLocation = req.query.location;
     const pBtReachable = req.params.bt_reachable=="false"? false : true;
     var overpassAreaCode,maxDistance,minDistance,location,queryString,filters;
-    filters=qFilter+Stereotypes.get_stereotypes_filters(pStereotypes);
+    console.log(qFilter)
+    filters=qFilter+"&&("+Stereotypes.get_stereotypes_filters(pStereotypes)+")";
     if (qLocation){
         location = qLocation.split('|');
         if (location.length<2||isNaN(location[0],isNaN(location[1]))){
