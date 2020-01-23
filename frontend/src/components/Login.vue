@@ -104,8 +104,6 @@ export default {
             this.$router.push({ name: 'home' })
           }, 1500)
         } catch (err) {
-          //console.log(err)
-          // this.$refs.form.reset()
           this.invokeSnackbar('Authorization Error', 'error')
           this.loading = false
         }

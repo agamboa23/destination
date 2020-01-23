@@ -58,6 +58,12 @@ export default new Router({
       props: true
     },
     {
+      path: '/profile/:id',
+      name: 'foreignProfile',
+      component: Profile,
+      props: true
+    },
+    {
       path: '/my-profile/trip-to-:destination-:tripId',
       name: 'userTripDetailed',
       component: UserTripDetailed,
