@@ -1,28 +1,78 @@
 <template>
-  <v-card flat>
+  <v-card class="text-center" flat>
     <v-card-text>
       <v-row align="center" justify="center">
-        <v-col cols="12" md="5">
-          <v-btn color="secondary">Use Current Location</v-btn>
-        </v-col>
-        <v-col cols="12" md="1">
-          <span class="headline font-weight-thin">or</span>
-        </v-col>
-        <v-col cols="12" md="5">
-          <v-autocomplete
-            outlined
+        <v-col cols="4">
+          <v-switch
+            v-model="moreOptions"
+            label="More Options"
             color="secondary"
-            label="Choose from List"
-            hint="e.g. Tegernsee"
-            prepend-inner-icon="mdi-city-variant"
-            no-data-text="Couldn't find location :("
-            :items="places"
-            item-text="name"
-            item-value="geo"
-            v-model="location"
-          ></v-autocomplete>
+          ></v-switch>
         </v-col>
       </v-row>
+      <v-btn class="my-6 mr-12" @click="getCurrentLocation()" color="secondary">
+        {{ isLoc ? `Don't use Current Location` : 'Use Current Location' }}
+      </v-btn>
+      <span class="my-6 ml-12 headline font-weight-thin">
+        {{ isLoc ? location : 'or' }}
+      </span>
+      <v-autocomplete
+        :disabled="isLoc"
+        class="my-6"
+        outlined
+        color="secondary"
+        label="Choose from List"
+        hint="e.g. Tegernsee"
+        prepend-inner-icon="mdi-city-variant"
+        no-data-text="Couldn't find location :("
+        :items="places"
+        item-text="name"
+        item-value="geo"
+        v-model="location"
+      ></v-autocomplete>
+      <template v-if="moreOptions">
+        <v-row align="center" justify="center">
+          <v-col cols="6">
+            <v-select
+              color="secondary"
+              label="Distance in"
+              v-model="aroundMetric"
+              :items="aroundSelection"
+              item-text="name"
+              item-value="abbr"
+            >
+            </v-select>
+            <v-text-field
+              color="secondary"
+              v-model="minDistance"
+              label="Minimum Distance"
+              type="number"
+              persistent-hint
+              :hint="minDistance + ' ' + aroundMetric"
+              :rules="[rules.betweenZeroAndHundred]"
+            ></v-text-field>
+            <v-text-field
+              color="secondary"
+              v-model="maxDistance"
+              label="Maximum Distance"
+              type="number"
+              persistent-hint
+              :hint="maxDistance + ' ' + aroundMetric"
+              :rules="[rules.betweenZeroAndHundred]"
+            ></v-text-field>
+            <v-checkbox
+              v-model="bt_reachable"
+              label="BayernTicket Reachable"
+              color="secondary"
+            ></v-checkbox>
+            <v-checkbox
+              v-model="wheelchair"
+              label="Wheelchair Accessible"
+              color="secondary"
+            ></v-checkbox>
+          </v-col>
+        </v-row>
+      </template>
     </v-card-text>
   </v-card>
 </template>
@@ -35,12 +85,22 @@ export default {
   data: () => {
     return {
       moreOptions: false,
+      isLoc: false,
       location: '',
       maxDistance: 15,
       minDistance: 0,
+      aroundSelection: [
+        { name: 'Meters', abbr: 'm' },
+        { name: 'Kilometers', abbr: 'km' },
+        { name: 'Hours', abbr: 'h' },
+        { name: 'Minutes', abbr: 'min' }
+      ],
       aroundMetric: 'km',
       bt_reachable: true,
-      wheelchair: false
+      wheelchair: false,
+      rules: {
+        betweenZeroAndHundred: v => (v <= 100 && v >= 0) || 'Between 0 and 100'
+      }
     }
   },
   computed: {
@@ -67,6 +127,24 @@ export default {
         }
       } else {
         return { location: this.location }
+      }
+    }
+  },
+  methods: {
+    getCurrentLocation() {
+      if (!this.isLoc) {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(position => {
+            this.location =
+              position.coords.latitude + '|' + position.coords.longitude
+          })
+          this.isLoc = !this.isLoc
+        } else {
+          window.alert('Geolocation is not supported by this browser.')
+        }
+      } else {
+        this.location = ''
+        this.isLoc = !this.isLoc
       }
     }
   },
