@@ -69,9 +69,9 @@
             <v-row align="start" justify="center">
               <v-col v-for="destination in computedDest" :key="destination.id">
                 <discover-detail-card
-                  :isImg="false"
-                  :lat="destination.lat"
-                  :lon="destination.lon"
+                  :avatarURL="destination.image"
+                  :lat="'' + destination.lat"
+                  :lon="'' + destination.lon"
                   :name="
                     destination.tags.name
                       ? destination.tags.name
@@ -89,12 +89,9 @@
                 ></discover-detail-card>
               </v-col>
             </v-row>
-            <v-btn
-              outlined
-              color="secondary"
-              @click="pagination = pagination + 20"
-              >Load More</v-btn
-            >
+            <v-btn outlined color="secondary" @click="morePagination()">
+              Load More
+            </v-btn>
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -121,8 +118,7 @@ export default {
       stereotypes: [],
       stereotypeSelection: [],
       options: {},
-      destinations: [],
-      pagination: 20
+      destinations: []
     }
   },
   computed: {
@@ -130,6 +126,14 @@ export default {
       return !this.options.location
     },
     computedDest() {
+      // let temp = []
+      // for (let i = 0; i < this.pagination; i++) {
+      //   if (this.destinations[i].type !== 'node') {
+
+      //   } else {
+      //     temp.push(this.destinations[i])
+      //   }
+      // }
       return this.destinations.slice(0, this.pagination)
     }
   },
@@ -138,6 +142,21 @@ export default {
       // https://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
       var keys = Object.keys(obj)
       return obj[keys[(keys.length * Math.random()) << 0]]
+    },
+    async getObjWithCommons(dests, n) {
+      let coors = ''
+      for (let i = 0; i < n - 1; i++) {
+        coors = coors + dests[i].lat + '|' + dests[i].lon + ','
+      }
+      coors = coors + dests[n - 1].lat + '|' + dests[n - 1].lon
+      const res = await axios.get(
+        this.recommenderUrl + 'recsys/commons/images/' + coors
+      )
+      const resData = res.data.results
+      for (let i = 0; i < n; i++) {
+        this.destinations[i].image = resData[i].image_url
+      }
+      return dests
     },
     async getStereotypes() {
       // TODO Try Catch
@@ -158,7 +177,6 @@ export default {
       }
       let paramObj = {}
       if ('maxDistance' in this.options) {
-        console.log('Version with more options')
         paramObj = {
           location: this.options.location,
           maxDistance: this.options.maxDistance,
@@ -168,7 +186,6 @@ export default {
           filter: wheelie
         }
       } else {
-        console.log('Version with less options')
         paramObj = {
           location: this.options.location
         }
@@ -179,8 +196,12 @@ export default {
           params: paramObj
         }
       )
-      const destinations = res.data.destinations
+      let destinations = res.data.destinations
       this.destinations = destinations
+      this.destinations = this.getObjWithCommons(
+        this.destinations,
+        this.pagination
+      )
       this.tab = 2
       this.overlay = false
     }
