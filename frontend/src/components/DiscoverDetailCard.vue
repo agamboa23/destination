@@ -6,26 +6,38 @@
     :color="active ? 'info' : hover ? 'info' : ''"
     @mouseover="hover = true"
     @mouseleave="hover = false"
+    @click="isDestination ? (clicked = !clicked) : ''"
     :style="hover ? 'cursor: pointer;' : ''"
   >
-    <v-list-item three-line>
+    <v-list-item>
       <v-list-item-content>
-        <div class="overline mb-4 text-capitalize">{{ subName }}</div>
+        <div class="overline mb-4 text-capitalize">
+          {{ isDestination ? underscoreToSpace(second) : subName }}
+        </div>
         <v-list-item-title class="headline mb-1 text-capitalize">
-          {{ name }}
+          {{ isDestination ? underscoreToSpace(first) : name }}
         </v-list-item-title>
-        <v-list-item-subtitle>
-          <v-btn v-if="moreInfo" x-small outlined color="black">
-            More Information
+        <v-list-item-subtitle v-if="isDestination">
+          <v-btn small outlined color="black" @click="toGoogleMaps()">
+            To Maps <v-icon>mdi-map-marker</v-icon>
           </v-btn>
+          <template v-if="expand">
+            <div class="mt-1">
+              <ul>
+                <li
+                  v-for="(value, tag) in restTags"
+                  :key="tag"
+                  class="text-capitalize grey--text"
+                >
+                  {{ underscoreToSpace(tag) }}: {{ underscoreToSpace(value) }}
+                </li>
+              </ul>
+            </div>
+          </template>
         </v-list-item-subtitle>
       </v-list-item-content>
-
       <v-list-item-avatar tile size="80">
-        <v-img v-if="isImg" :src="avatarURL" contain></v-img>
-        <v-btn x-large v-else text icon color="red" @click="toGoogleMaps()">
-          <v-icon>mdi-map-marker</v-icon>
-        </v-btn>
+        <v-img :src="avatarURL" contain></v-img>
       </v-list-item-avatar>
     </v-list-item>
   </v-card>
@@ -35,19 +47,27 @@
 export default {
   name: 'DiscoverDetailCard',
   props: {
-    itemId: Number,
+    isDestination: { type: Boolean, required: true },
+    name: String,
+    subName: String,
+    active: Boolean,
     avatarURL: String,
-    isImg: { type: Boolean, required: true },
-    name: { type: String, required: true },
-    subName: { type: String, required: true },
     lat: String,
     lon: String,
-    moreInfo: Boolean,
-    active: Boolean
+    tags: Object
   },
   data: () => {
     return {
-      hover: false
+      hover: false,
+      clicked: false,
+      first: '',
+      second: '',
+      restTags: {}
+    }
+  },
+  computed: {
+    expand() {
+      return this.isDestination && this.clicked
     }
   },
   methods: {
@@ -59,6 +79,63 @@ export default {
           this.lon,
         '_blank'
       )
+    },
+    underscoreToSpace(str) {
+      return str.replace(/_/g, ' ')
+    },
+    randomProperty(obj) {
+      // https://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
+      var keys = Object.keys(obj)
+      return obj[keys[(keys.length * Math.random()) << 0]]
+    },
+    getTags() {
+      const tagList = [
+        'name',
+        'tourism',
+        'amenity',
+        'historic',
+        'sport',
+        'natural',
+        'building',
+        'aerialway'
+      ]
+      let temp = []
+      for (let i = 0; i < tagList.length; i++) {
+        if (tagList[i] in this.tags) {
+          if (temp === 2) {
+            break
+          }
+          temp.push(this.tags[tagList[i]])
+        }
+      }
+      // If no tags of list is there
+      if (temp.length < 2) {
+        if (temp.length === 1) {
+          this.first = temp[0]
+          this.second = this.randomProperty(this.tags)
+        } else {
+          this.first = this.randomProperty(this.tags)
+          this.second = this.randomProperty(this.tags)
+        }
+      } else {
+        // Assignment
+        this.first = temp[0]
+        this.second = temp[1]
+      }
+      this.getRestTags()
+    },
+    getRestTags() {
+      const entries = Object.entries(this.tags)
+      for (const [tag, value] of entries) {
+        if (value !== this.first && value !== this.second) {
+          this.restTags[tag] = value
+        }
+      }
+    }
+  },
+  mounted() {
+    if (this.isDestination) {
+      this.getTags()
     }
   }
 }

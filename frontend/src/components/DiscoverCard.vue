@@ -35,9 +35,8 @@
                       <discover-detail-card
                         @click.native="toggle"
                         :active="active"
-                        :itemId="stereotype.id"
                         :avatarURL="stereotype.image_url"
-                        :isImg="true"
+                        :isDestination="false"
                         :name="stereotype.name"
                         :subName="stereotype.description"
                       ></discover-detail-card>
@@ -67,25 +66,13 @@
         <v-card flat>
           <v-card-text>
             <v-row align="start" justify="center">
-              <v-col v-for="destination in computedDest" :key="destination.id">
+              <v-col v-for="destination in topDests" :key="destination.id">
                 <discover-detail-card
+                  :isDestination="true"
                   :avatarURL="destination.image"
                   :lat="'' + destination.lat"
                   :lon="'' + destination.lon"
-                  :name="
-                    destination.tags.name
-                      ? destination.tags.name
-                      : destination.tags.tourism
-                      ? destination.tags.tourism
-                      : randomProperty(destination.tags)
-                  "
-                  :subName="
-                    destination.tags.name
-                      ? destination.tags.tourism
-                        ? destination.tags.tourism
-                        : randomProperty(destination.tags)
-                      : randomProperty(destination.tags)
-                  "
+                  :tags="destination.tags"
                 ></discover-detail-card>
               </v-col>
             </v-row>
@@ -115,48 +102,34 @@ export default {
       recommenderUrl: process.env.VUE_APP_RECOMMENDERURL,
       overlay: false,
       tab: null,
+      pagination: 20,
       stereotypes: [],
       stereotypeSelection: [],
       options: {},
-      destinations: []
+      destinations: [],
+      topDests: []
     }
   },
   computed: {
     nextDisabled() {
       return !this.options.location
-    },
-    computedDest() {
-      // let temp = []
-      // for (let i = 0; i < this.pagination; i++) {
-      //   if (this.destinations[i].type !== 'node') {
-
-      //   } else {
-      //     temp.push(this.destinations[i])
-      //   }
-      // }
-      return this.destinations.slice(0, this.pagination)
     }
   },
   methods: {
-    randomProperty(obj) {
-      // https://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
-      var keys = Object.keys(obj)
-      return obj[keys[(keys.length * Math.random()) << 0]]
-    },
-    async getObjWithCommons(dests, n) {
+    async getObjWithCommons(arr, n) {
       let coors = ''
       for (let i = 0; i < n - 1; i++) {
-        coors = coors + dests[i].lat + '|' + dests[i].lon + ','
+        coors = coors + arr[i].lat + '|' + arr[i].lon + ','
       }
-      coors = coors + dests[n - 1].lat + '|' + dests[n - 1].lon
+      coors = coors + arr[n - 1].lat + '|' + arr[n - 1].lon
       const res = await axios.get(
         this.recommenderUrl + 'recsys/commons/images/' + coors
       )
       const resData = res.data.results
       for (let i = 0; i < n; i++) {
-        this.destinations[i].image = resData[i].image_url
+        arr[i].image = resData[i].image_url
       }
-      return dests
+      return arr
     },
     async getStereotypes() {
       // TODO Try Catch
@@ -198,8 +171,9 @@ export default {
       )
       let destinations = res.data.destinations
       this.destinations = destinations
-      this.destinations = this.getObjWithCommons(
-        this.destinations,
+      this.topDests = destinations.slice(0, this.pagination)
+      this.topDests = await this.getObjWithCommons(
+        this.topDests,
         this.pagination
       )
       this.tab = 2
