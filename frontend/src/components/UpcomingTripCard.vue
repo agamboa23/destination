@@ -71,7 +71,7 @@ export default {
   },
   async created() {
     let found = destinations.find(elem => elem.name === this.destination)
-    if (typeof found.logo !== 'undefined') {
+    if (found) {
       this.logo = found.logo
     }
     this.dataReady = true
