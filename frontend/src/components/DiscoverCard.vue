@@ -2,13 +2,13 @@
   <v-card>
     <v-tabs v-model="tab" background-color="secondary" grow>
       <v-tab>
-        Stereotypes
+        1. Stereotypes
       </v-tab>
       <v-tab :disabled="stereotypeSelection.length === 0">
-        Options
+        2. Options
       </v-tab>
       <v-tab disabled>
-        Destinations
+        3. Destinations
       </v-tab>
     </v-tabs>
     <v-overlay v-model="overlay">
@@ -76,7 +76,12 @@
                 ></discover-detail-card>
               </v-col>
             </v-row>
-            <v-btn outlined color="secondary" @click="morePagination()">
+            <v-btn
+              :disabled="loadDisable"
+              outlined
+              color="secondary"
+              @click="morePagination()"
+            >
               Load More
             </v-btn>
           </v-card-text>
@@ -102,7 +107,9 @@ export default {
       recommenderUrl: process.env.VUE_APP_RECOMMENDERURL,
       overlay: false,
       tab: null,
+      loadDisable: false,
       pagination: 20,
+      startIndex: 0,
       stereotypes: [],
       stereotypeSelection: [],
       options: {},
@@ -116,17 +123,36 @@ export default {
     }
   },
   methods: {
-    async getObjWithCommons(arr, n) {
+    async morePagination() {
+      this.startIndex = this.startIndex + this.pagination
+      if (this.startIndex + this.pagination <= this.destinations.length) {
+        this.overlay = true
+        let sliced = this.destinations.slice(
+          this.startIndex,
+          this.startIndex + this.pagination
+        )
+        let temp = await this.getObjWithCommons(sliced)
+        this.topDests = [...this.topDests, ...temp]
+        this.overlay = false
+      } else {
+        this.loadDisable = true
+      }
+    },
+    async getObjWithCommons(arr) {
       let coors = ''
-      for (let i = 0; i < n - 1; i++) {
+      for (let i = 0; i < this.pagination - 1; i++) {
         coors = coors + arr[i].lat + '|' + arr[i].lon + ','
       }
-      coors = coors + arr[n - 1].lat + '|' + arr[n - 1].lon
+      coors =
+        coors +
+        arr[this.pagination - 1].lat +
+        '|' +
+        arr[this.pagination - 1].lon
       const res = await axios.get(
         this.recommenderUrl + 'recsys/commons/images/' + coors
       )
       const resData = res.data.results
-      for (let i = 0; i < n; i++) {
+      for (let i = 0; i < this.pagination; i++) {
         arr[i].image = resData[i].image_url
       }
       return arr
@@ -181,7 +207,7 @@ export default {
       )
       let destinations = res.data.destinations
       this.destinations = destinations
-      this.topDests = destinations.slice(0, this.pagination)
+      this.topDests = destinations.slice(this.startIndex, this.pagination)
       this.topDests = await this.getObjWithCommons(
         this.topDests,
         this.pagination
