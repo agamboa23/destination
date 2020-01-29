@@ -7,4 +7,4 @@
 
  - Backend: Node.js, MongoDB,
  - Frontend: Vue, Vuex, Vue Router, Vuetify
- - Recommender System
+ - Recommender System: Node.js
