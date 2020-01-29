@@ -9,6 +9,7 @@ import * as Stereotypes from "../controllers/stereotypes";
 const wiki_url =
   "https://www.wikidata.org/w/api.php?action=wbgetentities&props=claims&format=json&ids=";
 const provinces_qids = "Q10559|Q10547|Q10551|Q10557|Q10562|Q10554|Q10555";
+const querystring = require('querystring');
 
 export async function get_provinces_recommendations(req, res, next) {
   const qSortBy = "population";
@@ -160,7 +161,7 @@ export async function get_dstn_by_stereotype(req, res, next) {
     queryString,
     filters;
   filters =
-    qFilter + "&&(" + Stereotypes.get_stereotypes_filters(pStereotypes) + ")";
+  querystring.unescape(qFilter) + "&&(" + Stereotypes.get_stereotypes_filters(pStereotypes) + ")";
   if (qLocation) {
     location = qLocation.split("|");
     if (location.length < 2 || isNaN(location[0], isNaN(location[1]))) {
@@ -222,6 +223,7 @@ export async function get_dstn_by_stereotype(req, res, next) {
     );
   }
   try {
+    console.log(queryString);
     const destinations = await queryOverpass(queryString);
     res.status(200).json({ destinations });
   } catch (err) {
