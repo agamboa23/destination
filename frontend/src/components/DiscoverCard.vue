@@ -150,13 +150,23 @@ export default {
       }
       let paramObj = {}
       if ('maxDistance' in this.options) {
-        paramObj = {
-          location: this.options.location,
-          maxDistance: this.options.maxDistance,
-          minDistance: this.options.minDistance,
-          aroundMetric: this.options.aroundMetric,
-          bt_reachable: this.options.bt_reachable,
-          filter: wheelie
+        if (wheelie) {
+          paramObj = {
+            location: this.options.location,
+            maxDistance: this.options.maxDistance,
+            minDistance: this.options.minDistance,
+            aroundMetric: this.options.aroundMetric,
+            bt_reachable: this.options.bt_reachable,
+            filter: wheelie
+          }
+        } else {
+          paramObj = {
+            location: this.options.location,
+            maxDistance: this.options.maxDistance,
+            minDistance: this.options.minDistance,
+            aroundMetric: this.options.aroundMetric,
+            bt_reachable: this.options.bt_reachable
+          }
         }
       } else {
         paramObj = {
