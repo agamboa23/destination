@@ -1,7 +1,7 @@
 # Frontend for DestiNation
 
 ## Project setup
-Lints the whole project, then serves it
+### Lints the whole project, then serves it
 ```
 npm start
 ```
