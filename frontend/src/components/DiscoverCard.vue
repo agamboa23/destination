@@ -140,14 +140,15 @@ export default {
     },
     async getObjWithCommons(arr) {
       let coors = ''
-      for (let i = 0; i < this.pagination - 1; i++) {
-        coors = coors + arr[i].lat + '|' + arr[i].lon + ','
-      }
-      coors =
-        coors +
-        arr[this.pagination - 1].lat +
-        '|' +
-        arr[this.pagination - 1].lon
+
+      coors = arr
+        .slice(0, this.pagination)
+        .map(x =>
+          x.type == 'node'
+            ? x.lat + '|' + x.lon
+            : x.center.lat + '|' + x.center.lon
+        )
+        .join(',')
       const res = await axios.get(
         this.recommenderUrl + 'recsys/commons/images/' + coors
       )
@@ -172,7 +173,7 @@ export default {
       if (this.options.wheelchair) {
         wheelie = 't["wheelchair"]%3D%3D"yes"'
       } else {
-        wheelie = 't["wheelchair"]%3D%3D"no"'
+        wheelie = ''
       }
       let paramObj = {}
       if ('maxDistance' in this.options) {

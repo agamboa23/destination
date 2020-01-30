@@ -1,4 +1,5 @@
 const wiki_url="https://commons.wikimedia.org/w/api.php?format=json&action=query&list=geosearch&gsnamespace=6&gsradius=1000&gslimit=1&gscoord=";
+const placeholder="https://tekrabuilders.com/wp-content/uploads/2018/12/male-placeholder-image-300x300.jpeg";
 import * as WikiHelper from '../utils/wikidata';
 import { get } from "axios";
 
@@ -32,8 +33,13 @@ export async function get_images_by_locations(req, res, next) {
         for ( var result of api_results){
             wikiresponse = await(result);
             wikidata = wikiresponse[0];
-            file_url=WikiHelper.generate_image_url(wikidata.data.query.geosearch);
-            results.push({location:wikiresponse[1],image_url:file_url});
+            try{
+                file_url=WikiHelper.generate_image_url(wikidata.data.query.geosearch);
+                results.push({location:wikiresponse[1],image_url:file_url});
+            }
+            catch(err){
+                results.push({location:wikiresponse[1],image_url:placeholder,err:err});
+            }
         }
         res.status(200).json({results});
     }
