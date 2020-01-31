@@ -74,6 +74,18 @@
         </v-row>
       </template>
     </v-card-text>
+    <v-card-actions>
+      <v-btn
+        :disabled="nextDisabled"
+        class="elevation-12"
+        large
+        block
+        color="secondary"
+        @click="$emit('next')"
+      >
+        Next
+      </v-btn>
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -82,6 +94,9 @@ import placesPack from '@/assets/destinations.js'
 
 export default {
   name: 'DiscoverOptionsCard',
+  props: {
+    nextDisabled: Boolean
+  },
   data: () => {
     return {
       moreOptions: false,
