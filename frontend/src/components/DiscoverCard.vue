@@ -77,8 +77,16 @@
                 <discover-detail-card
                   :isDestination="true"
                   :avatarURL="destination.image"
-                  :lat="'' + destination.lat"
-                  :lon="'' + destination.lon"
+                  :lat="
+                    destination.center
+                      ? destination.center.lat.toString()
+                      : destination.lat.toString()
+                  "
+                  :lon="
+                    destination.center
+                      ? destination.center.lon.toString()
+                      : destination.lon.toString()
+                  "
                   :tags="destination.tags"
                   :usersLocation="city"
                 ></discover-detail-card>
