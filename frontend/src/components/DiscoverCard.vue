@@ -46,20 +46,27 @@
               </v-container>
             </v-item-group>
           </v-card-text>
+          <v-card-actions>
+            <v-btn
+              class="elevation-12"
+              large
+              block
+              color="secondary"
+              :disabled="stereotypeSelection.length === 0"
+              @click="tab = 1"
+            >
+              Next Page
+            </v-btn>
+          </v-card-actions>
         </v-card>
       </v-tab-item>
 
       <v-tab-item>
-        <discover-options-card v-model="options" />
-        <v-btn
-          :disabled="nextDisabled"
-          class="elevation-12"
-          block
-          color="secondary"
-          @click="getDestinations()"
-        >
-          Next
-        </v-btn>
+        <discover-options-card
+          v-model="options"
+          :nextDisabled="nextDisabled"
+          @next="getDestinations()"
+        />
       </v-tab-item>
 
       <v-tab-item>
@@ -119,7 +126,7 @@ export default {
   },
   computed: {
     nextDisabled() {
-      return !this.location
+      return !this.options.location
     }
   },
   methods: {
