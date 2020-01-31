@@ -15,7 +15,6 @@ const tripSchema = mongoose.Schema({
     requests: {type: Array},
     number_of_members: { type: Number },
     description: { type: String },
-    ratings: { type: Array },
     reviews: { type: Array },
     isCancelled: { type: Boolean}
 });

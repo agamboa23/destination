@@ -93,10 +93,6 @@ exports.notifications_get_notification = (req, res, next) => {
     });
 };
 
-async function markAsRead(notificationId){
-
-}
-
 exports.notifications_delete_notification = (req, res, next) => {
     const id = req.params.notificationId;
     Notification.deleteOne({ _id: id })
