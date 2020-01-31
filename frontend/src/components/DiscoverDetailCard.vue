@@ -54,7 +54,8 @@ export default {
     avatarURL: String,
     lat: String,
     lon: String,
-    tags: Object
+    tags: Object,
+    usersLocation: String
   },
   data: () => {
     return {
@@ -74,7 +75,7 @@ export default {
     toGoogleMapsDirections() {
       window.open(
         'https://www.google.com/maps?saddr=' +
-          this.options.location +
+          this.usersLocation +
           '&daddr=' +
           this.lat +
           ',' +
@@ -88,7 +89,8 @@ export default {
     randomProperty(obj) {
       // https://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
       var keys = Object.keys(obj)
-      return obj[keys[(keys.length * Math.random()) << 0]]
+      const randomKey = keys[(keys.length * Math.random()) << 0]
+      return randomKey + ': ' + obj[randomKey]
     },
     getTags() {
       let temp = []

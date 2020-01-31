@@ -80,6 +80,7 @@
                   :lat="'' + destination.lat"
                   :lon="'' + destination.lon"
                   :tags="destination.tags"
+                  :usersLocation="city"
                 ></discover-detail-card>
               </v-col>
             </v-row>
@@ -121,7 +122,8 @@ export default {
       stereotypeSelection: [],
       options: {},
       destinations: [],
-      topDests: []
+      topDests: [],
+      city: ''
     }
   },
   computed: {
@@ -183,10 +185,17 @@ export default {
         wheelie = ''
       }
       let paramObj = {}
+      let locToSend = null
+      if (typeof this.options.location === 'string') {
+        locToSend = this.options.location
+      } else {
+        locToSend = this.options.location.geo
+        this.city = this.options.location.name
+      }
       if ('maxDistance' in this.options) {
         if (wheelie) {
           paramObj = {
-            location: this.options.location,
+            location: locToSend,
             maxDistance: this.options.maxDistance,
             minDistance: this.options.minDistance,
             aroundMetric: this.options.aroundMetric,
@@ -195,7 +204,7 @@ export default {
           }
         } else {
           paramObj = {
-            location: this.options.location,
+            location: locToSend,
             maxDistance: this.options.maxDistance,
             minDistance: this.options.minDistance,
             aroundMetric: this.options.aroundMetric,
@@ -204,7 +213,7 @@ export default {
         }
       } else {
         paramObj = {
-          location: this.options.location
+          location: locToSend
         }
       }
       const res = await axios.get(
