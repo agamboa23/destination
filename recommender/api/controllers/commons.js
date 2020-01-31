@@ -23,6 +23,10 @@ export async function get_images_by_locations_old(req, res, next) {
  
 }
 
+export function get_default_image(req,res,next){
+    res.status(200).json([{location:undefined,image_url:placeholder}]);
+}
+
 export async function get_images_by_locations(req, res, next) {
     const pLocations = req.params.locations;
     var locations = pLocations.split(",");

@@ -95,7 +95,7 @@ export const STEREOTYPES = [
     {
         id:7,
         name:"Hungry Stomach",
-        description:"Retaurants, Foodcourts, bakeries",
+        description:"Restaurants, Foodcourts, bakeries",
         image_url:"https://tekrabuilders.com/wp-content/uploads/2018/12/male-placeholder-image-300x300.jpeg",
         filters:`
             t["amenity"]=="bbq"||
@@ -239,7 +239,8 @@ export const STEREOTYPES = [
         image_url:"https://tekrabuilders.com/wp-content/uploads/2018/12/male-placeholder-image-300x300.jpeg",
         filters:`
             t["highway"]=="raceway"||
-            t["sport"]=="karting"
+            t["sport"]=="karting" ||
+            t["shop"]=="car_parts"
             `,
     },
     {

@@ -97,7 +97,8 @@ export default {
         'sport',
         'natural',
         'building',
-        'aerialway'
+        'aerialway',
+        'shop'
       ]
       let temp = []
       for (let i = 0; i < tagList.length; i++) {

@@ -1,7 +1,7 @@
 export function get_around_query(location,filters,maxDistanceKm,isReachableByBT){
   var queryString;
   filters= "(if:("+filters+"))";
-  if (isReachableByBT=="true"){
+  if (isReachableByBT){
     queryString = `
     [out:json][timeout:800];
     area(3602145268);
@@ -26,7 +26,7 @@ export function get_around_query(location,filters,maxDistanceKm,isReachableByBT)
 export function get_ring_query(location,filters,maxDistanceKm, minDistanceKm,isReachableByBT){
   var queryString;
   filters= "(if:("+filters+"))";
-  if (isReachableByBT=="true"){
+  if (isReachableByBT){
     queryString = `
     [out:json][timeout:800];
     area(3602145268);
@@ -55,7 +55,7 @@ export function get_ring_query(location,filters,maxDistanceKm, minDistanceKm,isR
 export function get_area_query(area,filters,isReachableByBT){
   var queryString;
   filters= "(if:("+filters+"))";
-  if (isReachableByBT=="true"){
+  if (isReachableByBT){
     queryString = `
     [out:json][timeout:800];
     (nwr[public_transport=station](area:`+area+`);)->.big_area;

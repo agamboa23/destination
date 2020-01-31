@@ -3,7 +3,6 @@ import District from "../models/district";
 import Province from "../models/province";
 import { get } from "axios";
 import * as WikiHelper from "../utils/wikidata";
-import * as GeoCalculator from "../utils/geocalculator";
 import * as opQueryBuilder from "../utils/overpassQueryBuilder";
 import * as Stereotypes from "../controllers/stereotypes";
 const wiki_url =
@@ -153,7 +152,7 @@ export async function get_dstn_by_stereotype(req, res, next) {
     : Number(req.query.minDistance);
   const qAroundMetric = req.query.aroundMetric || "km";
   const qLocation = req.query.location;
-  const pBtReachable = req.params.bt_reachable == "false" ? false : true;
+  const pBtReachable = req.query.bt_reachable == "false" ? false : true;
   var overpassAreaCode,
     maxDistance,
     minDistance,
@@ -225,6 +224,17 @@ export async function get_dstn_by_stereotype(req, res, next) {
   try {
     console.log(queryString);
     const destinations = await queryOverpass(queryString);
+    if (destinations.length==0){
+      destinations.push({  
+      type: "node",
+      id: 0,
+      lat: undefined,
+      lon: undefined,
+      tags: {
+        name: "Not results found",
+        sort: "0 results"
+      }});
+    }
     res.status(200).json({ destinations });
   } catch (err) {
     res.status(400).json({ error: err });

@@ -153,7 +153,7 @@ export default {
         this.recommenderUrl + 'recsys/commons/images/' + coors
       )
       const resData = res.data.results
-      for (let i = 0; i < this.pagination; i++) {
+      for (let i = 0; i < Math.min(this.pagination, arr.length); i++) {
         arr[i].image = resData[i].image_url
       }
       return arr
