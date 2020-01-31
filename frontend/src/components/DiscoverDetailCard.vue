@@ -71,15 +71,6 @@ export default {
     }
   },
   methods: {
-    toGoogleMaps() {
-      window.open(
-        'https://www.google.com/maps/search/?api=1&query=' +
-          this.lat +
-          ',' +
-          this.lon,
-        '_blank'
-      )
-    },
     toGoogleMapsDirections() {
       window.open(
         'https://www.google.com/maps?saddr=' +
@@ -100,6 +91,8 @@ export default {
       return obj[keys[(keys.length * Math.random()) << 0]]
     },
     getTags() {
+      let temp = []
+      temp.push(this.tags['name'])
       const tagList = [
         'tourism',
         'amenity',
@@ -110,17 +103,16 @@ export default {
         'aerialway',
         'shop'
       ]
-      let temp = []
-      temp.push(this.tags['name'])
       for (let i = 0; i < tagList.length; i++) {
         if (tagList[i] in this.tags) {
-          if (temp === 2) {
+          if (temp.length === 2) {
             break
           }
           temp.push(tagList[i] + ': ' + this.tags[tagList[i]])
         }
       }
       // If no tags of list is there
+      // Though 'name' is always guaranteed, this stays as a second error handle
       if (temp.length < 2) {
         if (temp.length === 1) {
           this.first = temp[0]
