@@ -18,7 +18,7 @@
           {{ isDestination ? underscoreToSpace(first) : name }}
         </v-list-item-title>
         <v-list-item-subtitle v-if="isDestination">
-          <v-btn small outlined color="black" @click="toGoogleMaps()">
+          <v-btn small outlined color="black" @click="toGoogleMapsDirections()">
             To Maps <v-icon>mdi-map-marker</v-icon>
           </v-btn>
           <template v-if="expand">
@@ -80,6 +80,17 @@ export default {
         '_blank'
       )
     },
+    toGoogleMapsDirections() {
+      window.open(
+        'https://www.google.com/maps?saddr=' +
+          this.options.location +
+          '&daddr=' +
+          this.lat +
+          ',' +
+          this.lon,
+        '_blank'
+      )
+    },
     underscoreToSpace(str) {
       return str.replace(/_/g, ' ')
     },
@@ -90,7 +101,6 @@ export default {
     },
     getTags() {
       const tagList = [
-        'name',
         'tourism',
         'amenity',
         'historic',
@@ -101,12 +111,13 @@ export default {
         'shop'
       ]
       let temp = []
+      temp.push(this.tags['name'])
       for (let i = 0; i < tagList.length; i++) {
         if (tagList[i] in this.tags) {
           if (temp === 2) {
             break
           }
-          temp.push(this.tags[tagList[i]])
+          temp.push(tagList[i] + ': ' + this.tags[tagList[i]])
         }
       }
       // If no tags of list is there

@@ -2,7 +2,7 @@
   <v-card>
     <v-tabs v-model="tab" background-color="secondary" grow>
       <v-tab>
-        1. Stereotypes
+        1. Interests
       </v-tab>
       <v-tab :disabled="stereotypeSelection.length === 0">
         2. Options
@@ -119,7 +119,7 @@ export default {
   },
   computed: {
     nextDisabled() {
-      return !this.options.location
+      return !this.location
     }
   },
   methods: {
