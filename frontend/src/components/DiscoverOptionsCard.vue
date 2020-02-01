@@ -26,7 +26,6 @@
         prepend-inner-icon="mdi-city-variant"
         no-data-text="Couldn't find location :("
         :items="places"
-        return-object
         item-text="name"
         item-value="geo"
         v-model="location"

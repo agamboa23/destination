@@ -88,7 +88,7 @@
                       : destination.lon.toString()
                   "
                   :tags="destination.tags"
-                  :usersLocation="city"
+                  :usersLocation="usersLocation"
                 ></discover-detail-card>
               </v-col>
             </v-row>
@@ -131,7 +131,7 @@ export default {
       options: {},
       destinations: [],
       topDests: [],
-      city: ''
+      usersLocation: ''
     }
   },
   computed: {
@@ -187,23 +187,17 @@ export default {
       this.overlay = true
       const optString = this.stereotypeSelection.toString() + '/destinations'
       let wheelie = ''
+      this.usersLocation = this.options.location
       if (this.options.wheelchair) {
         wheelie = 't["wheelchair"]%3D%3D"yes"'
       } else {
         wheelie = ''
       }
       let paramObj = {}
-      let locToSend = null
-      if (typeof this.options.location === 'string') {
-        locToSend = this.options.location
-      } else {
-        locToSend = this.options.location.geo
-        this.city = this.options.location.name
-      }
       if ('maxDistance' in this.options) {
         if (wheelie) {
           paramObj = {
-            location: locToSend,
+            location: this.options.location,
             maxDistance: this.options.maxDistance,
             minDistance: this.options.minDistance,
             aroundMetric: this.options.aroundMetric,
@@ -212,7 +206,7 @@ export default {
           }
         } else {
           paramObj = {
-            location: locToSend,
+            location: this.options.location,
             maxDistance: this.options.maxDistance,
             minDistance: this.options.minDistance,
             aroundMetric: this.options.aroundMetric,
@@ -221,7 +215,7 @@ export default {
         }
       } else {
         paramObj = {
-          location: locToSend
+          location: this.options.location
         }
       }
       const res = await axios.get(
