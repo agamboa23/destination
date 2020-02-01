@@ -73,14 +73,16 @@ export default {
   },
   methods: {
     toGoogleMapsDirections() {
+      const latLons = this.usersLocation.split('|')
+      let origin = latLons[0] + ',' + latLons[1]
       window.open(
-        'https://www.google.com/maps?saddr=' +
-          this.usersLocation +
-          '&daddr=' +
+        'https://www.google.com/maps/dir/?api=1&origin=' +
+          origin +
+          '&destination=' +
           this.lat +
           ',' +
-          this.lon,
-        '_blank'
+          this.lon +
+          '&travelmode=driving'
       )
     },
     underscoreToSpace(str) {
