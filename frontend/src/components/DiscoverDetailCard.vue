@@ -98,13 +98,15 @@ export default {
       let temp = []
       temp.push(this.tags['name'])
       const tagList = [
+        'sport',
         'tourism',
         'amenity',
         'historic',
-        'sport',
         'natural',
         'building',
         'aerialway',
+        'leisure',
+        'route',
         'shop'
       ]
       for (let i = 0; i < tagList.length; i++) {

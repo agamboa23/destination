@@ -102,7 +102,7 @@ export default {
       moreOptions: false,
       isLoc: false,
       location: '',
-      maxDistance: 10,
+      maxDistance: 15,
       minDistance: 0,
       aroundSelection: [
         { name: 'Meters', abbr: 'm' },

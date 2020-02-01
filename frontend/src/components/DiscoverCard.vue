@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-tabs v-model="tab" background-color="secondary" grow>
-      <v-tab>
+      <v-tab @click="reloadPage()">
         1. Interests
       </v-tab>
       <v-tab :disabled="stereotypeSelection.length === 0">
@@ -140,6 +140,9 @@ export default {
     }
   },
   methods: {
+    reloadPage() {
+      window.location.reload()
+    },
     async morePagination() {
       this.startIndex = this.startIndex + this.pagination
       if (this.startIndex + this.pagination <= this.destinations.length) {

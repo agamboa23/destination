@@ -1,5 +1,14 @@
 export const STEREOTYPES = [
     {
+        id:0,
+        name:"Instagram Love",
+        description:"Great Viewpoints for visiting and photograph",
+        image_url:"https://images.unsplash.com/photo-1497354861845-d381fb7c91a8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
+        filters:`
+            t["tourism"]=="viewpoint"
+            `,
+    },
+    {
         id:1,
         name:"Art Lover",
         description:"Museums, Libraries, Cinemas, Galleries, Theatres",
@@ -26,7 +35,6 @@ export const STEREOTYPES = [
             t["amenity"]=="boat_rental"|| 
             t["building"]=="sports_hall"||
             t["leisure"]=="bicycle_rental" ||
-            t["leisure"]=="sports_centre" ||
             t["leisure"]=="ice_rink"
             `,
     },
@@ -155,8 +163,7 @@ export const STEREOTYPES = [
             t["natural"]=="peak"||
             t["tourism"]=="viewpoint"||
             t["sport"]=="climbing_adventure" ||
-            t["sport"]=="climbing" ||
-            t["tourism"]=="gallery"
+            t["sport"]=="climbing"
             `,
     },
     {
@@ -206,8 +213,6 @@ export const STEREOTYPES = [
             t["sport"]=="bmx"||
             t["sport"]=="cycling"||
             t["amenity"]=="bicycle_repair_station"||
-            t["route"]=="bicycle"||
-            t["shop"]=="bicycle"||
             t["route"]=="mtb"
             `,
     },
@@ -235,13 +240,13 @@ export const STEREOTYPES = [
         description:"Tourism destinations",
         image_url:"https://cdn.pixabay.com/photo/2018/07/27/00/37/munich-3564962_960_720.jpg",
         filters:`
-            t["tourism"]
+            t["tourism"] && t["tourism"] != "information" && t["tourism"] != "hotel"
             `,
     },
     {
         id:16,
         name:"Car Enthusiast",
-        description:"Snob that loves art",
+        description:"Karting, race tracks and tunning shops",
         image_url:"https://cdn.pixabay.com/photo/2016/03/11/02/08/speed-1249610_960_720.jpg",
         filters:`
             t["highway"]=="raceway"||
