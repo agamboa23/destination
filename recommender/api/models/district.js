@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
-const districtSchema = mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
+const districtSchema = Schema({
+    _id: Schema.Types.ObjectId,
     parent_osm_id: {type: Number},
     osm_id: {type: Number},
     place_id: {type: Number},
@@ -22,4 +22,4 @@ const districtSchema = mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('District', districtSchema, 'districts');
+export default model('District', districtSchema, 'districts');

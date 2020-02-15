@@ -5,18 +5,19 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "nodemon -r esm server.js"
   },
   "author": "Alexis Gamboa",
   "license": "ISC",
   "dependencies": {
     "@derhuerst/query-overpass": "^2.0.0",
-    "axios": "^0.19.0",
+    "axios": "^0.19.1",
     "bcrypt": "^3.0.7",
     "body-parser": "^1.19.0",
+    "esm": "^3.2.25",
     "express": "^4.17.1",
     "md5": "^2.2.1",
-    "mongoose": "^5.8.4",
+    "mongoose": "^5.8.7",
     "morgan": "^1.9.1",
     "query-overpass": "^1.5.5"
   },

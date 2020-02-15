@@ -4,8 +4,10 @@ import Home from './views/Home.vue'
 import Authentication from './views/Authentication.vue'
 import Search from './views/Search.vue'
 import User from './views/User.vue'
+import Profile from './views/Profile.vue'
+import UserTripDetailed from './views/UserTripDetailed.vue'
 import UpcomingTrips from './views/UpcomingTrips.vue'
-import DetailedTrip from './views/DetailedTrip.vue'
+import UpcomingTripDetailed from './views/UpcomingTripDetailed.vue'
 import CreateTrip from './views/CreateTrip.vue'
 import DiscoverView from './views/DiscoverView.vue'
 
@@ -50,14 +52,33 @@ export default new Router({
       component: User
     },
     {
+      path: '/my-profile/:name-Page',
+      name: 'profile',
+      component: Profile,
+      props: true
+    },
+    {
+      path: '/profile/:id',
+      name: 'foreignProfile',
+      component: Profile,
+      props: true
+    },
+    {
+      path: '/my-profile/trip-to-:destination-:tripId',
+      name: 'userTripDetailed',
+      component: UserTripDetailed,
+      props: true
+    },
+    {
       path: '/upcoming-trips',
       name: 'upcoming',
       component: UpcomingTrips
     },
     {
       path: '/upcoming-trips/trip-to-:destination-:tripId',
-      name: 'detailedTripView',
-      component: DetailedTrip
+      name: 'upcomingTripDetailed',
+      component: UpcomingTripDetailed,
+      props: true
     },
     {
       path: '/create-trip',

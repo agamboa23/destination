@@ -1,6 +1,6 @@
 <template>
   <v-row align="center" justify="center">
-    <v-col cols="12">
+    <v-col cols="10">
       <v-card v-if="dataReady" class="mx-auto" max-width="500">
         <v-img
           class="white--text align-end"
@@ -13,12 +13,13 @@
         >
           <v-card-title>Trip to {{ destination }}</v-card-title>
         </v-img>
-
-        <v-card-subtitle class="pb-0">Date: {{ date }}</v-card-subtitle>
-
+        <v-card-subtitle class="pb-2">{{ date }}</v-card-subtitle>
         <v-card-text class="text--primary">
-          <div class="pb-1" style="border-bottom: 1px solid grey;">
-            From <code>{{ origin }}</code> to <code>{{ destination }}</code>
+          <div class="pb-2" style="border-bottom: 1px solid grey;">
+            From
+            <code class="mx-2">{{ origin }}</code>
+            to
+            <code class="mx-2">{{ destination }}</code>
           </div>
 
           <div class="mt-1 pb-n3">
@@ -42,16 +43,21 @@
             :loading="loading"
             :disabled="loading"
             class="mx-2 mb-2"
-            :color="!tripUpdated ? 'secondary' : 'success'"
+            :color="buttonColor"
             depressed
             @click="joinTrip()"
           >
             {{ buttonText }}
           </v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="secondary" icon>
-            <v-icon>mdi-share</v-icon>
-          </v-btn>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn color="secondary" icon v-on="on">
+                <v-icon>mdi-share</v-icon>
+              </v-btn>
+            </template>
+            <span>Share this trip</span>
+          </v-tooltip>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -63,16 +69,17 @@ import { mapState } from 'vuex'
 import axios from 'axios'
 
 export default {
-  name: 'DetailedTripView',
+  name: 'UpcomingTripDetailed',
   data: () => {
     return {
+      backendUrl: process.env.VUE_APP_BACKENDURL,
       dataReady: false,
       loading: false,
-      tripUpdated: false,
+      buttonColor: 'secondary',
       buttonText: 'Send Join Request',
-      tripId: '',
       numberOfMembers: 0,
       maxMembers: 0,
+      creatorId: '',
       userLangs: [],
       origin: '',
       destination: '',
@@ -86,25 +93,42 @@ export default {
       try {
         this.loading = true
         if (this.userId) {
-          const res = await axios.patch(
-            'http://localhost:3000/trips/addreq/' +
-              this.tripId +
-              '/' +
-              this.userId
-          )
-          const resData = res.data.message
-          if (resData === 'Trip updated') {
-            this.buttonText = 'Request Sent'
-            this.tripUpdated = true
+          // User is signed in
+          if (this.userId !== this.creatorId) {
+            // Trying to join someone else's trip
+            if (this.numberOfMembers < this.maxMembers) {
+              // Member limit is not reached
+              const res = await axios.patch(
+                this.backendUrl +
+                  'trips/addreq/' +
+                  this.tripId +
+                  '/' +
+                  this.userId
+              )
+              const resData = res.data.message
+              if (resData === 'Trip updated') {
+                this.buttonText = 'Request Sent'
+                this.buttonColor = 'success'
+                this.loading = false
+              }
+            } else {
+              this.buttonText = 'Member limit is reached'
+              this.buttonColor = 'error'
+              this.loading = false
+            }
+          } else {
+            // Trying to join own trip
+            this.buttonText = `Can't join your own trip`
+            this.buttonColor = 'error'
             this.loading = false
           }
         } else {
           this.buttonText = 'Not Signed In'
+          this.buttonColor = 'error'
           this.loading = false
         }
       } catch (error) {
         this.loading = false
-        console.log(error)
       }
     }
   },
@@ -113,18 +137,27 @@ export default {
       userId: 'id'
     })
   },
+  props: {
+    tripId: {
+      type: String,
+      required: true
+    }
+  },
   async created() {
-    this.tripId = this.$route.params.tripId
-    const res = await axios.get('http://localhost:3000/trips/' + this.tripId)
+    const res = await axios.get(this.backendUrl + 'trips/' + this.tripId)
     const resData = res.data.trip
     this.numberOfMembers = resData.members.length
     this.maxMembers = resData.number_of_members
+    this.creatorId = resData.user._id
     this.userLangs = resData.user.languages
     this.origin = resData.origin
     this.destination = resData.destination
     this.description = resData.description
-    const dateArr = resData.date_of_trip.split('T')
-    this.date = dateArr[0]
+    const dateObj = new Date(resData.date_of_trip)
+    this.date = dateObj.toLocaleString('en-DE', {
+      dateStyle: 'full',
+      timeStyle: 'short'
+    })
     // TODO: Hardcoded Google CSE Parameters
     const imgRes = await axios.get(
       'https://www.googleapis.com/customsearch/v1?key=AIzaSyDuwSlA-c6xKWp7K3XPKRhaqE91_iEE5NA&cx=011914005902216404247:ewomagcszot&searchType=image&q=' +

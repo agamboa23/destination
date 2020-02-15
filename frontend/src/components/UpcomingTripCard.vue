@@ -1,5 +1,11 @@
 <template>
-  <v-card class="mx-auto" max-width="400" outlined @click="toDetailedTrip()">
+  <v-card
+    v-show="dataReady"
+    class="mx-auto"
+    max-width="400"
+    outlined
+    @click="toDetailedTrip()"
+  >
     <v-list-item three-line>
       <v-list-item-content>
         <div class="overline mb-4">From {{ origin }}</div>
@@ -7,7 +13,7 @@
           {{ destination }}
         </v-list-item-title>
         <v-list-item-subtitle>
-          {{ date }}
+          {{ betterDate }}
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-avatar v-if="logo" tile size="80">
@@ -21,45 +27,54 @@
       <v-btn text>Click for Details</v-btn>
       <v-spacer></v-spacer>
       <span class="subtitle-1 mx-2">
-        {{ trip.members.length }}/{{ trip.number_of_members }}
+        {{ membersLength }}/{{ maxMembers }}
       </span>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
-import axios from 'axios'
 import destinations from '@/assets/destinations.js'
 
 export default {
   name: 'UpcomingTripCard',
   props: {
+    id: String,
     origin: String,
     destination: String,
     date: String,
-    id: String
+    membersLength: Number,
+    maxMembers: Number
   },
   data: () => {
     return {
-      trip: {},
+      dataReady: false,
       logo: ''
+    }
+  },
+  computed: {
+    betterDate() {
+      const dateObj = new Date(this.date)
+      return dateObj.toLocaleString('en-DE', {
+        dateStyle: 'short',
+        timeStyle: 'short'
+      })
     }
   },
   methods: {
     toDetailedTrip() {
       this.$router.push({
-        name: 'detailedTripView',
+        name: 'upcomingTripDetailed',
         params: { destination: this.destination, tripId: this.id }
       })
     }
   },
   async created() {
-    const res = await axios.get('http://localhost:3000/trips/' + this.id)
-    this.trip = res.data.trip
     let found = destinations.find(elem => elem.name === this.destination)
-    if (typeof found.logo !== 'undefined') {
+    if (found) {
       this.logo = found.logo
     }
+    this.dataReady = true
   }
 }
 </script>

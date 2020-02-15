@@ -2,23 +2,29 @@ const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    email: { //
-        type: String,
-         required: true,
-          //unique: true,
-          //match: /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/
-        },
+    email: { type: String, required: true },
     password: {type: String, required: true},
     first_name: {type: String},
     last_name: {type: String},
+    phone_number: {type: String},
     gender: {type: String},
     age: {type: Number},
+    date_joined: {type: Date},
+    bio: {type: String},
+    education: {type: String},
+    home_town: {type: String},
+    friends: {type: Array},
+    interests: {type: Array},
     languages: {type: Array},
     trips: {type: Array},
     joined_trips: {type: Array},
     profile_id: {type: Number},
+    isVerified: {type: Boolean},
     userImage: {type: String},
-    notifications: {type: Array}
+    notifications: {type: Array},
+    badges: {type: Array},
+    last_login: {type: Date},
+    reviews: { type: Array }
 });
 
 module.exports = mongoose.model('User', userSchema);

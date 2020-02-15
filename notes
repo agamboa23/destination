@@ -1,0 +1,25 @@
+#Promo
+
+Step 1 Go to destiNation.com and create your account
+Step 2 Create a trip by choosing your destination, date and number of people
+Step 3 Choose which people will join your trip
+Step 4 Buy a Bayernticket
+Step 5 Enjoy your destiNation
+Step 6 Review your trip and rate your trip members
+
+
+#Docker
+
+1. sudo docker build -t backend . 
+2. docker run -it -p 9000:3000 backend
+
+3. docker-compose up -d --force-recreate (-d detach mode plus create from scratch)
+4. docker-compose down --rmi all
+
+docker system prune -a (removes all stopped containers and images)
+
+
+commented out console.log lint error I believe
+components Login 107, Signup 250 
+views CreateTrip 261, Search 100,
+        UpcomingTripDetailed 132 UserTripDetailed 257 added id to avoid error

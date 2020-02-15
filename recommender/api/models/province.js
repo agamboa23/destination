@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
-const provinceSchema = mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
+const provinceSchema = Schema({
+    _id: Schema.Types.ObjectId,
     osm_id: {type: Number},
     place_id: {type: Number},
     wikidata_code: { type: String },
@@ -20,6 +20,6 @@ const provinceSchema = mongoose.Schema({
             required: true
         }
     }
-})
+});
 
-module.exports = mongoose.model('Province', provinceSchema,'provinces');
+export default model('Province', provinceSchema,'provinces');

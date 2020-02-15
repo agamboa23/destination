@@ -23,7 +23,7 @@
         width="600"
         @click="toDiscoverView()"
       >
-        Discover DestiNations
+        {{ discoverDestinationsText }}
       </v-btn>
     </v-row>
     <v-row align="center" justify="center">
@@ -52,7 +52,8 @@ export default {
       hover1: false,
       hover2: false,
       hover3: false,
-      createTripText: 'Create a Trip'
+      createTripText: 'Create a Trip',
+      discoverDestinationsText: 'Discover Destinations'
     }
   },
   computed: {
@@ -70,7 +71,7 @@ export default {
       if (this.signedIn) {
         this.$router.push({ name: 'discoverView' })
       } else {
-        this.createTripText = 'Not Signed In'
+        this.discoverDestinationsText = 'Not Signed In'
       }
     }
   }

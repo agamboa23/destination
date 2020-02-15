@@ -32,7 +32,9 @@
           contain
           width="50"
         />
-        <span class="display-1 font-weight-light">DestiNation</span>
+        <span class="display-1 font-weight-light hidden-xs-only">
+          DestiNation
+        </span>
       </div>
       <v-spacer></v-spacer>
       <bar-icons />
@@ -42,8 +44,9 @@
         <router-view />
       </v-container>
     </v-content>
+    <notifications position="bottom right" />
     <v-footer color="accent" padless>
-      &copy; 2020 DestiNation Inc.
+      &copy; 2020 DestiNation GmbH
       <v-spacer></v-spacer>
       <v-btn text to="/about">
         About Us

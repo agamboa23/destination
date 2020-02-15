@@ -27,7 +27,8 @@ exports.users_signup = (req, res, next) => {
                             gender: req.body.gender,
                             age: req.body.age,
                             languages: req.body.languages,
-                            trips: req.body.trips
+                            phone_number: req.body.phone_number,
+                            trips: req.body.trips,
                         });
                         user.save()
                             .then(result => {
@@ -125,7 +126,7 @@ exports.users_get_all = (req, res, next) => {
 exports.users_get_user =  (req, res, next) => {
     const id = req.params.userId;
     User.findById(id)
-    .select('email first_name _id notifications last_name gender age languages trips joined_trips')
+    .select('email first_name _id notifications last_name gender age languages trips joined_trips phone_number')
     .exec()
     .then(doc => {
         if(doc){
