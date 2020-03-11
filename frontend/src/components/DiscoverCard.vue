@@ -1,6 +1,10 @@
 <template>
   <v-card>
-    <v-tabs v-model="tab" background-color="secondary" grow>
+    <v-tabs
+      v-model="tab"
+      background-color="secondary"
+      grow
+    >
       <v-tab @click="reloadPage()">
         1. Interests
       </v-tab>
@@ -17,29 +21,39 @@
         width="10"
         color="secondary"
         indeterminate
-      ></v-progress-circular>
+      />
     </v-overlay>
 
     <v-tabs-items v-model="tab">
       <v-tab-item>
         <v-card flat>
           <v-card-text>
-            <v-item-group v-model="stereotypeSelection" multiple mandatory>
+            <v-item-group
+              v-model="stereotypeSelection"
+              multiple
+              mandatory
+            >
               <v-container>
-                <v-row align="start" justify="center">
-                  <v-col v-for="stereotype in stereotypes" :key="stereotype.id">
+                <v-row
+                  align="start"
+                  justify="center"
+                >
+                  <v-col
+                    v-for="stereotype in stereotypes"
+                    :key="stereotype.id"
+                  >
                     <v-item
                       v-slot:default="{ active, toggle }"
                       :value="stereotype.id"
                     >
                       <discover-detail-card
-                        @click.native="toggle"
                         :active="active"
-                        :avatarURL="stereotype.image_url"
-                        :isDestination="false"
+                        :avatar-u-r-l="stereotype.image_url"
+                        :is-destination="false"
                         :name="stereotype.name"
-                        :subName="stereotype.description"
-                      ></discover-detail-card>
+                        :sub-name="stereotype.description"
+                        @click.native="toggle"
+                      />
                     </v-item>
                   </v-col>
                 </v-row>
@@ -64,7 +78,7 @@
       <v-tab-item>
         <discover-options-card
           v-model="options"
-          :nextDisabled="nextDisabled"
+          :next-disabled="nextDisabled"
           @next="getDestinations()"
         />
       </v-tab-item>
@@ -72,11 +86,17 @@
       <v-tab-item>
         <v-card flat>
           <v-card-text>
-            <v-row align="start" justify="center">
-              <v-col v-for="destination in topDests" :key="destination.id">
+            <v-row
+              align="start"
+              justify="center"
+            >
+              <v-col
+                v-for="destination in topDests"
+                :key="destination.id"
+              >
                 <discover-detail-card
-                  :isDestination="true"
-                  :avatarURL="destination.image"
+                  :is-destination="true"
+                  :avatar-u-r-l="destination.image"
                   :lat="
                     destination.center
                       ? destination.center.lat.toString()
@@ -88,8 +108,8 @@
                       : destination.lon.toString()
                   "
                   :tags="destination.tags"
-                  :usersLocation="usersLocation"
-                ></discover-detail-card>
+                  :users-location="usersLocation"
+                />
               </v-col>
             </v-row>
             <v-btn
@@ -138,6 +158,9 @@ export default {
     nextDisabled() {
       return !this.options.location
     }
+  },
+  created() {
+    this.getStereotypes()
   },
   methods: {
     reloadPage() {
@@ -237,9 +260,6 @@ export default {
       this.tab = 2
       this.overlay = false
     }
-  },
-  created() {
-    this.getStereotypes()
   }
 }
 </script>

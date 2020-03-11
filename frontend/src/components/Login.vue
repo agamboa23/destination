@@ -1,22 +1,30 @@
 <template>
   <div class="text-center">
     <v-card class="elevation-12">
-      <v-toolbar color="secondary" dark flat>
+      <v-toolbar
+        color="secondary"
+        dark
+        flat
+      >
         <v-toolbar-title>Login Form</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
-        <v-form ref="form" v-model="valid" @keyup.native.enter="submit()">
+        <v-form
+          ref="form"
+          v-model="valid"
+          @keyup.native.enter="submit()"
+        >
           <v-text-field
-            color="secondary"
             v-model="email"
+            color="secondary"
             label="E-Mail"
             prepend-icon="mdi-account"
             type="text"
             :rules="[rules.required, rules.email]"
           />
           <v-text-field
-            color="secondary"
             v-model="password"
+            color="secondary"
             label="Password"
             prepend-icon="mdi-lock"
             type="password"
@@ -32,8 +40,9 @@
           :loading="loading"
           :disabled="!valid || loading"
           @click="submit()"
-          >Login</v-btn
         >
+          Login
+        </v-btn>
       </v-card-actions>
     </v-card>
     <v-snackbar
@@ -44,7 +53,11 @@
       :timeout="timeout"
     >
       {{ snacktext }}
-      <v-btn color="white" text @click="snackbar = false">
+      <v-btn
+        color="white"
+        text
+        @click="snackbar = false"
+      >
         Close
       </v-btn>
     </v-snackbar>

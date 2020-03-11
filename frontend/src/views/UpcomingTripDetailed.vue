@@ -1,7 +1,14 @@
 <template>
-  <v-row align="center" justify="center">
+  <v-row
+    align="center"
+    justify="center"
+  >
     <v-col cols="10">
-      <v-card v-if="dataReady" class="mx-auto" max-width="500">
+      <v-card
+        v-if="dataReady"
+        class="mx-auto"
+        max-width="500"
+      >
         <v-img
           class="white--text align-end"
           height="200px"
@@ -13,9 +20,14 @@
         >
           <v-card-title>Trip to {{ destination }}</v-card-title>
         </v-img>
-        <v-card-subtitle class="pb-2">{{ date }}</v-card-subtitle>
+        <v-card-subtitle class="pb-2">
+          {{ date }}
+        </v-card-subtitle>
         <v-card-text class="text--primary">
-          <div class="pb-2" style="border-bottom: 1px solid grey;">
+          <div
+            class="pb-2"
+            style="border-bottom: 1px solid grey;"
+          >
             From
             <code class="mx-2">{{ origin }}</code>
             to
@@ -30,12 +42,29 @@
             }}
           </div>
         </v-card-text>
-        <v-row justify="start" align="center" no-gutters dense>
-          <v-col class="overline ml-4 text-justify-center" cols="5">
+        <v-row
+          justify="start"
+          align="center"
+          no-gutters
+          dense
+        >
+          <v-col
+            class="overline ml-4 text-justify-center"
+            cols="5"
+          >
             Languages spoken by Host:
           </v-col>
-          <v-col cols="2" v-for="(item, index) in userLangs" :key="index">
-            <v-chip color="accent" small>{{ item }}</v-chip>
+          <v-col
+            v-for="(item, index) in userLangs"
+            :key="index"
+            cols="2"
+          >
+            <v-chip
+              color="accent"
+              small
+            >
+              {{ item }}
+            </v-chip>
           </v-col>
         </v-row>
         <v-card-actions>
@@ -49,10 +78,14 @@
           >
             {{ buttonText }}
           </v-btn>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <v-btn color="secondary" icon v-on="on">
+              <v-btn
+                color="secondary"
+                icon
+                v-on="on"
+              >
                 <v-icon>mdi-share</v-icon>
               </v-btn>
             </template>

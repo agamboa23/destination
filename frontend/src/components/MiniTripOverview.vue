@@ -1,8 +1,15 @@
 <template>
-  <v-card class="mx-auto" outlined :disabled="completed" @click="toDetail()">
+  <v-card
+    class="mx-auto"
+    outlined
+    :disabled="completed"
+    @click="toDetail()"
+  >
     <v-card-title class="title mb-1">
       {{ origin }}
-      <v-icon class="mx-2">mdi-arrow-right</v-icon>
+      <v-icon class="mx-2">
+        mdi-arrow-right
+      </v-icon>
       {{ destination }}
       <v-spacer />
       <span class="font-italic font-weight-light">
@@ -15,13 +22,19 @@
     <v-card-text>
       <div>
         Members:
-        <span v-for="(item, index) in members" :key="index">
+        <span
+          v-for="(item, index) in members"
+          :key="index"
+        >
           <name :id="item" /> {{ getConditionalSlash(members, index) }}
         </span>
       </div>
       <div>
         Requests:
-        <span v-for="(name, index) in requests" :key="index">
+        <span
+          v-for="(name, index) in requests"
+          :key="index"
+        >
           <name :id="name" /> {{ getConditionalSlash(requests, index) }}
         </span>
       </div>

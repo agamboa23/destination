@@ -4,10 +4,10 @@
     max-width="400"
     outlined
     :color="active ? 'info' : hover ? 'info' : ''"
+    :style="hover ? 'cursor: pointer;' : ''"
     @mouseover="hover = true"
     @mouseleave="hover = false"
     @click="isDestination ? (clicked = !clicked) : ''"
-    :style="hover ? 'cursor: pointer;' : ''"
   >
     <v-list-item>
       <v-list-item-content>
@@ -18,7 +18,12 @@
           {{ isDestination ? underscoreToSpace(first) : name }}
         </v-list-item-title>
         <v-list-item-subtitle v-if="isDestination">
-          <v-btn small outlined color="black" @click="toGoogleMapsDirections()">
+          <v-btn
+            small
+            outlined
+            color="black"
+            @click="toGoogleMapsDirections()"
+          >
             To Maps <v-icon>mdi-map-marker</v-icon>
           </v-btn>
           <template v-if="expand">
@@ -36,8 +41,14 @@
           </template>
         </v-list-item-subtitle>
       </v-list-item-content>
-      <v-list-item-avatar tile size="80">
-        <v-img :src="avatarURL" contain></v-img>
+      <v-list-item-avatar
+        tile
+        size="80"
+      >
+        <v-img
+          :src="avatarURL"
+          contain
+        />
       </v-list-item-avatar>
     </v-list-item>
   </v-card>
@@ -69,6 +80,11 @@ export default {
   computed: {
     expand() {
       return this.isDestination && this.clicked
+    }
+  },
+  mounted() {
+    if (this.isDestination) {
+      this.getTags()
     }
   },
   methods: {
@@ -141,11 +157,6 @@ export default {
           this.restTags[tag] = value
         }
       }
-    }
-  },
-  mounted() {
-    if (this.isDestination) {
-      this.getTags()
     }
   }
 }

@@ -1,5 +1,8 @@
 <template>
-  <v-row align="center" justify="center">
+  <v-row
+    align="center"
+    justify="center"
+  >
     <v-col cols="12">
       <iframe
         frameborder="0"

@@ -1,36 +1,47 @@
 <template>
-  <v-row align="center" justify="center">
-    <v-col cols="6" md="4">
-      <p class="display-2 font-weight-light">Search</p>
+  <v-row
+    align="center"
+    justify="center"
+  >
+    <v-col
+      cols="6"
+      md="4"
+    >
+      <p class="display-2 font-weight-light">
+        Search
+      </p>
       <v-form ref="form">
         <v-autocomplete
+          v-model="origin"
           rounded
           outlined
           label="Start of your Journey"
-          v-model="origin"
           :items="destSelection"
           :rules="[rules.required]"
-        ></v-autocomplete>
+        />
         <v-autocomplete
+          v-model="destination"
           rounded
           outlined
           label="End of your Journey"
-          v-model="destination"
           :items="destSelection"
           :rules="[rules.required, startFinishRule]"
-        ></v-autocomplete>
-        <v-row align="center" justify="center">
+        />
+        <v-row
+          align="center"
+          justify="center"
+        >
           <v-col>
             <v-menu offset-y>
               <template v-slot:activator="{ on }">
                 <v-text-field
-                  v-on="on"
                   readonly
                   outlined
                   rounded
                   label="Date"
                   :value="date"
                   :rules="[rules.required]"
+                  v-on="on"
                 />
               </template>
               <v-date-picker v-model="date" />
@@ -40,16 +51,19 @@
             <v-menu>
               <template v-slot:activator="{ on }">
                 <v-text-field
-                  v-on="on"
                   readonly
                   outlined
                   rounded
                   label="Time"
                   :value="time"
                   :rules="[rules.required]"
+                  v-on="on"
                 />
               </template>
-              <v-time-picker format="24hr" v-model="time"></v-time-picker>
+              <v-time-picker
+                v-model="time"
+                format="24hr"
+              />
             </v-menu>
           </v-col>
         </v-row>
@@ -58,22 +72,26 @@
     <v-col cols="4">
       <v-row justify="center">
         <v-btn
-          @click="go()"
           class="my-6"
           color="secondary"
           width="220"
           min-width="200"
-          >Take me there
-          <v-icon class="ml-2">mdi-train</v-icon>
+          @click="go()"
+        >
+          Take me there
+          <v-icon class="ml-2">
+            mdi-train
+          </v-icon>
         </v-btn>
         <v-btn
-          @click="random()"
           class="my-6"
           color="secondary"
           width="220"
           min-width="200"
-          >DestiNation Unknown</v-btn
+          @click="random()"
         >
+          DestiNation Unknown
+        </v-btn>
       </v-row>
     </v-col>
   </v-row>
@@ -92,17 +110,6 @@ export default {
       rules: {
         required: v => !!v || 'Should be filled in'
       }
-    }
-  },
-  methods: {
-    async go() {
-      // No search functionality implemented
-      this.$refs.form.validate()
-    },
-    random() {
-      const max = this.destSelection.length
-      const random = Math.floor(Math.random() * max)
-      this.destination = this.destSelection[random]
     }
   },
   computed: {
@@ -126,6 +133,17 @@ export default {
       } else {
         return ''
       }
+    }
+  },
+  methods: {
+    async go() {
+      // No search functionality implemented
+      this.$refs.form.validate()
+    },
+    random() {
+      const max = this.destSelection.length
+      const random = Math.floor(Math.random() * max)
+      this.destination = this.destSelection[random]
     }
   }
 }

@@ -1,17 +1,33 @@
 <template>
-  <v-row align="center" justify="center">
-    <v-col cols="12" sm="8" md="6">
+  <v-row
+    align="center"
+    justify="center"
+  >
+    <v-col
+      cols="12"
+      sm="8"
+      md="6"
+    >
       <v-card class="elevation-12">
-        <v-toolbar color="secondary" dark flat>
+        <v-toolbar
+          color="secondary"
+          dark
+          flat
+        >
           <v-icon>mdi-image-filter-hdr</v-icon>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-toolbar-title>Create a Trip</v-toolbar-title>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-icon>mdi-road-variant</v-icon>
         </v-toolbar>
         <v-card-text>
-          <v-form ref="form" v-model="valid" lazy-validation>
+          <v-form
+            ref="form"
+            v-model="valid"
+            lazy-validation
+          >
             <v-autocomplete
+              v-model="origin"
               outlined
               color="secondary"
               label="Origin"
@@ -20,9 +36,9 @@
               :rules="[rules.required]"
               no-data-text="Couldn't find Origin :("
               :items="places"
-              v-model="origin"
-            ></v-autocomplete>
+            />
             <v-autocomplete
+              v-model="destination"
               outlined
               color="secondary"
               label="DestiNation"
@@ -31,9 +47,11 @@
               :rules="[rules.required]"
               no-data-text="Couldn't find DestiNation :("
               :items="places"
-              v-model="destination"
-            ></v-autocomplete>
-            <v-row align="center" justify="space-around">
+            />
+            <v-row
+              align="center"
+              justify="space-around"
+            >
               <v-col cols="4">
                 <v-dialog
                   ref="dialog1"
@@ -49,7 +67,7 @@
                       prepend-icon="mdi-calendar"
                       readonly
                       v-on="on"
-                    ></v-text-field>
+                    />
                   </template>
                   <v-date-picker
                     v-model="date"
@@ -57,8 +75,12 @@
                     :first-day-of-week="1"
                     :allowed-dates="allowedDates"
                   >
-                    <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="modal = false">
+                    <v-spacer />
+                    <v-btn
+                      text
+                      color="primary"
+                      @click="modal = false"
+                    >
                       Cancel
                     </v-btn>
                     <v-btn
@@ -86,7 +108,7 @@
                       prepend-icon="mdi-clock-outline"
                       readonly
                       v-on="on"
-                    ></v-text-field>
+                    />
                   </template>
                   <v-time-picker
                     v-if="modal2"
@@ -94,46 +116,55 @@
                     scrollable
                     format="24hr"
                   >
-                    <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="modal2 = false">
+                    <v-spacer />
+                    <v-btn
+                      text
+                      color="primary"
+                      @click="modal2 = false"
+                    >
                       Cancel
                     </v-btn>
                     <v-btn
                       text
                       color="success"
                       @click="$refs.dialog2.save(time)"
-                      >OK</v-btn
                     >
+                      OK
+                    </v-btn>
                   </v-time-picker>
                 </v-dialog>
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                  color="secondary"
                   v-model="numberOfMembers"
+                  color="secondary"
                   label="Number of Participants"
                   type="number"
                   prepend-icon="mdi-nature-people"
                   :rules="[moreThanTwoRule]"
-                ></v-text-field>
+                />
               </v-col>
             </v-row>
             <v-textarea
+              v-model="description"
               outlined
               color="secondary"
               label="Description of Trip"
               :rules="[rules.required]"
-              v-model="description"
               rows="1"
               auto-grow
               counter
-            ></v-textarea>
+            />
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn class="px-4" color="error" @click="resetEntries()"
-            >Reset Entries</v-btn
+          <v-btn
+            class="px-4"
+            color="error"
+            @click="resetEntries()"
           >
+            Reset Entries
+          </v-btn>
           <v-spacer />
           <v-btn
             class="px-4"
@@ -141,8 +172,9 @@
             :loading="loading"
             :disabled="!valid || loading"
             @click="createTrip()"
-            >Submit</v-btn
           >
+            Submit
+          </v-btn>
         </v-card-actions>
       </v-card>
       <v-snackbar
@@ -153,7 +185,11 @@
         :timeout="timeout"
       >
         {{ snacktext }}
-        <v-btn color="white" text @click="snackbar = false">
+        <v-btn
+          color="white"
+          text
+          @click="snackbar = false"
+        >
           Close
         </v-btn>
       </v-snackbar>
@@ -209,6 +245,9 @@ export default {
       return this.date + ' ' + this.time + ':00'
     }
   },
+  mounted() {
+    this.date = this.getTodaysDate()
+  },
   methods: {
     invokeSnackbar(text, color) {
       this.snacktext = text
@@ -262,9 +301,6 @@ export default {
         }
       }
     }
-  },
-  mounted() {
-    this.date = this.getTodaysDate()
   }
 }
 </script>

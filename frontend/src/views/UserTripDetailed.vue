@@ -1,6 +1,12 @@
 <template>
-  <v-row align="center" justify="center">
-    <v-col cols="11" md="5">
+  <v-row
+    align="center"
+    justify="center"
+  >
+    <v-col
+      cols="11"
+      md="5"
+    >
       <v-card max-width="500">
         <v-img
           class="white--text align-end"
@@ -13,9 +19,14 @@
         >
           <v-card-title>Trip to {{ destination }}</v-card-title>
         </v-img>
-        <v-card-subtitle class="pb-2">Date: {{ date }}</v-card-subtitle>
+        <v-card-subtitle class="pb-2">
+          Date: {{ date }}
+        </v-card-subtitle>
         <v-card-text class="text--primary">
-          <div class="pb-2" style="border-bottom: 1px solid grey;">
+          <div
+            class="pb-2"
+            style="border-bottom: 1px solid grey;"
+          >
             From
             <code class="mx-2">{{ origin }}</code>
             to
@@ -31,7 +42,7 @@
           </div>
         </v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-btn
             v-if="isAdmin"
             class="ml-5"
@@ -40,10 +51,16 @@
             outlined
             @click="cancelDialog = true"
           >
-            <v-icon class="mr-2">mdi-cancel</v-icon>
+            <v-icon class="mr-2">
+              mdi-cancel
+            </v-icon>
             Cancel Trip
           </v-btn>
-          <v-dialog v-model="cancelDialog" persistent max-width="550">
+          <v-dialog
+            v-model="cancelDialog"
+            persistent
+            max-width="550"
+          >
             <v-card>
               <v-card-title class="headline">
                 Cancel Trip from {{ origin }} to {{ destination }}?
@@ -53,7 +70,7 @@
                 trip.
               </v-card-text>
               <v-card-actions>
-                <v-spacer></v-spacer>
+                <v-spacer />
                 <v-btn
                   color="green darken-1"
                   text
@@ -74,22 +91,42 @@
         </v-card-actions>
       </v-card>
     </v-col>
-    <v-divider class="mx-2 hidden-sm-and-down" vertical inset />
-    <v-col cols="11" md="5">
-      <v-row align="center" justify="center">
+    <v-divider
+      class="mx-2 hidden-sm-and-down"
+      vertical
+      inset
+    />
+    <v-col
+      cols="11"
+      md="5"
+    >
+      <v-row
+        align="center"
+        justify="center"
+      >
         <v-col cols="12">
-          <div class="display-1 font-weight-thin">Members</div>
+          <div class="display-1 font-weight-thin">
+            Members
+          </div>
           <v-divider />
         </v-col>
       </v-row>
-      <v-row align="center" justify="center">
+      <v-row
+        align="center"
+        justify="center"
+      >
         <template v-if="members.length !== 0">
           <v-col cols="12">
             <v-list>
               <template v-for="(item, index) in members">
-                <v-list-item :key="index" @click="toUser(item)">
+                <v-list-item
+                  :key="index"
+                  @click="toUser(item)"
+                >
                   <v-list-item-avatar>
-                    <v-icon large>mdi-account-circle</v-icon>
+                    <v-icon large>
+                      mdi-account-circle
+                    </v-icon>
                   </v-list-item-avatar>
                   <v-list-item-content>
                     <v-list-item-title>
@@ -99,32 +136,46 @@
                 </v-list-item>
                 <v-divider
                   v-if="!(index + 1 === members.length)"
-                  inset
                   :key="index + 'divider'"
+                  inset
                 />
               </template>
             </v-list>
           </v-col>
         </template>
         <template v-else>
-          <v-col class="text-sm-left text-md-center" cols="12">
+          <v-col
+            class="text-sm-left text-md-center"
+            cols="12"
+          >
             <span class="title font-italic">Nothing to show here</span>
           </v-col>
         </template>
       </v-row>
 
-      <v-row align="center" justify="center">
+      <v-row
+        align="center"
+        justify="center"
+      >
         <v-col cols="12">
-          <div class="display-1 font-weight-thin">Requests</div>
+          <div class="display-1 font-weight-thin">
+            Requests
+          </div>
           <v-divider />
         </v-col>
       </v-row>
-      <v-row align="center" justify="center">
+      <v-row
+        align="center"
+        justify="center"
+      >
         <template v-if="requests.length !== 0">
           <v-col cols="12">
             <v-list>
               <template v-for="(item, index) in requests">
-                <v-hover :key="index + 'hover'" v-slot:default="{ hover }">
+                <v-hover
+                  :key="index + 'hover'"
+                  v-slot:default="{ hover }"
+                >
                   <v-list-item
                     :key="index"
                     :class="hover ? 'elevation-12' : ''"
@@ -133,7 +184,9 @@
                       class="hoverClick"
                       @click="toUser(item)"
                     >
-                      <v-icon large>mdi-account-circle</v-icon>
+                      <v-icon large>
+                        mdi-account-circle
+                      </v-icon>
                     </v-list-item-avatar>
                     <v-list-item-content>
                       <v-list-item-title>
@@ -141,10 +194,19 @@
                       </v-list-item-title>
                     </v-list-item-content>
                     <v-list-item-icon v-if="isAdmin">
-                      <v-dialog v-model="joinDialog" width="350">
+                      <v-dialog
+                        v-model="joinDialog"
+                        width="350"
+                      >
                         <template v-slot:activator="{ on }">
-                          <v-btn class="mr-4" icon v-on="on">
-                            <v-icon color="success">mdi-check</v-icon>
+                          <v-btn
+                            class="mr-4"
+                            icon
+                            v-on="on"
+                          >
+                            <v-icon color="success">
+                              mdi-check
+                            </v-icon>
                           </v-btn>
                         </template>
                         <v-card>
@@ -152,7 +214,7 @@
                             Let this user join your trip?
                           </v-card-title>
                           <v-card-actions>
-                            <v-spacer></v-spacer>
+                            <v-spacer />
                             <v-btn
                               color="secondary"
                               text
@@ -163,23 +225,31 @@
                           </v-card-actions>
                         </v-card>
                       </v-dialog>
-                      <v-btn icon @click="rejectJoin(item)">
-                        <v-icon color="error">mdi-close</v-icon>
+                      <v-btn
+                        icon
+                        @click="rejectJoin(item)"
+                      >
+                        <v-icon color="error">
+                          mdi-close
+                        </v-icon>
                       </v-btn>
                     </v-list-item-icon>
                   </v-list-item>
                 </v-hover>
                 <v-divider
                   v-if="!(index + 1 === requests.length)"
-                  inset
                   :key="index + 'divider'"
+                  inset
                 />
               </template>
             </v-list>
           </v-col>
         </template>
         <template v-else>
-          <v-col class="text-sm-left text-md-center" cols="12">
+          <v-col
+            class="text-sm-left text-md-center"
+            cols="12"
+          >
             <span class="title font-italic">Nothing to show here</span>
           </v-col>
         </template>
@@ -191,7 +261,7 @@
         width="10"
         color="secondary"
         indeterminate
-      ></v-progress-circular>
+      />
     </v-overlay>
     <v-snackbar
       v-model="snackbar"
@@ -201,7 +271,11 @@
       :timeout="3000"
     >
       {{ snacktext }}
-      <v-btn color="white" text @click="snackbar = false">
+      <v-btn
+        color="white"
+        text
+        @click="snackbar = false"
+      >
         Close
       </v-btn>
     </v-snackbar>
@@ -217,6 +291,12 @@ export default {
   name: 'UserTripDetailedView',
   components: {
     name: NameVue
+  },
+  props: {
+    tripId: {
+      type: String,
+      required: true
+    }
   },
   data: () => {
     return {
@@ -238,12 +318,6 @@ export default {
       description: ''
     }
   },
-  props: {
-    tripId: {
-      type: String,
-      required: true
-    }
-  },
   computed: {
     ...mapState('user', {
       userId: 'id'
@@ -251,6 +325,25 @@ export default {
     isAdmin() {
       return this.userId === this.tripCreator
     }
+  },
+  async created() {
+    this.overlay = true
+    const res = await axios.get(this.backendUrl + 'trips/' + this.tripId)
+    const resData = res.data.trip
+    this.members = resData.members
+    this.requests = resData.requests
+    this.tripCreator = resData.user._id
+    this.origin = resData.origin
+    this.destination = resData.destination
+    this.description = resData.description
+    const dateArr = resData.date_of_trip.split('T')
+    this.date = dateArr[0]
+    const imgRes = await axios.get(
+      'https://www.googleapis.com/customsearch/v1?key=AIzaSyDuwSlA-c6xKWp7K3XPKRhaqE91_iEE5NA&cx=011914005902216404247:ewomagcszot&searchType=image&q=' +
+        this.destination
+    )
+    this.imgSrc = imgRes.data.items[0].link
+    this.overlay = false
   },
   methods: {
     toUser(userId) {
@@ -318,25 +411,6 @@ export default {
         this.invokeSnackbar('Reject unsuccessful', 'error')
       }
     }
-  },
-  async created() {
-    this.overlay = true
-    const res = await axios.get(this.backendUrl + 'trips/' + this.tripId)
-    const resData = res.data.trip
-    this.members = resData.members
-    this.requests = resData.requests
-    this.tripCreator = resData.user._id
-    this.origin = resData.origin
-    this.destination = resData.destination
-    this.description = resData.description
-    const dateArr = resData.date_of_trip.split('T')
-    this.date = dateArr[0]
-    const imgRes = await axios.get(
-      'https://www.googleapis.com/customsearch/v1?key=AIzaSyDuwSlA-c6xKWp7K3XPKRhaqE91_iEE5NA&cx=011914005902216404247:ewomagcszot&searchType=image&q=' +
-        this.destination
-    )
-    this.imgSrc = imgRes.data.items[0].link
-    this.overlay = false
   }
 }
 </script>
