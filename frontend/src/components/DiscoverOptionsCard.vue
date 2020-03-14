@@ -27,8 +27,8 @@
         {{ isLoc ? location : 'or' }}
       </span>
       <v-autocomplete
-        :disabled="isLoc"
         v-model="location"
+        :disabled="isLoc"
         class="my-6"
         outlined
         color="secondary"
