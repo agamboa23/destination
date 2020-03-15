@@ -59,7 +59,6 @@
           </v-col>
         </template>
       </v-row>
-      <!-- eslint-disable-next-line prettier/prettier -->
 
       <v-row
         align="center"
@@ -108,7 +107,6 @@
           </v-col>
         </template>
       </v-row>
-      <!-- eslint-disable-next-line prettier/prettier -->
 
       <v-row
         align="center"
