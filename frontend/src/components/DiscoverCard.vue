@@ -187,7 +187,7 @@ export default {
       coors = arr
         .slice(0, this.pagination)
         .map(x =>
-          x.type == 'node'
+          x.type === 'node'
             ? x.lat + '|' + x.lon
             : x.center.lat + '|' + x.center.lon
         )
