@@ -122,7 +122,7 @@ export default {
     }
   },
   methods: {
-    async joinTrip() {
+    async joinTrip () {
       try {
         this.loading = true
         if (this.userId) {
@@ -151,7 +151,7 @@ export default {
             }
           } else {
             // Trying to join own trip
-            this.buttonText = `Can't join your own trip`
+            this.buttonText = 'Can\'t join your own trip'
             this.buttonColor = 'error'
             this.loading = false
           }
@@ -176,7 +176,7 @@ export default {
       required: true
     }
   },
-  async created() {
+  async created () {
     const res = await axios.get(this.backendUrl + 'trips/' + this.tripId)
     const resData = res.data.trip
     this.numberOfMembers = resData.members.length

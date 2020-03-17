@@ -75,29 +75,29 @@ export default {
     }
   },
   methods: {
-    toLogin() {
+    toLogin () {
       this.$router.push({ name: 'login' })
     },
-    toSignup() {
+    toSignup () {
       this.$router.push({ name: 'signup' })
     },
-    invokeSnackbar(text, color) {
+    invokeSnackbar (text, color) {
       this.snacktext = text
       this.snackcolor = color
       this.snackbar = true
     },
-    notify(message) {
+    notify (message) {
       this.$notify({
         type: 'warn',
         text: message
       })
     },
-    async getNotifIds() {
+    async getNotifIds () {
       const userRes = await axios.get(this.backendUrl + 'users/' + this.userId)
       const userResData = userRes.data.user.notifications
       this.notifIds = userResData
     },
-    async checkUpdates() {
+    async checkUpdates () {
       const temp = this.notifIds
       const userRes = await axios.get(this.backendUrl + 'users/' + this.userId)
       const userResData = userRes.data.user.notifications
@@ -124,7 +124,7 @@ export default {
       userId: 'id'
     })
   },
-  created() {
+  created () {
     this.getNotifIds()
   }
 }

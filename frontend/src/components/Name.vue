@@ -19,7 +19,7 @@ export default {
       name: ''
     }
   },
-  async mounted() {
+  async mounted () {
     const res = await axios.get(this.backendUrl + 'users/' + this.id)
     const resData = res.data
     this.name = resData.user.first_name + ' ' + resData.user.last_name

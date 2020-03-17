@@ -155,33 +155,33 @@ export default {
     }
   },
   computed: {
-    nextDisabled() {
+    nextDisabled () {
       return !this.options.location
     }
   },
-  created() {
+  created () {
     this.getStereotypes()
   },
   methods: {
-    reloadPage() {
+    reloadPage () {
       window.location.reload()
     },
-    async morePagination() {
+    async morePagination () {
       this.startIndex = this.startIndex + this.pagination
       if (this.startIndex + this.pagination <= this.destinations.length) {
         this.overlay = true
-        let sliced = this.destinations.slice(
+        const sliced = this.destinations.slice(
           this.startIndex,
           this.startIndex + this.pagination
         )
-        let temp = await this.getObjWithCommons(sliced)
+        const temp = await this.getObjWithCommons(sliced)
         this.topDests = [...this.topDests, ...temp]
         this.overlay = false
       } else {
         this.loadDisable = true
       }
     },
-    async getObjWithCommons(arr) {
+    async getObjWithCommons (arr) {
       let coors = ''
 
       coors = arr
@@ -201,7 +201,7 @@ export default {
       }
       return arr
     },
-    async getStereotypes() {
+    async getStereotypes () {
       // TODO Try Catch
       this.overlay = true
       const res = await axios.get(this.recommenderUrl + 'recsys/stereotypes/')
@@ -209,7 +209,7 @@ export default {
       this.stereotypes = stereotypes
       this.overlay = false
     },
-    async getDestinations() {
+    async getDestinations () {
       this.overlay = true
       const optString = this.stereotypeSelection.toString() + '/destinations'
       let wheelie = ''
@@ -250,7 +250,7 @@ export default {
           params: paramObj
         }
       )
-      let destinations = res.data.destinations
+      const destinations = res.data.destinations
       this.destinations = destinations
       this.topDests = destinations.slice(this.startIndex, this.pagination)
       this.topDests = await this.getObjWithCommons(

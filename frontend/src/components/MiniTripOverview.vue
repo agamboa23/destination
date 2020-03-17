@@ -61,7 +61,7 @@ export default {
     completed: Boolean
   },
   computed: {
-    betterDate() {
+    betterDate () {
       const dateObj = new Date(this.date)
       return dateObj.toLocaleString('en-DE', {
         dateStyle: 'short',
@@ -70,7 +70,7 @@ export default {
     }
   },
   methods: {
-    getConditionalSlash(arr, i) {
+    getConditionalSlash (arr, i) {
       if (arr.length !== 1) {
         if (i + 1 === arr.length) {
           return ''
@@ -81,7 +81,7 @@ export default {
         return ''
       }
     },
-    toDetail() {
+    toDetail () {
       this.$router.push({
         name: 'userTripDetailed',
         params: { destination: this.destination, tripId: this.tripId }

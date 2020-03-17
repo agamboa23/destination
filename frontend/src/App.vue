@@ -112,11 +112,10 @@ export default {
     }
   },
   methods: {
-    toRoot() {
-      // eslint-disable-next-line no-unused-vars
-      this.$router.push({ name: 'home' }).catch(err => {})
+    toRoot () {
+      this.$router.push({ name: 'home' })
     },
-    logOut() {
+    logOut () {
       this.$store.dispatch('auth/logout')
       this.drawer = false
     }

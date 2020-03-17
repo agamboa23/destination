@@ -322,11 +322,11 @@ export default {
     ...mapState('user', {
       userId: 'id'
     }),
-    isAdmin() {
+    isAdmin () {
       return this.userId === this.tripCreator
     }
   },
-  async created() {
+  async created () {
     this.overlay = true
     const res = await axios.get(this.backendUrl + 'trips/' + this.tripId)
     const resData = res.data.trip
@@ -346,23 +346,23 @@ export default {
     this.overlay = false
   },
   methods: {
-    toUser(userId) {
+    toUser (userId) {
       this.$router.push({
         name: 'foreignProfile',
         params: { id: userId }
       })
     },
-    invokeSnackbar(text, color) {
+    invokeSnackbar (text, color) {
       this.snacktext = text
       this.snackcolor = color
       this.snackbar = true
     },
-    removeFromArray(arr, item) {
+    removeFromArray (arr, item) {
       return arr.filter(ele => {
         return ele !== item
       })
     },
-    async deleteTrip() {
+    async deleteTrip () {
       try {
         this.cancelDisabled = true
         const res = await axios.patch(
@@ -377,10 +377,10 @@ export default {
       } catch (error) {
         this.cancelDialog = false
         this.cancelDisabled = false
-        this.invokeSnackbar(`Couldn't delete trip :(`, 'error')
+        this.invokeSnackbar('Couldn\'t delete trip :(', 'error')
       }
     },
-    async acceptJoin(id) {
+    async acceptJoin (id) {
       try {
         this.overlay = true
         this.dialog = false
@@ -397,7 +397,7 @@ export default {
         this.invokeSnackbar('Join unsuccessful', 'error')
       }
     },
-    async rejectJoin(id) {
+    async rejectJoin (id) {
       try {
         this.overlay = true
         await axios.patch(

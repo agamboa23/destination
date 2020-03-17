@@ -12,11 +12,11 @@ const getters = {}
 const actions = {}
 
 const mutations = {
-  setUser(state, user) {
+  setUser (state, user) {
     state.id = user.id
     state.firstName = user.firstName
   },
-  resetState(state) {
+  resetState (state) {
     Object.assign(state, getDefaultState())
   }
 }

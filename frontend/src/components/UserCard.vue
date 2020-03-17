@@ -36,7 +36,7 @@ export default {
   },
   computed: {
     ...mapState('user', ['firstName']),
-    computedName() {
+    computedName () {
       var name = this.firstName
       const lastChar = name.slice(-1)
       if (lastChar === 's') {
@@ -45,12 +45,12 @@ export default {
         return this.firstName + "'s"
       }
     },
-    computedTitleText() {
+    computedTitleText () {
       return this.computedName + ' Trips'
     }
   },
   methods: {
-    toProfile() {
+    toProfile () {
       this.$router.push({
         name: 'profile',
         params: { name: this.computedName }

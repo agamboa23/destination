@@ -78,19 +78,19 @@ export default {
     }
   },
   computed: {
-    expand() {
+    expand () {
       return this.isDestination && this.clicked
     }
   },
-  mounted() {
+  mounted () {
     if (this.isDestination) {
       this.getTags()
     }
   },
   methods: {
-    toGoogleMapsDirections() {
+    toGoogleMapsDirections () {
       const latLons = this.usersLocation.split('|')
-      let origin = latLons[0] + ',' + latLons[1]
+      const origin = latLons[0] + ',' + latLons[1]
       window.open(
         'https://www.google.com/maps/dir/?api=1&origin=' +
           origin +
@@ -101,18 +101,18 @@ export default {
           '&travelmode=driving'
       )
     },
-    underscoreToSpace(str) {
+    underscoreToSpace (str) {
       return str.replace(/_/g, ' ')
     },
-    randomProperty(obj) {
+    randomProperty (obj) {
       // https://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
       var keys = Object.keys(obj)
       const randomKey = keys[(keys.length * Math.random()) << 0]
       return randomKey + ': ' + obj[randomKey]
     },
-    getTags() {
-      let temp = []
-      temp.push(this.tags['name'])
+    getTags () {
+      const temp = []
+      temp.push(this.tags.name)
       const tagList = [
         'sport',
         'tourism',
@@ -150,7 +150,7 @@ export default {
       }
       this.getRestTags()
     },
-    getRestTags() {
+    getRestTags () {
       const entries = Object.entries(this.tags)
       for (const [tag, value] of entries) {
         if (value !== this.first && value !== this.second) {

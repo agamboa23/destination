@@ -45,11 +45,11 @@ export default {
     }
   },
   computed: {
-    isUneven() {
+    isUneven () {
       return this.items.count % 2 !== 0
     }
   },
-  async created() {
+  async created () {
     const res = await axios.get(this.backendUrl + 'trips/upcoming')
     this.items = res.data
   }

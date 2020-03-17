@@ -230,49 +230,49 @@ export default {
     ...mapState('user', {
       userId: 'id'
     }),
-    moreThanTwoRule() {
+    moreThanTwoRule () {
       return () =>
         this.numberOfMembers >= 2 || 'Min. number of participants is 2 :)'
     },
-    places() {
+    places () {
       const result = []
       for (let i = 0; i < placesPack.length; i++) {
         result.push(placesPack[i].name)
       }
       return result
     },
-    betterDate() {
+    betterDate () {
       return this.date + ' ' + this.time + ':00'
     }
   },
-  mounted() {
+  mounted () {
     this.date = this.getTodaysDate()
   },
   methods: {
-    invokeSnackbar(text, color) {
+    invokeSnackbar (text, color) {
       this.snacktext = text
       this.snackcolor = color
       this.snackbar = true
     },
-    getTodaysDate() {
-      //https://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript
+    getTodaysDate () {
+      // https://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript
       var today = new Date()
       var dd = String(today.getDate()).padStart(2, '0')
-      var mm = String(today.getMonth() + 1).padStart(2, '0') //January is 0!
+      var mm = String(today.getMonth() + 1).padStart(2, '0') // January is 0!
       var yyyy = today.getFullYear()
       return yyyy + '-' + mm + '-' + dd
     },
-    resetEntries() {
+    resetEntries () {
       this.origin = ''
       this.destination = ''
       this.date = this.getTodaysDate()
       this.numberOfMembers = 2
       this.description = 'An awesome trip to an awesome DestiNation!'
     },
-    allowedDates(val) {
+    allowedDates (val) {
       return val >= this.getTodaysDate()
     },
-    async createTrip() {
+    async createTrip () {
       if (this.$refs.form.validate()) {
         try {
           this.loading = true
@@ -288,7 +288,7 @@ export default {
             members: [],
             requests: []
           }
-          //POST Request
+          // POST Request
           const res = await axios.post(this.backendUrl + 'trips', trip)
           this.invokeSnackbar(res.data.message, 'success')
           this.loading = false

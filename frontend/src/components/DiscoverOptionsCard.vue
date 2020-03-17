@@ -131,10 +131,10 @@ export default {
     }
   },
   computed: {
-    places() {
+    places () {
       const result = []
       for (let i = 0; i < placesPack.length; i++) {
-        let item = {
+        const item = {
           name: placesPack[i].name,
           geo: placesPack[i].geo
         }
@@ -142,7 +142,7 @@ export default {
       }
       return result
     },
-    smartModel() {
+    smartModel () {
       if (this.moreOptions) {
         return {
           location: this.location,
@@ -158,12 +158,12 @@ export default {
     }
   },
   watch: {
-    smartModel() {
+    smartModel () {
       this.$emit('input', this.smartModel)
     }
   },
   methods: {
-    getCurrentLocation() {
+    getCurrentLocation () {
       if (!this.isLoc) {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(position => {

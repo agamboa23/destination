@@ -69,14 +69,14 @@ export default {
     ...mapState('auth', ['signedIn'])
   },
   methods: {
-    toCreateTrip() {
+    toCreateTrip () {
       if (this.signedIn) {
         this.$router.push({ name: 'createTrip' })
       } else {
         this.createTripText = 'Not Signed In'
       }
     },
-    toDiscoverView() {
+    toDiscoverView () {
       if (this.signedIn) {
         this.$router.push({ name: 'discoverView' })
       } else {

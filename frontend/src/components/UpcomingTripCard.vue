@@ -69,7 +69,7 @@ export default {
     }
   },
   computed: {
-    betterDate() {
+    betterDate () {
       const dateObj = new Date(this.date)
       return dateObj.toLocaleString('en-DE', {
         dateStyle: 'short',
@@ -77,15 +77,15 @@ export default {
       })
     }
   },
-  async created() {
-    let found = destinations.find(elem => elem.name === this.destination)
+  async created () {
+    const found = destinations.find(elem => elem.name === this.destination)
     if (found) {
       this.logo = found.logo
     }
     this.dataReady = true
   },
   methods: {
-    toDetailedTrip() {
+    toDetailedTrip () {
       this.$router.push({
         name: 'upcomingTripDetailed',
         params: { destination: this.destination, tripId: this.id }

@@ -31,7 +31,7 @@ export default {
     }
   },
   computed: {
-    isLogin() {
+    isLogin () {
       return this.type === 'login'
     }
   }

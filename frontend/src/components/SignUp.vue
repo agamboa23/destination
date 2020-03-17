@@ -210,24 +210,24 @@ export default {
     }
   },
   computed: {
-    phoneNumber() {
+    phoneNumber () {
       return this.countryCode.code + ' ' + this.number
     },
-    passwordConfirmationRule() {
+    passwordConfirmationRule () {
       return () => this.password === this.rePassword || 'Password must match'
     },
-    langSelection() {
+    langSelection () {
       const result = []
       for (let i = 0; i < langPack.length; i++) {
         result.push(langPack[i].name)
       }
       return result
     },
-    langRule() {
+    langRule () {
       return () =>
         this.languages.length !== 0 || 'Atleast one language should be selected'
     },
-    ages() {
+    ages () {
       const result = []
       for (let index = 17; index < 100; index++) {
         result.push(index + 1)
@@ -236,12 +236,12 @@ export default {
     }
   },
   watch: {
-    languages() {
+    languages () {
       this.search = ''
     }
   },
   methods: {
-    beautifyNumber() {
+    beautifyNumber () {
       // No special characters
       // eslint-disable-next-line no-control-regex
       this.number = this.number.replace(/[^\x00-\x7F]+/g, '')
@@ -251,12 +251,12 @@ export default {
       this.number = this.number.replace(/\s\s+/g, ' ')
       this.number = this.number.trim()
     },
-    invokeSnackbar(text, color) {
+    invokeSnackbar (text, color) {
       this.snacktext = text
       this.snackcolor = color
       this.snackbar = true
     },
-    async login() {
+    async login () {
       const cred = {
         email: this.email,
         password: this.password
@@ -271,7 +271,7 @@ export default {
         firstName: firstName
       })
     },
-    async submit() {
+    async submit () {
       if (this.$refs.form.validate()) {
         try {
           this.loading = true

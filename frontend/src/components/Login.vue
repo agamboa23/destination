@@ -87,12 +87,12 @@ export default {
     }
   },
   methods: {
-    invokeSnackbar(text, color) {
+    invokeSnackbar (text, color) {
       this.snacktext = text
       this.snackcolor = color
       this.snackbar = true
     },
-    async submit() {
+    async submit () {
       if (this.$refs.form.validate()) {
         try {
           this.loading = true

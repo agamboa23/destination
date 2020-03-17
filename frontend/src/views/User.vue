@@ -190,14 +190,14 @@ export default {
     }
   },
   methods: {
-    isUneven(arr) {
+    isUneven (arr) {
       return arr.length % 2 !== 0
     }
   },
   computed: {
     ...mapState('user', ['id'])
   },
-  async created() {
+  async created () {
     this.overlay = true
     const createdRes = await axios.get(
       this.backendUrl + 'trips/upcoming/' + this.id

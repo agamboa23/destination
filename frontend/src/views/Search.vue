@@ -113,20 +113,20 @@ export default {
     }
   },
   computed: {
-    destSelection() {
+    destSelection () {
       const result = []
       for (let i = 0; i < destinations.length; i++) {
         result.push(destinations[i].name)
       }
       return result
     },
-    startFinishRule() {
+    startFinishRule () {
       return (
         this.origin !== this.destination ||
         "Origin and DestiNation can't be the same"
       )
     },
-    formattedDate() {
+    formattedDate () {
       if (this.date) {
         const input = this.date.split('-')
         return input[2] + '.' + input[1] + '.' + input[0]
@@ -136,11 +136,11 @@ export default {
     }
   },
   methods: {
-    async go() {
+    async go () {
       // No search functionality implemented
       this.$refs.form.validate()
     },
-    random() {
+    random () {
       const max = this.destSelection.length
       const random = Math.floor(Math.random() * max)
       this.destination = this.destSelection[random]
