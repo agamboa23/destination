@@ -74,6 +74,16 @@ export default {
       snacktext: ''
     }
   },
+  computed: {
+    ...mapState('auth', ['signedIn']),
+    ...mapState('user', {
+      firstName: 'firstName',
+      userId: 'id'
+    })
+  },
+  created () {
+    this.getNotifIds()
+  },
   methods: {
     toLogin () {
       this.$router.push({ name: 'login' })
@@ -116,16 +126,6 @@ export default {
         this.invokeSnackbar('No Updates', 'info')
       }
     }
-  },
-  computed: {
-    ...mapState('auth', ['signedIn']),
-    ...mapState('user', {
-      firstName: 'firstName',
-      userId: 'id'
-    })
-  },
-  created () {
-    this.getNotifIds()
   }
 }
 </script>

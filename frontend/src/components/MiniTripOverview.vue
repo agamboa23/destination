@@ -51,13 +51,34 @@ export default {
     name: NameVue
   },
   props: {
-    tripId: String,
-    requests: Array,
-    members: Array,
-    maxMembers: Number,
-    origin: String,
-    destination: String,
-    date: String,
+    tripId: {
+      type: String,
+      default: ''
+    },
+    requests: {
+      type: Array,
+      default: () => []
+    },
+    members: {
+      type: Array,
+      default: () => []
+    },
+    maxMembers: {
+      type: Number,
+      default: 5
+    },
+    origin: {
+      type: String,
+      default: ''
+    },
+    destination: {
+      type: String,
+      default: ''
+    },
+    date: {
+      type: String,
+      default: ''
+    },
     completed: Boolean
   },
   computed: {

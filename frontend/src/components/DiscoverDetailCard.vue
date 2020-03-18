@@ -59,14 +59,35 @@ export default {
   name: 'DiscoverDetailCard',
   props: {
     isDestination: { type: Boolean, required: true },
-    name: String,
-    subName: String,
+    name: {
+      type: String,
+      default: ''
+    },
+    subName: {
+      type: String,
+      default: ''
+    },
     active: Boolean,
-    avatarURL: String,
-    lat: String,
-    lon: String,
-    tags: Object,
-    usersLocation: String
+    avatarURL: {
+      type: String,
+      default: ''
+    },
+    lat: {
+      type: String,
+      default: ''
+    },
+    lon: {
+      type: String,
+      default: ''
+    },
+    tags: {
+      type: Object,
+      default: () => {}
+    },
+    usersLocation: {
+      type: String,
+      default: ''
+    }
   },
   data: () => {
     return {

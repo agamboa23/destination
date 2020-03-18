@@ -189,11 +189,6 @@ export default {
       completedTrips: []
     }
   },
-  methods: {
-    isUneven (arr) {
-      return arr.length % 2 !== 0
-    }
-  },
   computed: {
     ...mapState('user', ['id'])
   },
@@ -217,6 +212,11 @@ export default {
     const joinedCompletedArr = joinedCompletedRes.data.trips
     this.completedTrips = completedArr.concat(joinedCompletedArr)
     this.overlay = false
+  },
+  methods: {
+    isUneven (arr) {
+      return arr.length % 2 !== 0
+    }
   }
 }
 </script>

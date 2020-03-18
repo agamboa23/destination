@@ -55,12 +55,30 @@ import destinations from '@/assets/destinations.js'
 export default {
   name: 'UpcomingTripCard',
   props: {
-    id: String,
-    origin: String,
-    destination: String,
-    date: String,
-    membersLength: Number,
-    maxMembers: Number
+    id: {
+      type: String,
+      default: ''
+    },
+    origin: {
+      type: String,
+      default: ''
+    },
+    destination: {
+      type: String,
+      default: ''
+    },
+    date: {
+      type: String,
+      default: ''
+    },
+    membersLength: {
+      type: Number,
+      default: 1
+    },
+    maxMembers: {
+      type: Number,
+      default: 5
+    }
   },
   data: () => {
     return {

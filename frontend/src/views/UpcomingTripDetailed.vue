@@ -103,6 +103,12 @@ import axios from 'axios'
 
 export default {
   name: 'UpcomingTripDetailed',
+  props: {
+    tripId: {
+      type: String,
+      required: true
+    }
+  },
   data: () => {
     return {
       backendUrl: process.env.VUE_APP_BACKENDURL,
@@ -120,6 +126,34 @@ export default {
       date: '',
       imgSrc: ''
     }
+  },
+  computed: {
+    ...mapState('user', {
+      userId: 'id'
+    })
+  },
+  async created () {
+    const res = await axios.get(this.backendUrl + 'trips/' + this.tripId)
+    const resData = res.data.trip
+    this.numberOfMembers = resData.members.length
+    this.maxMembers = resData.number_of_members
+    this.creatorId = resData.user._id
+    this.userLangs = resData.user.languages
+    this.origin = resData.origin
+    this.destination = resData.destination
+    this.description = resData.description
+    const dateObj = new Date(resData.date_of_trip)
+    this.date = dateObj.toLocaleString('en-DE', {
+      dateStyle: 'full',
+      timeStyle: 'short'
+    })
+    // TODO: Hardcoded Google CSE Parameters
+    const imgRes = await axios.get(
+      'https://www.googleapis.com/customsearch/v1?key=AIzaSyDuwSlA-c6xKWp7K3XPKRhaqE91_iEE5NA&cx=011914005902216404247:ewomagcszot&searchType=image&q=' +
+        this.destination
+    )
+    this.imgSrc = imgRes.data.items[0].link
+    this.dataReady = true
   },
   methods: {
     async joinTrip () {
@@ -164,40 +198,6 @@ export default {
         this.loading = false
       }
     }
-  },
-  computed: {
-    ...mapState('user', {
-      userId: 'id'
-    })
-  },
-  props: {
-    tripId: {
-      type: String,
-      required: true
-    }
-  },
-  async created () {
-    const res = await axios.get(this.backendUrl + 'trips/' + this.tripId)
-    const resData = res.data.trip
-    this.numberOfMembers = resData.members.length
-    this.maxMembers = resData.number_of_members
-    this.creatorId = resData.user._id
-    this.userLangs = resData.user.languages
-    this.origin = resData.origin
-    this.destination = resData.destination
-    this.description = resData.description
-    const dateObj = new Date(resData.date_of_trip)
-    this.date = dateObj.toLocaleString('en-DE', {
-      dateStyle: 'full',
-      timeStyle: 'short'
-    })
-    // TODO: Hardcoded Google CSE Parameters
-    const imgRes = await axios.get(
-      'https://www.googleapis.com/customsearch/v1?key=AIzaSyDuwSlA-c6xKWp7K3XPKRhaqE91_iEE5NA&cx=011914005902216404247:ewomagcszot&searchType=image&q=' +
-        this.destination
-    )
-    this.imgSrc = imgRes.data.items[0].link
-    this.dataReady = true
   }
 }
 </script>
