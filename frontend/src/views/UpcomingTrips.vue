@@ -1,29 +1,35 @@
 <template>
-  <v-row
-    align="center"
-    justify="center"
+  <v-container
+    fill-height
+    fluid
+    class="pa-0"
   >
-    <v-col
-      v-for="(item, index) in items.trips"
-      :key="index"
-      cols="10"
-      md="5"
+    <v-row
+      align="center"
+      justify="center"
     >
-      <trip-card
-        :id="item._id"
-        :origin="item.origin"
-        :destination="item.destination"
-        :date="item.date"
-        :members-length="item.members_length"
-        :max-members="item.number_of_members"
+      <v-col
+        v-for="(item, index) in items.trips"
+        :key="index"
+        cols="10"
+        md="5"
+      >
+        <trip-card
+          :id="item._id"
+          :origin="item.origin"
+          :destination="item.destination"
+          :date="item.date"
+          :members-length="item.members_length"
+          :max-members="item.number_of_members"
+        />
+      </v-col>
+      <v-col
+        v-if="isUneven"
+        cols="10"
+        md="5"
       />
-    </v-col>
-    <v-col
-      v-if="isUneven"
-      cols="10"
-      md="5"
-    />
-  </v-row>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

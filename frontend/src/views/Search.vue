@@ -1,100 +1,106 @@
 <template>
-  <v-row
-    align="center"
-    justify="center"
+  <v-container
+    fill-height
+    fluid
+    class="pa-0"
   >
-    <v-col
-      cols="6"
-      md="4"
+    <v-row
+      align="center"
+      justify="center"
     >
-      <p class="display-2 font-weight-light">
-        Search
-      </p>
-      <v-form ref="form">
-        <v-autocomplete
-          v-model="origin"
-          rounded
-          outlined
-          label="Start of your Journey"
-          :items="destSelection"
-          :rules="[rules.required]"
-        />
-        <v-autocomplete
-          v-model="destination"
-          rounded
-          outlined
-          label="End of your Journey"
-          :items="destSelection"
-          :rules="[rules.required, startFinishRule]"
-        />
-        <v-row
-          align="center"
-          justify="center"
-        >
-          <v-col>
-            <v-menu offset-y>
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  readonly
-                  outlined
-                  rounded
-                  label="Date"
-                  :value="date"
-                  :rules="[rules.required]"
-                  v-on="on"
+      <v-col
+        cols="6"
+        md="4"
+      >
+        <p class="display-2 font-weight-light">
+          Search
+        </p>
+        <v-form ref="form">
+          <v-autocomplete
+            v-model="origin"
+            rounded
+            outlined
+            label="Start of your Journey"
+            :items="destSelection"
+            :rules="[rules.required]"
+          />
+          <v-autocomplete
+            v-model="destination"
+            rounded
+            outlined
+            label="End of your Journey"
+            :items="destSelection"
+            :rules="[rules.required, startFinishRule]"
+          />
+          <v-row
+            align="center"
+            justify="center"
+          >
+            <v-col>
+              <v-menu offset-y>
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    readonly
+                    outlined
+                    rounded
+                    label="Date"
+                    :value="date"
+                    :rules="[rules.required]"
+                    v-on="on"
+                  />
+                </template>
+                <v-date-picker v-model="date" />
+              </v-menu>
+            </v-col>
+            <v-col>
+              <v-menu>
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    readonly
+                    outlined
+                    rounded
+                    label="Time"
+                    :value="time"
+                    :rules="[rules.required]"
+                    v-on="on"
+                  />
+                </template>
+                <v-time-picker
+                  v-model="time"
+                  format="24hr"
                 />
-              </template>
-              <v-date-picker v-model="date" />
-            </v-menu>
-          </v-col>
-          <v-col>
-            <v-menu>
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  readonly
-                  outlined
-                  rounded
-                  label="Time"
-                  :value="time"
-                  :rules="[rules.required]"
-                  v-on="on"
-                />
-              </template>
-              <v-time-picker
-                v-model="time"
-                format="24hr"
-              />
-            </v-menu>
-          </v-col>
+              </v-menu>
+            </v-col>
+          </v-row>
+        </v-form>
+      </v-col>
+      <v-col cols="4">
+        <v-row justify="center">
+          <v-btn
+            class="my-6"
+            color="secondary"
+            width="220"
+            min-width="200"
+            @click="go()"
+          >
+            Take me there
+            <v-icon class="ml-2">
+              mdi-train
+            </v-icon>
+          </v-btn>
+          <v-btn
+            class="my-6"
+            color="secondary"
+            width="220"
+            min-width="200"
+            @click="random()"
+          >
+            DestiNation Unknown
+          </v-btn>
         </v-row>
-      </v-form>
-    </v-col>
-    <v-col cols="4">
-      <v-row justify="center">
-        <v-btn
-          class="my-6"
-          color="secondary"
-          width="220"
-          min-width="200"
-          @click="go()"
-        >
-          Take me there
-          <v-icon class="ml-2">
-            mdi-train
-          </v-icon>
-        </v-btn>
-        <v-btn
-          class="my-6"
-          color="secondary"
-          width="220"
-          min-width="200"
-          @click="random()"
-        >
-          DestiNation Unknown
-        </v-btn>
-      </v-row>
-    </v-col>
-  </v-row>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

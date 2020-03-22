@@ -1,189 +1,134 @@
 <template>
-  <v-row
-    align="center"
-    justify="center"
+  <v-container
+    fill-height
+    fluid
+    class="pa-0"
   >
-    <v-col
-      cols="11"
-      md="5"
+    <v-row
+      align="center"
+      justify="center"
     >
-      <v-card max-width="500">
-        <v-img
-          class="white--text align-end"
-          height="200px"
-          :src="
-            imgSrc
-              ? imgSrc
-              : 'https://images.unsplash.com/photo-1517021897933-0e0319cfbc28?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80'
-          "
+      <v-col
+        cols="11"
+        md="5"
+      >
+        <v-card max-width="500">
+          <v-img
+            class="white--text align-end"
+            height="200px"
+            :src="
+              imgSrc
+                ? imgSrc
+                : 'https://images.unsplash.com/photo-1517021897933-0e0319cfbc28?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80'
+            "
+          >
+            <v-card-title>Trip to {{ destination }}</v-card-title>
+          </v-img>
+          <v-card-subtitle class="pb-2">
+            Date: {{ date }}
+          </v-card-subtitle>
+          <v-card-text class="text--primary">
+            <div
+              class="pb-2"
+              style="border-bottom: 1px solid grey;"
+            >
+              From
+              <code class="mx-2">{{ origin }}</code>
+              to
+              <code class="mx-2">{{ destination }}</code>
+            </div>
+
+            <div class="mt-1 pb-n3">
+              {{
+                description
+                  ? description
+                  : 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione quasi aperiam provident cumque blanditiis ipsum, officiis facere, animi et veritatis eum perspiciatis quaerat? Doloremque culpa nihil error, totam dolor aspernatur?'
+              }}
+            </div>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn
+              v-if="isAdmin"
+              class="ml-5"
+              color="error"
+              small
+              outlined
+              @click="cancelDialog = true"
+            >
+              <v-icon class="mr-2">
+                mdi-cancel
+              </v-icon>
+              Cancel Trip
+            </v-btn>
+            <v-dialog
+              v-model="cancelDialog"
+              persistent
+              max-width="550"
+            >
+              <v-card>
+                <v-card-title class="headline">
+                  Cancel Trip from {{ origin }} to {{ destination }}?
+                </v-card-title>
+                <v-card-text>
+                  By clicking on "Cancel Trip" you're irreversibly deleting the
+                  trip.
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer />
+                  <v-btn
+                    color="green darken-1"
+                    text
+                    @click="cancelDialog = false"
+                  >
+                    Back
+                  </v-btn>
+                  <v-btn
+                    color="error"
+                    :disabled="cancelDisabled"
+                    @click="deleteTrip()"
+                  >
+                    Cancel Trip
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+      <v-divider
+        class="mx-2 hidden-sm-and-down"
+        vertical
+        inset
+      />
+      <v-col
+        cols="11"
+        md="5"
+      >
+        <v-row
+          align="center"
+          justify="center"
         >
-          <v-card-title>Trip to {{ destination }}</v-card-title>
-        </v-img>
-        <v-card-subtitle class="pb-2">
-          Date: {{ date }}
-        </v-card-subtitle>
-        <v-card-text class="text--primary">
-          <div
-            class="pb-2"
-            style="border-bottom: 1px solid grey;"
-          >
-            From
-            <code class="mx-2">{{ origin }}</code>
-            to
-            <code class="mx-2">{{ destination }}</code>
-          </div>
-
-          <div class="mt-1 pb-n3">
-            {{
-              description
-                ? description
-                : 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione quasi aperiam provident cumque blanditiis ipsum, officiis facere, animi et veritatis eum perspiciatis quaerat? Doloremque culpa nihil error, totam dolor aspernatur?'
-            }}
-          </div>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            v-if="isAdmin"
-            class="ml-5"
-            color="error"
-            small
-            outlined
-            @click="cancelDialog = true"
-          >
-            <v-icon class="mr-2">
-              mdi-cancel
-            </v-icon>
-            Cancel Trip
-          </v-btn>
-          <v-dialog
-            v-model="cancelDialog"
-            persistent
-            max-width="550"
-          >
-            <v-card>
-              <v-card-title class="headline">
-                Cancel Trip from {{ origin }} to {{ destination }}?
-              </v-card-title>
-              <v-card-text>
-                By clicking on "Cancel Trip" you're irreversibly deleting the
-                trip.
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer />
-                <v-btn
-                  color="green darken-1"
-                  text
-                  @click="cancelDialog = false"
-                >
-                  Back
-                </v-btn>
-                <v-btn
-                  color="error"
-                  :disabled="cancelDisabled"
-                  @click="deleteTrip()"
-                >
-                  Cancel Trip
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-    <v-divider
-      class="mx-2 hidden-sm-and-down"
-      vertical
-      inset
-    />
-    <v-col
-      cols="11"
-      md="5"
-    >
-      <v-row
-        align="center"
-        justify="center"
-      >
-        <v-col cols="12">
-          <div class="display-1 font-weight-thin">
-            Members
-          </div>
-          <v-divider />
-        </v-col>
-      </v-row>
-      <v-row
-        align="center"
-        justify="center"
-      >
-        <template v-if="members.length !== 0">
           <v-col cols="12">
-            <v-list>
-              <template v-for="(item, index) in members">
-                <v-list-item
-                  :key="index"
-                  @click="toUser(item)"
-                >
-                  <v-list-item-avatar>
-                    <v-icon large>
-                      mdi-account-circle
-                    </v-icon>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      <name :id="item" />
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-divider
-                  v-if="!(index + 1 === members.length)"
-                  :key="index + 'divider'"
-                  inset
-                />
-              </template>
-            </v-list>
+            <div class="display-1 font-weight-thin">
+              Members
+            </div>
+            <v-divider />
           </v-col>
-        </template>
-        <template v-else>
-          <v-col
-            class="text-sm-left text-md-center"
-            cols="12"
-          >
-            <span class="title font-italic">Nothing to show here</span>
-          </v-col>
-        </template>
-      </v-row>
-
-      <v-row
-        align="center"
-        justify="center"
-      >
-        <v-col cols="12">
-          <div class="display-1 font-weight-thin">
-            Requests
-          </div>
-          <v-divider />
-        </v-col>
-      </v-row>
-      <v-row
-        align="center"
-        justify="center"
-      >
-        <template v-if="requests.length !== 0">
-          <v-col cols="12">
-            <v-list>
-              <template v-for="(item, index) in requests">
-                <v-hover
-                  :key="index + 'hover'"
-                  v-slot:default="{ hover }"
-                >
+        </v-row>
+        <v-row
+          align="center"
+          justify="center"
+        >
+          <template v-if="members.length !== 0">
+            <v-col cols="12">
+              <v-list>
+                <template v-for="(item, index) in members">
                   <v-list-item
                     :key="index"
-                    :class="hover ? 'elevation-12' : ''"
+                    @click="toUser(item)"
                   >
-                    <v-list-item-avatar
-                      class="hoverClick"
-                      @click="toUser(item)"
-                    >
+                    <v-list-item-avatar>
                       <v-icon large>
                         mdi-account-circle
                       </v-icon>
@@ -193,93 +138,154 @@
                         <name :id="item" />
                       </v-list-item-title>
                     </v-list-item-content>
-                    <v-list-item-icon v-if="isAdmin">
-                      <v-dialog
-                        v-model="joinDialog"
-                        width="350"
-                      >
-                        <template v-slot:activator="{ on }">
-                          <v-btn
-                            class="mr-4"
-                            icon
-                            v-on="on"
-                          >
-                            <v-icon color="success">
-                              mdi-check
-                            </v-icon>
-                          </v-btn>
-                        </template>
-                        <v-card>
-                          <v-card-title>
-                            Let this user join your trip?
-                          </v-card-title>
-                          <v-card-actions>
-                            <v-spacer />
-                            <v-btn
-                              color="secondary"
-                              text
-                              @click="acceptJoin(item)"
-                            >
-                              Accept Join Request
-                            </v-btn>
-                          </v-card-actions>
-                        </v-card>
-                      </v-dialog>
-                      <v-btn
-                        icon
-                        @click="rejectJoin(item)"
-                      >
-                        <v-icon color="error">
-                          mdi-close
-                        </v-icon>
-                      </v-btn>
-                    </v-list-item-icon>
                   </v-list-item>
-                </v-hover>
-                <v-divider
-                  v-if="!(index + 1 === requests.length)"
-                  :key="index + 'divider'"
-                  inset
-                />
-              </template>
-            </v-list>
+                  <v-divider
+                    v-if="!(index + 1 === members.length)"
+                    :key="index + 'divider'"
+                    inset
+                  />
+                </template>
+              </v-list>
+            </v-col>
+          </template>
+          <template v-else>
+            <v-col
+              class="text-sm-left text-md-center"
+              cols="12"
+            >
+              <span class="title font-italic">Nothing to show here</span>
+            </v-col>
+          </template>
+        </v-row>
+
+        <v-row
+          align="center"
+          justify="center"
+        >
+          <v-col cols="12">
+            <div class="display-1 font-weight-thin">
+              Requests
+            </div>
+            <v-divider />
           </v-col>
-        </template>
-        <template v-else>
-          <v-col
-            class="text-sm-left text-md-center"
-            cols="12"
-          >
-            <span class="title font-italic">Nothing to show here</span>
-          </v-col>
-        </template>
-      </v-row>
-    </v-col>
-    <v-overlay v-model="overlay">
-      <v-progress-circular
-        size="150"
-        width="10"
-        color="secondary"
-        indeterminate
-      />
-    </v-overlay>
-    <v-snackbar
-      v-model="snackbar"
-      :color="snackcolor"
-      :top="true"
-      :right="true"
-      :timeout="3000"
-    >
-      {{ snacktext }}
-      <v-btn
-        color="white"
-        text
-        @click="snackbar = false"
+        </v-row>
+        <v-row
+          align="center"
+          justify="center"
+        >
+          <template v-if="requests.length !== 0">
+            <v-col cols="12">
+              <v-list>
+                <template v-for="(item, index) in requests">
+                  <v-hover
+                    :key="index + 'hover'"
+                    v-slot:default="{ hover }"
+                  >
+                    <v-list-item
+                      :key="index"
+                      :class="hover ? 'elevation-12' : ''"
+                    >
+                      <v-list-item-avatar
+                        class="hoverClick"
+                        @click="toUser(item)"
+                      >
+                        <v-icon large>
+                          mdi-account-circle
+                        </v-icon>
+                      </v-list-item-avatar>
+                      <v-list-item-content>
+                        <v-list-item-title>
+                          <name :id="item" />
+                        </v-list-item-title>
+                      </v-list-item-content>
+                      <v-list-item-icon v-if="isAdmin">
+                        <v-dialog
+                          v-model="joinDialog"
+                          width="350"
+                        >
+                          <template v-slot:activator="{ on }">
+                            <v-btn
+                              class="mr-4"
+                              icon
+                              v-on="on"
+                            >
+                              <v-icon color="success">
+                                mdi-check
+                              </v-icon>
+                            </v-btn>
+                          </template>
+                          <v-card>
+                            <v-card-title>
+                              Let this user join your trip?
+                            </v-card-title>
+                            <v-card-actions>
+                              <v-spacer />
+                              <v-btn
+                                color="secondary"
+                                text
+                                @click="acceptJoin(item)"
+                              >
+                                Accept Join Request
+                              </v-btn>
+                            </v-card-actions>
+                          </v-card>
+                        </v-dialog>
+                        <v-btn
+                          icon
+                          @click="rejectJoin(item)"
+                        >
+                          <v-icon color="error">
+                            mdi-close
+                          </v-icon>
+                        </v-btn>
+                      </v-list-item-icon>
+                    </v-list-item>
+                  </v-hover>
+                  <v-divider
+                    v-if="!(index + 1 === requests.length)"
+                    :key="index + 'divider'"
+                    inset
+                  />
+                </template>
+              </v-list>
+            </v-col>
+          </template>
+          <template v-else>
+            <v-col
+              class="text-sm-left text-md-center"
+              cols="12"
+            >
+              <span class="title font-italic">Nothing to show here</span>
+            </v-col>
+          </template>
+        </v-row>
+      </v-col>
+      <v-overlay v-model="overlay">
+        <v-progress-circular
+          size="150"
+          width="10"
+          color="secondary"
+          indeterminate
+        />
+      </v-overlay>
+      <v-snackbar
+        v-model="snackbar"
+        :color="snackcolor"
+        :top="true"
+        :right="true"
+        :timeout="3000"
       >
-        Close
-      </v-btn>
-    </v-snackbar>
-  </v-row>
+        {{ snacktext }}
+        <v-btn
+          color="white"
+          text
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </v-snackbar>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

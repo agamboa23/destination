@@ -57,13 +57,7 @@
       <bar-icons />
     </v-app-bar>
     <v-content>
-      <v-container
-        fill-height
-        fluid
-        class="pa-0"
-      >
-        <router-view />
-      </v-container>
+      <router-view />
     </v-content>
     <notifications position="bottom right" />
     <v-footer

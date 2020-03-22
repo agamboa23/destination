@@ -1,53 +1,35 @@
 <template>
   <div>
-    <v-row
-      align="center"
-      justify="center"
+    <v-btn
+      :outlined="!hover1"
+      class="ma-4 elevation-6"
+      color="secondary"
+      @mouseover="hover1 = true"
+      @mouseleave="hover1 = false"
+      @click="toCreateTrip()"
     >
-      <v-btn
-        :outlined="!hover1"
-        class="ma-4 elevation-6"
-        color="secondary"
-        width="600"
-        @mouseover="hover1 = true"
-        @mouseleave="hover1 = false"
-        @click="toCreateTrip()"
-      >
-        {{ createTripText }}
-      </v-btn>
-    </v-row>
-    <v-row
-      align="center"
-      justify="center"
+      {{ createTripText }}
+    </v-btn>
+    <v-btn
+      :outlined="!hover2"
+      class="ma-4 elevation-6"
+      color="secondary"
+      @mouseover="hover2 = true"
+      @mouseleave="hover2 = false"
+      @click="toDiscoverView()"
     >
-      <v-btn
-        :outlined="!hover2"
-        class="ma-4 elevation-6"
-        color="secondary"
-        width="600"
-        @mouseover="hover2 = true"
-        @mouseleave="hover2 = false"
-        @click="toDiscoverView()"
-      >
-        {{ discoverDestinationsText }}
-      </v-btn>
-    </v-row>
-    <v-row
-      align="center"
-      justify="center"
+      {{ discoverDestinationsText }}
+    </v-btn>
+    <v-btn
+      :outlined="!hover3"
+      :to="{ name: 'upcoming' }"
+      class="ma-4 elevation-6"
+      color="secondary"
+      @mouseover="hover3 = true"
+      @mouseleave="hover3 = false"
     >
-      <v-btn
-        :outlined="!hover3"
-        :to="{ name: 'upcoming' }"
-        class="ma-4 elevation-6"
-        color="secondary"
-        width="600"
-        @mouseover="hover3 = true"
-        @mouseleave="hover3 = false"
-      >
-        Upcoming Trips
-      </v-btn>
-    </v-row>
+      Upcoming Trips
+    </v-btn>
   </div>
 </template>
 

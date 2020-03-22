@@ -1,100 +1,106 @@
 <template>
-  <v-row
-    align="center"
-    justify="center"
+  <v-container
+    fill-height
+    fluid
+    class="pa-0"
   >
-    <v-col cols="10">
-      <v-card
-        v-if="dataReady"
-        class="mx-auto"
-        max-width="500"
-      >
-        <v-img
-          class="white--text align-end"
-          height="200px"
-          :src="
-            imgSrc
-              ? imgSrc
-              : 'https://images.unsplash.com/photo-1517021897933-0e0319cfbc28?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80'
-          "
+    <v-row
+      align="center"
+      justify="center"
+    >
+      <v-col cols="10">
+        <v-card
+          v-if="dataReady"
+          class="mx-auto"
+          max-width="500"
         >
-          <v-card-title>Trip to {{ destination }}</v-card-title>
-        </v-img>
-        <v-card-subtitle class="pb-2">
-          {{ date }}
-        </v-card-subtitle>
-        <v-card-text class="text--primary">
-          <div
-            class="pb-2"
-            style="border-bottom: 1px solid grey;"
+          <v-img
+            class="white--text align-end"
+            height="200px"
+            :src="
+              imgSrc
+                ? imgSrc
+                : 'https://images.unsplash.com/photo-1517021897933-0e0319cfbc28?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80'
+            "
           >
-            From
-            <code class="mx-2">{{ origin }}</code>
-            to
-            <code class="mx-2">{{ destination }}</code>
-          </div>
-
-          <div class="mt-1 pb-n3">
-            {{
-              description
-                ? description
-                : 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione quasi aperiam provident cumque blanditiis ipsum, officiis facere, animi et veritatis eum perspiciatis quaerat? Doloremque culpa nihil error, totam dolor aspernatur?'
-            }}
-          </div>
-        </v-card-text>
-        <v-row
-          justify="start"
-          align="center"
-          no-gutters
-          dense
-        >
-          <v-col
-            class="overline ml-4 text-justify-center"
-            cols="5"
-          >
-            Languages spoken by Host:
-          </v-col>
-          <v-col
-            v-for="(item, index) in userLangs"
-            :key="index"
-            cols="2"
-          >
-            <v-chip
-              color="accent"
-              small
+            <v-card-title>Trip to {{ destination }}</v-card-title>
+          </v-img>
+          <v-card-subtitle class="pb-2">
+            {{ date }}
+          </v-card-subtitle>
+          <v-card-text class="text--primary">
+            <div
+              class="pb-2"
+              style="border-bottom: 1px solid grey;"
             >
-              {{ item }}
-            </v-chip>
-          </v-col>
-        </v-row>
-        <v-card-actions>
-          <v-btn
-            :loading="loading"
-            :disabled="loading"
-            class="mx-2 mb-2"
-            :color="buttonColor"
-            depressed
-            @click="joinTrip()"
+              From
+              <code class="mx-2">{{ origin }}</code>
+              to
+              <code class="mx-2">{{ destination }}</code>
+            </div>
+
+            <div class="mt-1 pb-n3">
+              {{
+                description
+                  ? description
+                  : 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione quasi aperiam provident cumque blanditiis ipsum, officiis facere, animi et veritatis eum perspiciatis quaerat? Doloremque culpa nihil error, totam dolor aspernatur?'
+              }}
+            </div>
+          </v-card-text>
+          <v-row
+            justify="start"
+            align="center"
+            no-gutters
+            dense
           >
-            {{ buttonText }}
-          </v-btn>
-          <v-spacer />
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <v-btn
-                color="secondary"
-                icon
-                v-on="on"
+            <v-col
+              class="overline ml-4 text-justify-center"
+              cols="5"
+            >
+              Languages spoken by Host:
+            </v-col>
+            <v-col
+              v-for="(item, index) in userLangs"
+              :key="index"
+              cols="2"
+            >
+              <v-chip
+                color="accent"
+                small
               >
-                <v-icon>mdi-share</v-icon>
-              </v-btn>
-            </template>
-            <span>Share this trip</span>
-          </v-tooltip>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+                {{ item }}
+              </v-chip>
+            </v-col>
+          </v-row>
+          <v-card-actions>
+            <v-btn
+              :loading="loading"
+              :disabled="loading"
+              class="mx-2 mb-2"
+              :color="buttonColor"
+              depressed
+              @click="joinTrip()"
+            >
+              {{ buttonText }}
+            </v-btn>
+            <v-spacer />
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  color="secondary"
+                  icon
+                  v-on="on"
+                >
+                  <v-icon>mdi-share</v-icon>
+                </v-btn>
+              </template>
+              <span>Share this trip</span>
+            </v-tooltip>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

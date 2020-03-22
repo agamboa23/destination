@@ -1,12 +1,8 @@
 <template>
-  <div
-    :style="{
-      backgroundImage: 'url(' + require('@/assets/background.jpg') + ')',
-      backgroundSize: 'cover',
-      display: 'inherit',
-      width: 'inherit',
-      height: 'inherit'
-    }"
+  <v-container
+    class="back"
+    fill-height
+    fluid
   >
     <v-row
       align="center"
@@ -20,7 +16,7 @@
         <welcome />
       </v-col>
     </v-row>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -34,4 +30,9 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.back {
+  background-image: url('../assets/background.jpg');
+  background-size: cover;
+}
+</style>
