@@ -118,7 +118,7 @@ export default {
           this.loading = false
           setTimeout(() => {
             this.$router.push({ name: 'home' })
-          }, 1500)
+          }, 1000)
         } catch (err) {
           this.invokeSnackbar('Authorization Error', 'error')
           this.loading = false

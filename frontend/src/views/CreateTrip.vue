@@ -62,7 +62,7 @@
                 >
                   <template v-slot:activator="{ on }">
                     <v-text-field
-                      v-model="date"
+                      v-model="computedDate"
                       label="Date of Trip"
                       prepend-icon="mdi-calendar"
                       readonly
@@ -213,6 +213,7 @@ export default {
       },
       origin: '',
       destination: '',
+      today: new Date().toISOString().split('T')[0],
       date: '',
       time: '08:00',
       numberOfMembers: 2,
@@ -241,12 +242,16 @@ export default {
       }
       return result
     },
-    betterDate () {
+    computedDate () {
+      const [year, month, day] = this.date.split('-')
+      return `${day}.${month}.${year}`
+    },
+    dateToSubmit () {
       return this.date + ' ' + this.time + ':00'
     }
   },
   mounted () {
-    this.date = this.getTodaysDate()
+    this.date = this.setDate()
   },
   methods: {
     invokeSnackbar (text, color) {
@@ -254,23 +259,20 @@ export default {
       this.snackcolor = color
       this.snackbar = true
     },
-    getTodaysDate () {
-      // https://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript
-      var today = new Date()
-      var dd = String(today.getDate()).padStart(2, '0')
-      var mm = String(today.getMonth() + 1).padStart(2, '0') // January is 0!
-      var yyyy = today.getFullYear()
-      return yyyy + '-' + mm + '-' + dd
+    setDate () {
+      const tomorrow = new Date()
+      tomorrow.setDate(tomorrow.getDate() + 1)
+      return tomorrow.toISOString().split('T')[0]
     },
     resetEntries () {
       this.origin = ''
       this.destination = ''
-      this.date = this.getTodaysDate()
+      this.date = this.setDate()
       this.numberOfMembers = 2
       this.description = 'An awesome trip to an awesome DestiNation!'
     },
     allowedDates (val) {
-      return val >= this.getTodaysDate()
+      return val >= this.today
     },
     async createTrip () {
       if (this.$refs.form.validate()) {
@@ -281,7 +283,7 @@ export default {
             destination: this.destination,
             origin: this.origin,
             // "year-month-day hour:minute:second"
-            date_of_trip: this.betterDate,
+            date_of_trip: this.dateToSubmit,
             number_of_members: this.numberOfMembers,
             isOpen: true,
             description: this.description,
