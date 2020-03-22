@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="d-flex flex-column">
     <v-btn
       :outlined="!hover1"
       class="ma-4 elevation-6"

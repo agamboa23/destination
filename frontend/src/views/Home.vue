@@ -1,17 +1,17 @@
 <template>
   <v-container
     class="back"
+    pa-0
     fill-height
     fluid
   >
     <v-row
-      align="center"
       justify="center"
     >
       <v-col
         cols="12"
         sm="8"
-        md="4"
+        md="6"
       >
         <welcome />
       </v-col>
