@@ -113,8 +113,10 @@
             color="secondary"
             label="Password"
             prepend-icon="mdi-lock"
-            type="password"
+            :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="showPassword ? 'text' : 'password'"
             :rules="[rules.required, rules.password]"
+            @click:append="showPassword =! showPassword"
           />
           <transition
             name="fade"
@@ -175,6 +177,7 @@ export default {
     return {
       backendUrl: process.env.VUE_APP_BACKENDURL,
       valid: true,
+      showPassword: false,
       loading: false,
       email: '',
       password: '',

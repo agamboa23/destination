@@ -27,8 +27,10 @@
             color="secondary"
             label="Password"
             prepend-icon="mdi-lock"
-            type="password"
+            :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="showPassword ? 'text' : 'password'"
             :rules="[rules.required]"
+            @click:append="showPassword = !showPassword"
           />
         </v-form>
       </v-card-text>
@@ -74,6 +76,7 @@ export default {
       backendUrl: process.env.VUE_APP_BACKENDURL,
       valid: true,
       loading: false,
+      showPassword: false,
       email: '',
       password: '',
       rules: {
