@@ -1,23 +1,42 @@
 <template>
   <div>
     <div v-if="!signedIn">
-      <v-btn class="mx-2" color="secondary" depressed @click="toLogin()">
+      <v-btn
+        class="mx-2"
+        color="secondary"
+        depressed
+        @click="toLogin()"
+      >
         Log In
       </v-btn>
-      <v-btn outlined @click="toSignup()">
+      <v-btn
+        outlined
+        @click="toSignup()"
+      >
         Sign Up
         <v-icon>mdi-face</v-icon>
       </v-btn>
     </div>
     <div v-else>
-      <v-btn icon @click="checkUpdates()">
+      <v-btn
+        icon
+        @click="checkUpdates()"
+      >
         <v-icon>mdi-bell-ring</v-icon>
       </v-btn>
-      <v-btn icon :to="{ name: 'search' }">
+      <v-btn
+        icon
+        :to="{ name: 'search' }"
+      >
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
-      <v-btn text :to="{ name: 'user' }">
-        <v-icon class="mr-2">mdi-account</v-icon>
+      <v-btn
+        text
+        :to="{ name: 'user' }"
+      >
+        <v-icon class="mr-2">
+          mdi-account
+        </v-icon>
         {{ firstName }}
       </v-btn>
     </div>
@@ -29,7 +48,11 @@
       :timeout="2000"
     >
       {{ snacktext }}
-      <v-btn color="white" text @click="snackbar = false">
+      <v-btn
+        color="white"
+        text
+        @click="snackbar = false"
+      >
         Close
       </v-btn>
     </v-snackbar>
@@ -51,30 +74,40 @@ export default {
       snacktext: ''
     }
   },
+  computed: {
+    ...mapState('auth', ['signedIn']),
+    ...mapState('user', {
+      firstName: 'firstName',
+      userId: 'id'
+    })
+  },
+  created () {
+    this.getNotifIds()
+  },
   methods: {
-    toLogin() {
+    toLogin () {
       this.$router.push({ name: 'login' })
     },
-    toSignup() {
+    toSignup () {
       this.$router.push({ name: 'signup' })
     },
-    invokeSnackbar(text, color) {
+    invokeSnackbar (text, color) {
       this.snacktext = text
       this.snackcolor = color
       this.snackbar = true
     },
-    notify(message) {
+    notify (message) {
       this.$notify({
         type: 'warn',
         text: message
       })
     },
-    async getNotifIds() {
+    async getNotifIds () {
       const userRes = await axios.get(this.backendUrl + 'users/' + this.userId)
       const userResData = userRes.data.user.notifications
       this.notifIds = userResData
     },
-    async checkUpdates() {
+    async checkUpdates () {
       const temp = this.notifIds
       const userRes = await axios.get(this.backendUrl + 'users/' + this.userId)
       const userResData = userRes.data.user.notifications
@@ -93,16 +126,6 @@ export default {
         this.invokeSnackbar('No Updates', 'info')
       }
     }
-  },
-  computed: {
-    ...mapState('auth', ['signedIn']),
-    ...mapState('user', {
-      firstName: 'firstName',
-      userId: 'id'
-    })
-  },
-  created() {
-    this.getNotifIds()
   }
 }
 </script>

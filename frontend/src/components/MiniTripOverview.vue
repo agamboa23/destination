@@ -1,8 +1,15 @@
 <template>
-  <v-card class="mx-auto" outlined :disabled="completed" @click="toDetail()">
+  <v-card
+    class="mx-auto"
+    outlined
+    :disabled="completed"
+    @click="toDetail()"
+  >
     <v-card-title class="title mb-1">
       {{ origin }}
-      <v-icon class="mx-2">mdi-arrow-right</v-icon>
+      <v-icon class="mx-2">
+        mdi-arrow-right
+      </v-icon>
       {{ destination }}
       <v-spacer />
       <span class="font-italic font-weight-light">
@@ -15,13 +22,19 @@
     <v-card-text>
       <div>
         Members:
-        <span v-for="(item, index) in members" :key="index">
+        <span
+          v-for="(item, index) in members"
+          :key="index"
+        >
           <name :id="item" /> {{ getConditionalSlash(members, index) }}
         </span>
       </div>
       <div>
         Requests:
-        <span v-for="(name, index) in requests" :key="index">
+        <span
+          v-for="(name, index) in requests"
+          :key="index"
+        >
           <name :id="name" /> {{ getConditionalSlash(requests, index) }}
         </span>
       </div>
@@ -38,17 +51,38 @@ export default {
     name: NameVue
   },
   props: {
-    tripId: String,
-    requests: Array,
-    members: Array,
-    maxMembers: Number,
-    origin: String,
-    destination: String,
-    date: String,
+    tripId: {
+      type: String,
+      default: ''
+    },
+    requests: {
+      type: Array,
+      default: () => []
+    },
+    members: {
+      type: Array,
+      default: () => []
+    },
+    maxMembers: {
+      type: Number,
+      default: 5
+    },
+    origin: {
+      type: String,
+      default: ''
+    },
+    destination: {
+      type: String,
+      default: ''
+    },
+    date: {
+      type: String,
+      default: ''
+    },
     completed: Boolean
   },
   computed: {
-    betterDate() {
+    betterDate () {
       const dateObj = new Date(this.date)
       return dateObj.toLocaleString('en-DE', {
         dateStyle: 'short',
@@ -57,7 +91,7 @@ export default {
     }
   },
   methods: {
-    getConditionalSlash(arr, i) {
+    getConditionalSlash (arr, i) {
       if (arr.length !== 1) {
         if (i + 1 === arr.length) {
           return ''
@@ -68,7 +102,7 @@ export default {
         return ''
       }
     },
-    toDetail() {
+    toDetail () {
       this.$router.push({
         name: 'userTripDetailed',
         params: { destination: this.destination, tripId: this.tripId }

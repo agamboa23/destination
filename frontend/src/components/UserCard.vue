@@ -3,12 +3,20 @@
     <v-card-title>
       {{ computedTitleText }}
       <v-spacer />
-      <v-btn class="mr-4" outlined @click="toProfile()">
-        <v-icon class="mr-2">mdi-account-card-details-outline</v-icon>
+      <v-btn
+        class="mr-4"
+        outlined
+        @click="toProfile()"
+      >
+        <v-icon class="mr-2">
+          mdi-account-card-details-outline
+        </v-icon>
         Profile
       </v-btn>
       <v-btn outlined>
-        <v-icon class="mr-2">mdi-settings</v-icon>
+        <v-icon class="mr-2">
+          mdi-settings
+        </v-icon>
         Settings
       </v-btn>
     </v-card-title>
@@ -28,7 +36,7 @@ export default {
   },
   computed: {
     ...mapState('user', ['firstName']),
-    computedName() {
+    computedName () {
       var name = this.firstName
       const lastChar = name.slice(-1)
       if (lastChar === 's') {
@@ -37,12 +45,12 @@ export default {
         return this.firstName + "'s"
       }
     },
-    computedTitleText() {
+    computedTitleText () {
       return this.computedName + ' Trips'
     }
   },
   methods: {
-    toProfile() {
+    toProfile () {
       this.$router.push({
         name: 'profile',
         params: { name: this.computedName }

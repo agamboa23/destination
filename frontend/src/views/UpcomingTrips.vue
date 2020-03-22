@@ -1,16 +1,28 @@
 <template>
-  <v-row align="center" justify="center">
-    <v-col cols="10" md="5" v-for="(item, index) in items.trips" :key="index">
+  <v-row
+    align="center"
+    justify="center"
+  >
+    <v-col
+      v-for="(item, index) in items.trips"
+      :key="index"
+      cols="10"
+      md="5"
+    >
       <trip-card
         :id="item._id"
         :origin="item.origin"
         :destination="item.destination"
         :date="item.date"
-        :membersLength="item.members_length"
-        :maxMembers="item.number_of_members"
+        :members-length="item.members_length"
+        :max-members="item.number_of_members"
       />
     </v-col>
-    <v-col v-if="isUneven" cols="10" md="5" />
+    <v-col
+      v-if="isUneven"
+      cols="10"
+      md="5"
+    />
   </v-row>
 </template>
 
@@ -33,11 +45,11 @@ export default {
     }
   },
   computed: {
-    isUneven() {
+    isUneven () {
       return this.items.count % 2 !== 0
     }
   },
-  async created() {
+  async created () {
     const res = await axios.get(this.backendUrl + 'trips/upcoming')
     this.items = res.data
   }

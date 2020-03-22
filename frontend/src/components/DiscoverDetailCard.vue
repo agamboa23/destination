@@ -4,10 +4,10 @@
     max-width="400"
     outlined
     :color="active ? 'info' : hover ? 'info' : ''"
+    :style="hover ? 'cursor: pointer;' : ''"
     @mouseover="hover = true"
     @mouseleave="hover = false"
     @click="isDestination ? (clicked = !clicked) : ''"
-    :style="hover ? 'cursor: pointer;' : ''"
   >
     <v-list-item>
       <v-list-item-content>
@@ -18,7 +18,12 @@
           {{ isDestination ? underscoreToSpace(first) : name }}
         </v-list-item-title>
         <v-list-item-subtitle v-if="isDestination">
-          <v-btn small outlined color="black" @click="toGoogleMapsDirections()">
+          <v-btn
+            small
+            outlined
+            color="black"
+            @click="toGoogleMapsDirections()"
+          >
             To Maps <v-icon>mdi-map-marker</v-icon>
           </v-btn>
           <template v-if="expand">
@@ -36,8 +41,14 @@
           </template>
         </v-list-item-subtitle>
       </v-list-item-content>
-      <v-list-item-avatar tile size="80">
-        <v-img :src="avatarURL" contain></v-img>
+      <v-list-item-avatar
+        tile
+        size="80"
+      >
+        <v-img
+          :src="avatarURL"
+          contain
+        />
       </v-list-item-avatar>
     </v-list-item>
   </v-card>
@@ -48,14 +59,35 @@ export default {
   name: 'DiscoverDetailCard',
   props: {
     isDestination: { type: Boolean, required: true },
-    name: String,
-    subName: String,
+    name: {
+      type: String,
+      default: ''
+    },
+    subName: {
+      type: String,
+      default: ''
+    },
     active: Boolean,
-    avatarURL: String,
-    lat: String,
-    lon: String,
-    tags: Object,
-    usersLocation: String
+    avatarURL: {
+      type: String,
+      default: ''
+    },
+    lat: {
+      type: String,
+      default: ''
+    },
+    lon: {
+      type: String,
+      default: ''
+    },
+    tags: {
+      type: Object,
+      default: () => {}
+    },
+    usersLocation: {
+      type: String,
+      default: ''
+    }
   },
   data: () => {
     return {
@@ -67,14 +99,19 @@ export default {
     }
   },
   computed: {
-    expand() {
+    expand () {
       return this.isDestination && this.clicked
     }
   },
+  mounted () {
+    if (this.isDestination) {
+      this.getTags()
+    }
+  },
   methods: {
-    toGoogleMapsDirections() {
+    toGoogleMapsDirections () {
       const latLons = this.usersLocation.split('|')
-      let origin = latLons[0] + ',' + latLons[1]
+      const origin = latLons[0] + ',' + latLons[1]
       window.open(
         'https://www.google.com/maps/dir/?api=1&origin=' +
           origin +
@@ -85,18 +122,18 @@ export default {
           '&travelmode=driving'
       )
     },
-    underscoreToSpace(str) {
+    underscoreToSpace (str) {
       return str.replace(/_/g, ' ')
     },
-    randomProperty(obj) {
+    randomProperty (obj) {
       // https://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
       var keys = Object.keys(obj)
       const randomKey = keys[(keys.length * Math.random()) << 0]
       return randomKey + ': ' + obj[randomKey]
     },
-    getTags() {
-      let temp = []
-      temp.push(this.tags['name'])
+    getTags () {
+      const temp = []
+      temp.push(this.tags.name)
       const tagList = [
         'sport',
         'tourism',
@@ -134,18 +171,13 @@ export default {
       }
       this.getRestTags()
     },
-    getRestTags() {
+    getRestTags () {
       const entries = Object.entries(this.tags)
       for (const [tag, value] of entries) {
         if (value !== this.first && value !== this.second) {
           this.restTags[tag] = value
         }
       }
-    }
-  },
-  mounted() {
-    if (this.isDestination) {
-      this.getTags()
     }
   }
 }

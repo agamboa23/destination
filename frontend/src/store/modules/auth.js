@@ -13,7 +13,7 @@ const state = getDefaultState()
 const getters = {}
 
 const actions = {
-  logout({ commit }) {
+  logout ({ commit }) {
     commit('resetState')
     commit('user/resetState', null, { root: true })
     router.push({ name: 'home' })
@@ -21,11 +21,11 @@ const actions = {
 }
 
 const mutations = {
-  login(state, token) {
+  login (state, token) {
     state.token = token
     state.signedIn = true
   },
-  resetState(state) {
+  resetState (state) {
     Object.assign(state, getDefaultState())
   }
 }

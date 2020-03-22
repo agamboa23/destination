@@ -1,74 +1,82 @@
 <template>
   <div class="text-center">
     <v-card class="elevation-12">
-      <v-toolbar color="secondary" dark flat>
+      <v-toolbar
+        color="secondary"
+        dark
+        flat
+      >
         <v-toolbar-title>Sign-Up Form</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
-        <v-form ref="form" v-model="valid" lazy-validation>
+        <v-form
+          ref="form"
+          v-model="valid"
+          lazy-validation
+        >
           <v-text-field
+            v-model="firstName"
             outlined
             color="secondary"
-            v-model="firstName"
             type="text"
             label="First Name"
             prepend-inner-icon="mdi-pencil"
             :rules="[rules.required, rules.noDigit]"
-          >
-          </v-text-field>
+          />
           <v-text-field
+            v-model="lastName"
             outlined
             color="secondary"
             type="text"
-            v-model="lastName"
             label="Last Name"
             prepend-inner-icon="mdi-pencil-outline"
             :rules="[rules.required, rules.noDigit]"
-          >
-          </v-text-field>
+          />
           <v-autocomplete
+            v-model="gender"
             no-data-text="Couldn't find that :("
             outlined
             color="secondary"
-            v-model="gender"
             label="Gender"
             :items="genderSelection"
             prepend-inner-icon="mdi-gender-male-female"
             :rules="[rules.required]"
-          >
-          </v-autocomplete>
+          />
           <v-select
+            v-model="age"
             outlined
             color="secondary"
-            v-model="age"
             label="Age"
             type="number"
             :items="ages"
             prepend-inner-icon="mdi-glass-mug-variant"
             :rules="[rules.required]"
-          ></v-select>
+          />
           <v-autocomplete
+            v-model="languages"
             no-data-text="Couldn't find that :("
             outlined
             color="secondary"
             chips
             multiple
             prepend-inner-icon="mdi-translate"
-            v-model="languages"
             :search-input.sync="search"
             label="Languages"
             :items="langSelection"
             :rules="[langRule]"
-          ></v-autocomplete>
-          <v-row align="center" justify="space-between">
+          />
+          <v-row
+            align="center"
+            justify="space-between"
+          >
             <v-col cols="4">
               <v-select
+                v-model="countryCode"
                 outlined
                 color="secondary"
                 label="Country Code"
                 prepend-inner-icon="mdi-flag"
                 :rules="[rules.required]"
-                v-model="countryCode"
                 :items="countryCodes"
               >
                 <template v-slot:selection="data">
@@ -81,38 +89,41 @@
             </v-col>
             <v-col cols="8">
               <v-text-field
+                v-model="number"
                 outlined
                 color="secondary"
-                v-model="number"
                 label="Phone Number"
                 prepend-inner-icon="mdi-phone"
-                @change="beautifyNumber()"
                 :rules="[rules.required, rules.spaceyNumber]"
                 :hint="phoneNumber"
-              ></v-text-field>
+                @change="beautifyNumber()"
+              />
             </v-col>
           </v-row>
           <v-text-field
-            color="secondary"
             v-model="email"
+            color="secondary"
             label="E-Mail"
             prepend-icon="mdi-mail"
             type="text"
             :rules="[rules.required, rules.email]"
           />
           <v-text-field
-            color="secondary"
             v-model="password"
+            color="secondary"
             label="Password"
             prepend-icon="mdi-lock"
             type="password"
             :rules="[rules.required, rules.password]"
           />
-          <transition name="fade" mode="out-in">
+          <transition
+            name="fade"
+            mode="out-in"
+          >
             <v-text-field
               v-show="!!password"
-              transition="scroll-y-transition"
               v-model="rePassword"
+              transition="scroll-y-transition"
               color="secondary"
               label="Verify Password"
               type="password"
@@ -129,8 +140,9 @@
           :loading="loading"
           :disabled="!valid || loading"
           @click="submit()"
-          >Submit</v-btn
         >
+          Submit
+        </v-btn>
       </v-card-actions>
     </v-card>
     <v-snackbar
@@ -141,7 +153,11 @@
       :timeout="timeout"
     >
       {{ snacktext }}
-      <v-btn color="white" text @click="snackbar = false">
+      <v-btn
+        color="white"
+        text
+        @click="snackbar = false"
+      >
         Close
       </v-btn>
     </v-snackbar>
@@ -193,8 +209,39 @@ export default {
       timeout: 3000
     }
   },
+  computed: {
+    phoneNumber () {
+      return this.countryCode.code + ' ' + this.number
+    },
+    passwordConfirmationRule () {
+      return () => this.password === this.rePassword || 'Password must match'
+    },
+    langSelection () {
+      const result = []
+      for (let i = 0; i < langPack.length; i++) {
+        result.push(langPack[i].name)
+      }
+      return result
+    },
+    langRule () {
+      return () =>
+        this.languages.length !== 0 || 'Atleast one language should be selected'
+    },
+    ages () {
+      const result = []
+      for (let index = 17; index < 100; index++) {
+        result.push(index + 1)
+      }
+      return result
+    }
+  },
+  watch: {
+    languages () {
+      this.search = ''
+    }
+  },
   methods: {
-    beautifyNumber() {
+    beautifyNumber () {
       // No special characters
       // eslint-disable-next-line no-control-regex
       this.number = this.number.replace(/[^\x00-\x7F]+/g, '')
@@ -204,12 +251,12 @@ export default {
       this.number = this.number.replace(/\s\s+/g, ' ')
       this.number = this.number.trim()
     },
-    invokeSnackbar(text, color) {
+    invokeSnackbar (text, color) {
       this.snacktext = text
       this.snackcolor = color
       this.snackbar = true
     },
-    async login() {
+    async login () {
       const cred = {
         email: this.email,
         password: this.password
@@ -224,7 +271,7 @@ export default {
         firstName: firstName
       })
     },
-    async submit() {
+    async submit () {
       if (this.$refs.form.validate()) {
         try {
           this.loading = true
@@ -250,37 +297,6 @@ export default {
           this.loading = false
         }
       }
-    }
-  },
-  computed: {
-    phoneNumber() {
-      return this.countryCode.code + ' ' + this.number
-    },
-    passwordConfirmationRule() {
-      return () => this.password === this.rePassword || 'Password must match'
-    },
-    langSelection() {
-      const result = []
-      for (let i = 0; i < langPack.length; i++) {
-        result.push(langPack[i].name)
-      }
-      return result
-    },
-    langRule() {
-      return () =>
-        this.languages.length !== 0 || 'Atleast one language should be selected'
-    },
-    ages() {
-      const result = []
-      for (let index = 17; index < 100; index++) {
-        result.push(index + 1)
-      }
-      return result
-    }
-  },
-  watch: {
-    languages() {
-      this.search = ''
     }
   }
 }
