@@ -10,6 +10,7 @@
         Log In
       </v-btn>
       <v-btn
+        color="white"
         outlined
         @click="toSignup()"
       >
@@ -19,18 +20,21 @@
     </div>
     <div v-else>
       <v-btn
+        color="white"
         icon
         @click="checkUpdates()"
       >
         <v-icon>mdi-bell-ring</v-icon>
       </v-btn>
       <v-btn
+        color="white"
         icon
         :to="{ name: 'search' }"
       >
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
       <v-btn
+        color="white"
         text
         :to="{ name: 'user' }"
       >
