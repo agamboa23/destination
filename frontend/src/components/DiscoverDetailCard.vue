@@ -2,6 +2,7 @@
   <v-card
     class="mx-auto"
     max-width="400"
+    min-width="350"
     outlined
     :color="active ? 'info' : hover ? 'info' : ''"
     @mouseover="hover = true"
@@ -24,7 +25,7 @@
           <template v-if="expand">
             <div class="mt-1">
               <ul>
-                <li
+                <li style="word-break: break-word;white-space: normal;"
                   v-for="(value, tag) in restTags"
                   :key="tag"
                   class="text-capitalize grey--text"
@@ -36,8 +37,11 @@
           </template>
         </v-list-item-subtitle>
       </v-list-item-content>
-      <v-list-item-avatar tile size="80">
-        <v-img :src="avatarURL" contain></v-img>
+      <v-list-item-avatar v-if="!expand" tile size="80">
+        <v-img :src="avatarURL"></v-img>
+      </v-list-item-avatar>
+      <v-list-item-avatar v-if="expand" tile size="160">
+        <v-img :src="avatarURL"></v-img>
       </v-list-item-avatar>
     </v-list-item>
   </v-card>

@@ -39,7 +39,7 @@ export async function get_images_by_locations(req, res, next) {
             wikidata = wikiresponse[0];
             try{
                 file_url=WikiHelper.generate_image_url(wikidata.data.query.geosearch);
-                results.push({location:wikiresponse[1],image_url:file_url});
+                results.push({location:wikiresponse[1],image_url:file_url+"?width=160px"});
             }
             catch(err){
                 results.push({location:wikiresponse[1],image_url:placeholder,err:err});

@@ -100,6 +100,14 @@
             >
               Load More
             </v-btn>
+            <v-btn
+              :disabled="loadDisable"
+              outlined
+              color="secondary"
+              @click="rankSort()"
+            >
+              Geo-Rank Sort
+            </v-btn>
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -143,6 +151,12 @@ export default {
     reloadPage() {
       window.location.reload()
     },
+    async rankSort() {
+      this.topDests = this.destinations.slice(0, this.pagination)
+      this.topDests = await this.getObjWithCommons(
+        this.topDests,
+        this.pagination
+      )    },
     async morePagination() {
       this.startIndex = this.startIndex + this.pagination
       if (this.startIndex + this.pagination <= this.destinations.length) {

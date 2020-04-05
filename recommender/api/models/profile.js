@@ -1,25 +1,13 @@
 import { Schema, model } from 'mongoose';
 
 const profileSchema = Schema({
-    _id: Schema.Types.ObjectId,
-    user_id: {type: Number},
-    arts: {type: Number},
-    wikidata_code: { type: String },
+    fb_id: {type: String},
+    access_code: {type:String},
+    email: {type: String},
     name: {type: String},
-    name_eng: {type: String},
-    importance_rank: {type: Number},
-    osm_type: {type: String},
-    location: {
-        type: {
-            type: String,
-            enum: ['Point'],
-            required:true
-        },
-        coordinates: {
-            type: [Number],
-            required: true
-        }
-    }
+    locations: [{type:String}],
+    likes_text :{type:String},
+    posts_text: {type:String}
 });
 
-export default model('Profiles', profileSchema,'profiles');
+export default model('Profile', profileSchema, 'profiles');

@@ -68,11 +68,12 @@ export default {
       }
     },
     toDiscoverView() {
-      if (this.signedIn) {
+      /***if (this.signedIn) {
         this.$router.push({ name: 'discoverView' })
       } else {
         this.discoverDestinationsText = 'Not Signed In'
-      }
+      }***/
+      this.$router.push({ name: 'discoverView' })
     }
   }
 }
