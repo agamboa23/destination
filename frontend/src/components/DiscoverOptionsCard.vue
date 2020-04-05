@@ -16,37 +16,25 @@
           />
         </v-col>
       </v-row>
-<<<<<<< HEAD
-      <v-row align="center" justify="center">
+      <v-row
+        align="center"
+        justify="center"
+      >
         <v-col cols="4">
           <v-facebook-login
-            app-id="1139571796385665"
-            :login-options="this.permissions"
+            :login-options="permissions"
             v-model="model"
             @sdk-init="handleSdkInit"
             @login="onLogin"
-          ></v-facebook-login>
-        </v-col>
-        <v-col cols="3">
-          <v-switch
-            v-model="useGeoRank"
-            label="Use Geographical Data"
-            color="secondary"
-          ></v-switch>
-        </v-col>
-        <v-col cols="3">
-          <v-switch
-            v-model="usePostRank"
-            label="Use Preferences Data"
-            color="secondary"
-          ></v-switch>
+            app-id="1139571796385665"
+          />
         </v-col>
       </v-row>
       <v-row>
         <h1>My Facebook Information</h1>
         <div class="well">
           <div class="list-item">
-            <img :src="picture" />
+            <img :src="picture">
           </div>
           <div class="list-item">
             <i>{{ name }}</i>
@@ -59,14 +47,11 @@
           </div>
         </div>
       </v-row>
-      <v-btn class="my-6 mr-12" @click="getCurrentLocation()" color="secondary">
-=======
       <v-btn
+        @click="getCurrentLocation()"
         class="my-6 mr-12"
         color="secondary"
-        @click="getCurrentLocation()"
       >
->>>>>>> d28a0ff7979a94b9290fe91a804c3863e81af632
         {{ isLoc ? `Don't use Current Location` : 'Use Current Location' }}
       </v-btn>
       <span class="my-6 ml-12 headline font-weight-thin">
@@ -75,6 +60,7 @@
       <v-autocomplete
         v-model="location"
         :disabled="isLoc"
+        :items="places"
         class="my-6"
         outlined
         color="secondary"
@@ -82,7 +68,6 @@
         hint="e.g. Tegernsee"
         prepend-inner-icon="mdi-city-variant"
         no-data-text="Couldn't find location :("
-        :items="places"
         item-text="name"
         item-value="geo"
       />
@@ -94,33 +79,29 @@
           <v-col cols="6">
             <v-select
               v-model="aroundMetric"
+              :items="aroundSelection"
               color="secondary"
               label="Distance in"
-              :items="aroundSelection"
               item-text="name"
               item-value="abbr"
-<<<<<<< HEAD
-            ></v-select>
-=======
             />
->>>>>>> d28a0ff7979a94b9290fe91a804c3863e81af632
             <v-text-field
               v-model="minDistance"
+              :hint="minDistance + ' ' + aroundMetric"
+              :rules="[rules.betweenZeroAndHundred]"
               color="secondary"
               label="Minimum Distance"
               type="number"
               persistent-hint
-              :hint="minDistance + ' ' + aroundMetric"
-              :rules="[rules.betweenZeroAndHundred]"
             />
             <v-text-field
               v-model="maxDistance"
+              :hint="maxDistance + ' ' + aroundMetric"
+              :rules="[rules.betweenZeroAndHundred]"
               color="secondary"
               label="Maximum Distance"
               type="number"
               persistent-hint
-              :hint="maxDistance + ' ' + aroundMetric"
-              :rules="[rules.betweenZeroAndHundred]"
             />
             <v-checkbox
               v-model="bt_reachable"
@@ -139,13 +120,14 @@
     <v-card-actions>
       <v-btn
         :disabled="nextDisabled"
+        @click="$emit('next')"
         class="elevation-12"
         large
         block
         color="secondary"
-        @click="$emit('next')"
-        >Next</v-btn
       >
+        Next
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -156,10 +138,10 @@ import VFacebookLogin from 'vue-facebook-login-component'
 import axios from 'axios'
 
 export default {
+  name: 'DiscoverOptionsCard',
   components: {
     VFacebookLogin
   },
-  name: 'DiscoverOptionsCard',
   props: {
     nextDisabled: Boolean
   },
@@ -179,8 +161,6 @@ export default {
       picture: '',
       photos: {},
       moreOptions: false,
-      useGeoRank: false,
-      usePostRank: false,
       isLoc: false,
       location: '',
       maxDistance: 15,
@@ -232,13 +212,12 @@ export default {
     }
   },
   methods: {
-<<<<<<< HEAD
-    handleSdkInit({ FB, scope }) {
+    handleSdkInit ({ FB, scope }) {
       this.FB = FB
       this.scope = scope
       if (this.scope.connected) this.getUserData()
     },
-    async getUserData() {
+    async getUserData () {
       this.FB.api(
         '/me',
         'GET',
@@ -249,19 +228,19 @@ export default {
           this.name = user.name
           this.picture = user.picture.data.url
           this.isProfileReady = 'Loading Data'
-          const fb_profile = {
+          const fbProfile = {
             fbId: user.id,
             access_code: this.FB.getAccessToken(),
             name: user.name,
             email: this.email
           }
-          console.log(fb_profile)
-          const response_build_profile = await axios.post(
+          console.log(fbProfile)
+          const responseBuildProfile = await axios.post(
             this.recommenderUrl + 'recsys/profiler/build_profile/',
-            fb_profile
+            fbProfile
           )
-          console.log(response_build_profile)
-          if (response_build_profile.status == 200) {
+          console.log(responseBuildProfile)
+          if (responseBuildProfile.status === 200) {
             this.isProfileReady = 'Ready to go'
           } else {
             this.isProfileReady = 'Error when loading'
@@ -269,10 +248,10 @@ export default {
         }
       )
     },
-    async buildProfile() {
-      //Get all facebook data (posts and geographic points)
-      //store in backend
-      //all good
+    async buildProfile () {
+      // Get all facebook data (posts and geographic points)
+      // store in backend
+      // all good
       await this.FB.api(
         '/me',
         'GET',
@@ -282,13 +261,10 @@ export default {
         }
       )
     },
-    async onLogin() {
+    async onLogin () {
       await this.getUserData()
     },
-    getCurrentLocation() {
-=======
     getCurrentLocation () {
->>>>>>> d28a0ff7979a94b9290fe91a804c3863e81af632
       if (!this.isLoc) {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(position => {

@@ -1,14 +1,14 @@
 <template>
   <v-card
-    class="mx-auto"
-    max-width="400"
-    min-width="350"
-    outlined
     :color="active ? 'info' : hover ? 'info' : ''"
     :style="hover ? 'cursor: pointer;' : ''"
     @mouseover="hover = true"
     @mouseleave="hover = false"
     @click="isDestination ? (clicked = !clicked) : ''"
+    class="mx-auto"
+    max-width="400"
+    min-width="350"
+    outlined
   >
     <v-list-item>
       <v-list-item-content>
@@ -20,10 +20,10 @@
         </v-list-item-title>
         <v-list-item-subtitle v-if="isDestination">
           <v-btn
+            @click="toGoogleMapsDirections()"
             small
             outlined
             color="black"
-            @click="toGoogleMapsDirections()"
           >
             To Maps <v-icon>mdi-map-marker</v-icon>
           </v-btn>
@@ -31,9 +31,9 @@
             <div class="mt-1">
               <ul>
                 <li
-                  style="word-break: break-word;white-space: normal;"
                   v-for="(value, tag) in restTags"
                   :key="tag"
+                  style="word-break: break-word;white-space: normal;"
                   class="text-capitalize grey--text"
                 >
                   {{ underscoreToSpace(tag) }}: {{ underscoreToSpace(value) }}
@@ -43,22 +43,19 @@
           </template>
         </v-list-item-subtitle>
       </v-list-item-content>
-<<<<<<< HEAD
-      <v-list-item-avatar v-if="!expand" tile size="80">
-        <v-img :src="avatarURL"></v-img>
-      </v-list-item-avatar>
-      <v-list-item-avatar v-if="expand" tile size="160">
-        <v-img :src="avatarURL"></v-img>
-=======
       <v-list-item-avatar
+        v-if="!expand"
         tile
         size="80"
       >
-        <v-img
-          :src="avatarURL"
-          contain
-        />
->>>>>>> d28a0ff7979a94b9290fe91a804c3863e81af632
+        <v-img :src="avatarURL" />
+      </v-list-item-avatar>
+      <v-list-item-avatar
+        v-if="expand"
+        tile
+        size="160"
+      >
+        <v-img :src="avatarURL" />
       </v-list-item-avatar>
     </v-list-item>
   </v-card>

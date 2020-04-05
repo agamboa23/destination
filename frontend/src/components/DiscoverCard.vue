@@ -62,12 +62,12 @@
           </v-card-text>
           <v-card-actions>
             <v-btn
+              :disabled="stereotypeSelection.length === 0"
+              @click="tab = 1"
               class="elevation-12"
               large
               block
               color="secondary"
-              :disabled="stereotypeSelection.length === 0"
-              @click="tab = 1"
             >
               Next Page
             </v-btn>
@@ -89,7 +89,38 @@
             <v-row
               align="start"
               justify="center"
+            >            <v-btn
+              :disabled="loadDisable"
+              @click="rankSort()"
+              outlined
+              color="secondary"
             >
+              Random Sort
+            </v-btn>
+            <v-btn
+              :disabled="loadDisable"
+              @click="rankSort()"
+              outlined
+              color="secondary"
+            >
+              Geo-Rank Sort
+            </v-btn>
+            <v-btn
+              :disabled="loadDisable"
+              @click="rankSort()"
+              outlined
+              color="secondary"
+            >
+              Semantic Sort
+            </v-btn>
+            <v-btn
+              :disabled="loadDisable"
+              @click="rankSort()"
+              outlined
+              color="secondary"
+            >
+              Geo-Semantic Sort
+            </v-btn>
               <v-col
                 v-for="destination in topDests"
                 :key="destination.id"
@@ -114,19 +145,11 @@
             </v-row>
             <v-btn
               :disabled="loadDisable"
+              @click="morePagination()"
               outlined
               color="secondary"
-              @click="morePagination()"
             >
               Load More
-            </v-btn>
-            <v-btn
-              :disabled="loadDisable"
-              outlined
-              color="secondary"
-              @click="rankSort()"
-            >
-              Geo-Rank Sort
             </v-btn>
           </v-card-text>
         </v-card>
@@ -174,18 +197,14 @@ export default {
     reloadPage () {
       window.location.reload()
     },
-<<<<<<< HEAD
-    async rankSort() {
+    async rankSort () {
       this.topDests = this.destinations.slice(0, this.pagination)
       this.topDests = await this.getObjWithCommons(
         this.topDests,
         this.pagination
       )
     },
-    async morePagination() {
-=======
     async morePagination () {
->>>>>>> d28a0ff7979a94b9290fe91a804c3863e81af632
       this.startIndex = this.startIndex + this.pagination
       if (this.startIndex + this.pagination <= this.destinations.length) {
         this.overlay = true
