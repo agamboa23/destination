@@ -156,7 +156,8 @@ export default {
       this.topDests = await this.getObjWithCommons(
         this.topDests,
         this.pagination
-      )    },
+      )
+    },
     async morePagination() {
       this.startIndex = this.startIndex + this.pagination
       if (this.startIndex + this.pagination <= this.destinations.length) {

@@ -240,7 +240,8 @@ export default {
             this.isProfileReady = 'Error when loading'
           }
         }
-      )},
+      )
+    },
     async buildProfile() {
       //Get all facebook data (posts and geographic points)
       //store in backend
@@ -256,7 +257,6 @@ export default {
     },
     async onLogin() {
       await this.getUserData()
-
     },
     getCurrentLocation() {
       if (!this.isLoc) {

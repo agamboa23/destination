@@ -25,7 +25,8 @@
           <template v-if="expand">
             <div class="mt-1">
               <ul>
-                <li style="word-break: break-word;white-space: normal;"
+                <li
+                  style="word-break: break-word;white-space: normal;"
                   v-for="(value, tag) in restTags"
                   :key="tag"
                   class="text-capitalize grey--text"
