@@ -199,10 +199,14 @@ export default {
           minDistance: this.minDistance,
           aroundMetric: this.aroundMetric,
           bt_reachable: this.bt_reachable,
-          wheelchair: this.wheelchair
+          wheelchair: this.wheelchair,
+          personalID: this.personalID
         }
       } else {
-        return { location: this.location }
+        return {
+          location: this.location,
+          personalID: this.personalID
+        }
       }
     }
   },
