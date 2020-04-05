@@ -1,8 +1,17 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer" app temporary>
+    <v-navigation-drawer
+      v-model="drawer"
+      app
+      temporary
+    >
       <v-list>
-        <v-list-item v-for="item in items" :key="item.title" link :to="item.to">
+        <v-list-item
+          v-for="item in items"
+          :key="item.title"
+          link
+          :to="item.to"
+        >
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
@@ -11,14 +20,32 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+
       <template v-slot:append>
         <div class="pa-2">
-          <v-btn block @click="logOut()">Logout</v-btn>
+          <v-switch
+            v-model="$vuetify.theme.dark"
+            color="white"
+            :label="$vuetify.theme.dark ? 'Dark Mode' : 'Light Mode'"
+          />
+          <v-btn
+            block
+            @click="logOut()"
+          >
+            Logout
+          </v-btn>
         </div>
       </template>
     </v-navigation-drawer>
-    <v-app-bar app color="primary">
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+    <v-app-bar
+      app
+      color="primary"
+      elevate-on-scroll
+    >
+      <v-app-bar-nav-icon
+        color="white"
+        @click="drawer = !drawer"
+      />
       <div
         style="cursor: pointer;"
         class="d-flex align-center"
@@ -32,23 +59,29 @@
           contain
           width="50"
         />
-        <span class="display-1 font-weight-light hidden-xs-only">
+        <span class="display-1 font-weight-light white--text hidden-xs-only">
           DestiNation
         </span>
       </div>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <bar-icons />
     </v-app-bar>
     <v-content>
-      <v-container fill-height fluid class="pa-0">
-        <router-view />
-      </v-container>
+      <router-view />
     </v-content>
     <notifications position="bottom right" />
-    <v-footer color="accent" padless>
+    <v-footer
+      class="white--text"
+      color="accent"
+      padless
+    >
       &copy; 2020 DestiNation GmbH
-      <v-spacer></v-spacer>
-      <v-btn text to="/about">
+      <v-spacer />
+      <v-btn
+        color="white"
+        text
+        to="/about"
+      >
         About Us
       </v-btn>
     </v-footer>
@@ -85,11 +118,10 @@ export default {
     }
   },
   methods: {
-    toRoot() {
-      // eslint-disable-next-line no-unused-vars
-      this.$router.push({ name: 'home' }).catch(err => {})
+    toRoot () {
+      this.$router.push({ name: 'home' })
     },
-    logOut() {
+    logOut () {
       this.$store.dispatch('auth/logout')
       this.drawer = false
     }

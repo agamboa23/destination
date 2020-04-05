@@ -1,5 +1,11 @@
 <template>
-  <v-row></v-row>
+  <v-container
+    fill-height
+    fluid
+    class="pa-0"
+  >
+    <v-row />
+  </v-container>
 </template>
 
 <script>

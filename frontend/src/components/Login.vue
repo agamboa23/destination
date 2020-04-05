@@ -1,26 +1,36 @@
 <template>
   <div class="text-center">
     <v-card class="elevation-12">
-      <v-toolbar color="secondary" dark flat>
+      <v-toolbar
+        color="secondary"
+        dark
+        flat
+      >
         <v-toolbar-title>Login Form</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
-        <v-form ref="form" v-model="valid" @keyup.native.enter="submit()">
+        <v-form
+          ref="form"
+          v-model="valid"
+          @keyup.native.enter="submit()"
+        >
           <v-text-field
-            color="secondary"
             v-model="email"
+            color="secondary"
             label="E-Mail"
             prepend-icon="mdi-account"
             type="text"
             :rules="[rules.required, rules.email]"
           />
           <v-text-field
-            color="secondary"
             v-model="password"
+            color="secondary"
             label="Password"
             prepend-icon="mdi-lock"
-            type="password"
+            :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="showPassword ? 'text' : 'password'"
             :rules="[rules.required]"
+            @click:append="showPassword = !showPassword"
           />
         </v-form>
       </v-card-text>
@@ -32,8 +42,9 @@
           :loading="loading"
           :disabled="!valid || loading"
           @click="submit()"
-          >Login</v-btn
         >
+          Login
+        </v-btn>
       </v-card-actions>
     </v-card>
     <v-snackbar
@@ -44,7 +55,11 @@
       :timeout="timeout"
     >
       {{ snacktext }}
-      <v-btn color="white" text @click="snackbar = false">
+      <v-btn
+        color="white"
+        text
+        @click="snackbar = false"
+      >
         Close
       </v-btn>
     </v-snackbar>
@@ -61,6 +76,7 @@ export default {
       backendUrl: process.env.VUE_APP_BACKENDURL,
       valid: true,
       loading: false,
+      showPassword: false,
       email: '',
       password: '',
       rules: {
@@ -74,12 +90,12 @@ export default {
     }
   },
   methods: {
-    invokeSnackbar(text, color) {
+    invokeSnackbar (text, color) {
       this.snacktext = text
       this.snackcolor = color
       this.snackbar = true
     },
-    async submit() {
+    async submit () {
       if (this.$refs.form.validate()) {
         try {
           this.loading = true
@@ -102,7 +118,7 @@ export default {
           this.loading = false
           setTimeout(() => {
             this.$router.push({ name: 'home' })
-          }, 1500)
+          }, 1000)
         } catch (err) {
           this.invokeSnackbar('Authorization Error', 'error')
           this.loading = false
