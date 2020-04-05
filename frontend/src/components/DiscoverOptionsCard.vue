@@ -234,12 +234,10 @@ export default {
             name: user.name,
             email: this.email
           }
-          console.log(fbProfile)
           const responseBuildProfile = await axios.post(
             this.recommenderUrl + 'recsys/profiler/build_profile/',
             fbProfile
           )
-          console.log(responseBuildProfile)
           if (responseBuildProfile.status === 200) {
             this.isProfileReady = 'Ready to go'
           } else {

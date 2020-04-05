@@ -86,11 +86,7 @@
       <v-tab-item>
         <v-card flat>
           <v-card-text>
-            <v-row
-              align="start"
-              justify="center"
-            >            <v-btn
-              :disabled="loadDisable"
+            <v-btn
               @click="rankSort()"
               outlined
               color="secondary"
@@ -98,7 +94,6 @@
               Random Sort
             </v-btn>
             <v-btn
-              :disabled="loadDisable"
               @click="rankSort()"
               outlined
               color="secondary"
@@ -106,7 +101,6 @@
               Geo-Rank Sort
             </v-btn>
             <v-btn
-              :disabled="loadDisable"
               @click="rankSort()"
               outlined
               color="secondary"
@@ -114,13 +108,16 @@
               Semantic Sort
             </v-btn>
             <v-btn
-              :disabled="loadDisable"
               @click="rankSort()"
               outlined
               color="secondary"
             >
               Geo-Semantic Sort
             </v-btn>
+            <v-row
+              align="start"
+              justify="center"
+            >
               <v-col
                 v-for="destination in topDests"
                 :key="destination.id"
@@ -198,11 +195,12 @@ export default {
       window.location.reload()
     },
     async rankSort () {
-      this.topDests = this.destinations.slice(0, this.pagination)
-      this.topDests = await this.getObjWithCommons(
-        this.topDests,
-        this.pagination
-      )
+      this.destinations = this.destinations.sort(() => Math.random() - 0.5)
+      var tempTop = this.destinations.slice(0, this.pagination)
+      tempTop = await this.updateImages(
+        tempTop)
+      this.topDests = []
+      this.topDests = tempTop
     },
     async morePagination () {
       this.startIndex = this.startIndex + this.pagination
@@ -218,6 +216,24 @@ export default {
       } else {
         this.loadDisable = true
       }
+    },
+    async updateImages (arr) {
+      let coors = ''
+      coors = arr
+        .map(x =>
+          x.type === 'node'
+            ? x.lat + '|' + x.lon
+            : x.center.lat + '|' + x.center.lon
+        )
+        .join(',')
+      const res = await axios.get(
+        this.recommenderUrl + 'recsys/commons/images/' + coors
+      )
+      const resData = res.data.results
+      for (let i = 0; i < arr.length; i++) {
+        arr[i].image = resData[i].image_url
+      }
+      return arr
     },
     async getObjWithCommons (arr) {
       let coors = ''
