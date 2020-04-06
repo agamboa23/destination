@@ -1,7 +1,11 @@
 import axios from "axios";
 import mimir from "mimir";
 import nj from "numjs";
-
+export const RANKTYPES = {
+    SEMANTIC: 'semantic',
+    LOCATION: 'location',
+    ALL: 'all'
+};
 var bow = mimir.bow, dict = mimir.dict;
 import tm from "text-miner";
 import * as GeoUtil from "../utils/geocalculator";
@@ -14,26 +18,42 @@ var lancasterStemmer = require('lancaster-stemmer');
 const YANDEXKEY = 'trnsl.1.1.20200404T180324Z.ff6dd6fd7d6572f1.1bd83273a39201564029ab25e0b4d53c892dae50';
 import YandexTranslate from 'yet-another-yandex-translate';
 const YandexTranslator = new YandexTranslate(YANDEXKEY);
-const TranslateCharacterLimit=400
-const fb_api = "https://graph.facebook.com/v6.0/";
-const cursor_iterator = 1;
+const TranslateCharacterLimit=400;
 
 
 export async function rank_destinations(destinations,rank_type, user_id) {
     //Find rank type
     //if all, zip results
+    var location_rank,semantic_rank,result;
     var fb_profile = await Profile.findOne({fb_id:user_id});
     if (!fb_profile){
         return {destinations:destinations,error:"User Not in DataBase"};
     }
-    //var location_rank = geo_rank(destinations,fb_profile.locations);
-    var text_rank_list = await text_rank(destinations,fb_profile.likes_text,fb_profile.posts_text);
-    
-    return {destinations:text_rank_list};
-
+    switch (rank_type) {
+        case RANKTYPES.SEMANTIC:
+            result = await text_rank(destinations,fb_profile.likes_text,fb_profile.posts_text);
+            break;
+        case RANKTYPES.LOCATION:
+            result = geo_rank(destinations,fb_profile.locations);
+            break;
+        case RANKTYPES.ALL:
+            location_rank = geo_rank(destinations,fb_profile.locations);
+            semantic_rank = await text_rank(location_rank,fb_profile.likes_text,fb_profile.posts_text);
+            result = zip_merge_to_array(semantic_rank,location_rank);
+            break;
+        default:
+            return {destinations:destinations,error:"Invalid Rank Type"};
+    }
+    return {destinations:result};
 }
+
 function geo_rank(destinations,user_locations) {
+    var results=[];
     var lat,lon;
+    if (destinations[0].min_distance){
+        results = [...destinations];
+        return results.sort((a,b)=>a.min_distance-b.min_distance);
+    }
     var filtered_user_locations = user_locations
         .map(x=>x.split("&").map(i=>Number(i)))
         .filter(p=>GeoUtil.is_Bayern(p));
@@ -49,16 +69,17 @@ function geo_rank(destinations,user_locations) {
             {latitude:x[0],longitude:x[1]}))
             .reduce((min,current)=>Math.min(min,current));
     });
-    return destinations.sort((a,b)=>a.min_distance-b.min_distance);
+    results = [...destinations];
+    return results.sort((a,b)=>a.min_distance-b.min_distance);
 }
 
 async function text_rank(destinations,likes_text, posts_text) {
-    //Bow for feed and likes
-    //bow for nodes
-    //vector multiplication
-    //add and sort by max value
-    var rest_text=[],namesAndDescriptions=[];
+    var rest_text=[],namesAndDescriptions=[],results=[];
     var name,description,tag_text='';
+    if (destinations[0].text_score){
+        results = [...destinations];
+        return results.sort((a,b)=>b.text_score-a.text_score);
+    }
     destinations.forEach(element => {
         name = getNested(element,"tags","name")?getNested(element,"tags","name"):'';
         description = getNested(element,"tags","description")?getNested(element,"tags","description"):'';
@@ -97,18 +118,20 @@ async function text_rank(destinations,likes_text, posts_text) {
     for (var i=0;i<items_count;i++){
         destinations[i].text_score=final_rank.get(i);
     }
-    return destinations.sort((a,b)=>b.text_score-a.text_score);
+    results=[...destinations];
+    return results.sort((a,b)=>b.text_score-a.text_score);
 
 }
 
-async function process_text(documents){
-    
-    var response = await YandexTranslator.translate(documents, {from:'de', to: 'en'});
-    var new_corpus = new tm.Corpus(response);
-    new_corpus = new_corpus.removeWords(tm.STOPWORDS.EN).map(x=>x.replace(/[^A-Za-z0-9 ]/g, ' ')).clean().removeInterpunctuation();
-    var last_text = new_corpus.documents.join(" ").split(" ").map(x=>lancasterStemmer(x)).join(" ");
-    return last_text;
+function zip_merge_to_array(array_a,array_b){
+    var result = [],i, l = Math.min(array_a.length, array_b.length);
+    for (i = 0; i < l; i++) {
+        result.push(array_a[i], array_b[i]);
+    }
+    var unique_results = [...new Set(result)];
+    return unique_results;
 }
+
 function getNested(obj, ...args) {
     return args.reduce((obj, level) => obj && obj[level], obj)
   }
