@@ -181,7 +181,7 @@ export default {
     getRestTags () {
       const entries = Object.entries(this.tags)
       for (const [tag, value] of entries) {
-        if (value !== this.first && value !== this.second) {
+        if (value !== this.first && value !== this.second && !tag.includes('addr') && !tag.includes('Addr')) {
           this.restTags[tag] = value
         }
       }
