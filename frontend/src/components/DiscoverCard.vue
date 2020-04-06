@@ -87,28 +87,28 @@
         <v-card flat>
           <v-card-text>
             <v-btn
-              @click="rankSort()"
+              @click="rankSort('random')"
               outlined
               color="secondary"
             >
               Random Sort
             </v-btn>
             <v-btn
-              @click="rankSort()"
+              @click="rankSort('location')"
               outlined
               color="secondary"
             >
               Geo-Rank Sort
             </v-btn>
             <v-btn
-              @click="rankSort()"
+              @click="rankSort('semantic')"
               outlined
               color="secondary"
             >
               Semantic Sort
             </v-btn>
             <v-btn
-              @click="rankSort()"
+              @click="rankSort('all')"
               outlined
               color="secondary"
             >
@@ -194,13 +194,18 @@ export default {
     reloadPage () {
       window.location.reload()
     },
-    async rankSort () {
+    async rankSort (prankSort) {
+      this.overlay = true
       var currentList = {
         destination_list: this.destinations,
         user_id: this.options.personalID
       }
-      const responseRank = await axios.post(this.recommenderUrl + 'recsys/recommendations/rank_sort/2', currentList).catch(x => console.log(x))
-      this.destinations = responseRank.data.destinations
+      if (prankSort === 'random') {
+        this.destinations = this.destinations.sort(() => Math.random() - 0.5)
+      } else {
+        const responseRank = await axios.post(this.recommenderUrl + 'recsys/recommendations/rank_sort/' + prankSort, currentList).catch(x => console.log(x))
+        this.destinations = responseRank.data.destinations
+      }
       // this.destinations = this.destinations.sort(() => Math.random() - 0.5)
       var tempTop = this.destinations.slice(0, this.pagination)
       this.startIndex = 0
@@ -209,6 +214,7 @@ export default {
         tempTop)
       this.topDests = []
       this.topDests = tempTop
+      this.overlay = false
     },
     async morePagination () {
       this.startIndex = this.startIndex + this.pagination
