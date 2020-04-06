@@ -243,11 +243,9 @@ export async function get_dstn_by_stereotype(req, res, next) {
   }
 }
 export async function sort_rank(req, res, next) {
-  //var ranked_list = await RecRanker.rank_destinations(req.body.destination_list,req.params.sort_type);
-  console.log(req.body.user_id)
-
+  var ranked_list = await RecRanker.rank_destinations(req.body.destination_list,req.params.sort_type,req.body.user_id);
   const pStereotypes = req.params.sort_type;
   const qFilter = req.query.filter || "'true'";
-  res.status(200).json({ pStereotypes:pStereotypes });
+  res.status(200).json({ destinations:ranked_list.destinations});
 
 }

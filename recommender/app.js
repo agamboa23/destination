@@ -21,7 +21,7 @@ mongoose.connect(
 app.use(morgan('dev'));
 app.use('/uploads', express.static('uploads'));
 app.use(urlencoded({extended: false}));
-app.use(json());
+app.use(json({ limit: '20mb'}));
 
 app.use((req,res,next) => {
     res.header("Access-Control-Allow-Origin", "*");

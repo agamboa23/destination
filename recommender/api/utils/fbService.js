@@ -71,17 +71,6 @@ function get_list_text(x){
     return [getNested(x,"name"),getNested(x,"description"),getNested(x,"category"),getNested(x,"products")].join(" ");
 }
 
-export function generate_image_url(pagesList){
-    if (pagesList.length==0){
-        return placeholder_url;
-    }
-    var file_url, file_md,filename;
-    filename=pagesList[0].title.slice(5).replace(/ /g,"_");
-    file_md = md5(filename).substr(0,2);
-    file_url = media_url + file_md[0] + '/' + file_md + '/' +filename;
-    return file_url;
-}
-
 function get_place_coordinates(x){
 	return getNested(x,"location","latitude") + '&' + getNested(x,"location","longitude")
 }

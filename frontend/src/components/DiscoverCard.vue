@@ -200,9 +200,11 @@ export default {
         user_id: this.options.personalID
       }
       const responseRank = await axios.post(this.recommenderUrl + 'recsys/recommendations/rank_sort/2', currentList).catch(x => console.log(x))
-      console.log(responseRank)
-      this.destinations = this.destinations.sort(() => Math.random() - 0.5)
+      this.destinations = responseRank.data.destinations
+      // this.destinations = this.destinations.sort(() => Math.random() - 0.5)
       var tempTop = this.destinations.slice(0, this.pagination)
+      this.startIndex = 0
+      // var tempTop = responseRank.data.destinations.slice(0, this.pagination)
       tempTop = await this.updateImages(
         tempTop)
       this.topDests = []
