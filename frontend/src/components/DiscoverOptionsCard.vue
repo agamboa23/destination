@@ -39,13 +39,11 @@
         align="center"
         justify="center"
       >
-        <v-col cols="4">
-          <v-switch
-            v-model="moreOptions"
-            label="More Options"
-            color="secondary"
-          />
-        </v-col>
+        <v-switch
+          v-model="moreOptions"
+          label="More Options"
+          color="secondary"
+        />
       </v-row>
       <v-btn
         @click="getCurrentLocation()"

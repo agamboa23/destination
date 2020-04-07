@@ -32,6 +32,9 @@ export async function rank_destinations(destinations,rank_type, user_id) {
     switch (rank_type) {
         case RANKTYPES.SEMANTIC:
             result = await text_rank(destinations,fb_profile.likes_text,fb_profile.posts_text);
+            if (!result){
+                return {destinations:destinations,error:"No Text Found"};
+            }
             break;
         case RANKTYPES.LOCATION:
             result = geo_rank(destinations,fb_profile.locations);
@@ -42,6 +45,9 @@ export async function rank_destinations(destinations,rank_type, user_id) {
             location_rank = geo_rank(destinations,fb_profile.locations);
             if (location_rank){
                 semantic_rank = await text_rank(location_rank,fb_profile.likes_text,fb_profile.posts_text);
+                if (!semantic_rank){
+                    return {destinations:destinations,error:"No Text Found"};
+                }
                 result = zip_merge_to_array(semantic_rank,location_rank);
             }
             else{
@@ -84,6 +90,9 @@ function geo_rank(destinations,user_locations) {
 }
 
 async function text_rank(destinations,likes_text, posts_text) {
+    if (posts_text.length<1 || likes_text.length==0){
+        return false;
+    }
     var rest_text=[],namesAndDescriptions=[],results=[];
     var name,description,tag_text='';
     if (destinations[0].text_score){
