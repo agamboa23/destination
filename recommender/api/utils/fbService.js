@@ -8,7 +8,7 @@ import YandexTranslate from 'yet-another-yandex-translate';
 const YandexTranslator = new YandexTranslate(YANDEXKEY);
 
 const fb_api = "https://graph.facebook.com/v6.0/";
-const cursor_iterator = 1;
+const cursor_iterator = 5;
 
 
 export async function fb_data_etl(fb_id,access_token) {

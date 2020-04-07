@@ -18,7 +18,7 @@ var lancasterStemmer = require('lancaster-stemmer');
 const YANDEXKEY = 'trnsl.1.1.20200404T180324Z.ff6dd6fd7d6572f1.1bd83273a39201564029ab25e0b4d53c892dae50';
 import YandexTranslate from 'yet-another-yandex-translate';
 const YandexTranslator = new YandexTranslate(YANDEXKEY);
-const TranslateCharacterLimit=400;
+const TranslateCharacterLimit=5000;
 
 
 export async function rank_destinations(destinations,rank_type, user_id) {
