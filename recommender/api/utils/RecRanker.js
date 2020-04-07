@@ -35,11 +35,18 @@ export async function rank_destinations(destinations,rank_type, user_id) {
             break;
         case RANKTYPES.LOCATION:
             result = geo_rank(destinations,fb_profile.locations);
+            if (!result)
+            return {destinations:destinations,error:"No Locations Found"};
             break;
         case RANKTYPES.ALL:
             location_rank = geo_rank(destinations,fb_profile.locations);
-            semantic_rank = await text_rank(location_rank,fb_profile.likes_text,fb_profile.posts_text);
-            result = zip_merge_to_array(semantic_rank,location_rank);
+            if (location_rank){
+                semantic_rank = await text_rank(location_rank,fb_profile.likes_text,fb_profile.posts_text);
+                result = zip_merge_to_array(semantic_rank,location_rank);
+            }
+            else{
+                return {destinations:destinations,error:"No Locations Found"};
+            }
             break;
         default:
             return {destinations:destinations,error:"Invalid Rank Type"};
@@ -57,6 +64,9 @@ function geo_rank(destinations,user_locations) {
     var filtered_user_locations = user_locations
         .map(x=>x.split("&").map(i=>Number(i)))
         .filter(p=>GeoUtil.is_Bayern(p));
+    if (filtered_user_locations.length==0){
+        return false;
+    } 
     destinations.forEach(element => {
         if (element.center){
             [lat,lon] = [element.center.lat,element.center.lon];
@@ -133,5 +143,5 @@ function zip_merge_to_array(array_a,array_b){
 }
 
 function getNested(obj, ...args) {
-    return args.reduce((obj, level) => obj && obj[level], obj)
+    return args.reduce((obj, level) => obj && obj[level], obj);
   }

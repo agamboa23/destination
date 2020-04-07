@@ -91,28 +91,28 @@
               outlined
               color="secondary"
             >
-              Random Sort
+              A Sort
             </v-btn>
             <v-btn
               @click="rankSort('location')"
               outlined
               color="secondary"
             >
-              Geo-Rank Sort
+              {{this.geoText}}
             </v-btn>
             <v-btn
               @click="rankSort('semantic')"
               outlined
               color="secondary"
             >
-              Semantic Sort
+              {{this.semanticText}}
             </v-btn>
             <v-btn
               @click="rankSort('all')"
               outlined
               color="secondary"
             >
-              Geo-Semantic Sort
+              {{this.geoSemanticText}}
             </v-btn>
             <v-row
               align="start"
@@ -170,6 +170,9 @@ export default {
     return {
       recommenderUrl: process.env.VUE_APP_RECOMMENDERURL,
       overlay: false,
+      geoText: 'B Sort',
+      semanticText: 'C Sort',
+      geoSemanticText: 'D Sort',
       tab: null,
       loadDisable: false,
       pagination: 20,
@@ -178,6 +181,7 @@ export default {
       stereotypeSelection: [],
       options: {},
       destinations: [],
+      original_destinations: [],
       topDests: [],
       usersLocation: ''
     }
@@ -201,10 +205,23 @@ export default {
         user_id: this.options.personalID
       }
       if (prankSort === 'random') {
-        this.destinations = this.destinations.sort(() => Math.random() - 0.5)
+        this.destinations = this.original_destinations
       } else {
         const responseRank = await axios.post(this.recommenderUrl + 'recsys/recommendations/rank_sort/' + prankSort, currentList).catch(x => console.log(x))
         this.destinations = responseRank.data.destinations
+        if (responseRank.data.error) {
+          switch (prankSort) {
+            case 'location':
+              this.geoText = responseRank.data.error
+              break
+            case 'semantic':
+              this.semanticText = responseRank.data.error
+              break
+            case 'all':
+              this.geoSemanticText = responseRank.data.error
+              break
+          }
+        }
       }
       // this.destinations = this.destinations.sort(() => Math.random() - 0.5)
       var tempTop = this.destinations.slice(0, this.pagination)
@@ -320,6 +337,8 @@ export default {
       )
       const destinations = res.data.destinations
       this.destinations = destinations
+      this.destinations = this.destinations.sort(() => Math.random() - 0.5)
+      this.original_destinations = this.destinations
       this.topDests = destinations.slice(this.startIndex, this.pagination)
       this.topDests = await this.getObjWithCommons(
         this.topDests,

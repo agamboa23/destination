@@ -244,12 +244,18 @@ export async function get_dstn_by_stereotype(req, res, next) {
 }
 export async function sort_rank(req, res, next) {
   var rank_type=req.params.sort_type?req.params.sort_type:"location";
-  var ranked_list = await RecRanker.rank_destinations(req.body.destination_list,rank_type,req.body.user_id);
-  if (ranked_list.error) {
-    res.status(200).json({ destinations:ranked_list.destinations,error:ranked_list.error});
-    console.log(ranked_list.error);
-  }
-  else{
-    res.status(200).json({ destinations:ranked_list.destinations});
+  var fb_id = req.body.user_id;
+  try {
+    var ranked_list = await RecRanker.rank_destinations(req.body.destination_list,rank_type,fb_id);
+    if (ranked_list.error) {
+      res.status(200).json({ destinations:ranked_list.destinations,error:"Not Available"});
+      console.log(ranked_list.error);
+    }
+    else{
+      res.status(200).json({ destinations:ranked_list.destinations});
+    }
+  } catch (error) {
+    res.status(200).json({ destinations:req.body.destination_list,error:error});
+    console.log(error);
   }
 }
