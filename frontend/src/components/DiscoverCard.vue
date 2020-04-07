@@ -181,7 +181,6 @@ export default {
       stereotypeSelection: [],
       options: {},
       destinations: [],
-      original_destinations: [],
       topDests: [],
       usersLocation: ''
     }
@@ -205,9 +204,9 @@ export default {
         user_id: this.options.personalID
       }
       if (prankSort === 'random') {
-        this.destinations = this.original_destinations
+        this.destinations.sort((a, b) => a.id - b.id)
       } else {
-        const responseRank = await axios.post(this.recommenderUrl + 'recsys/recommendations/rank_sort/' + prankSort, currentList).catch(x => console.log(x))
+        const responseRank = await axios.post(this.recommenderUrl + 'recsys/recommendations/rank_sort/' + prankSort, currentList)
         this.destinations = responseRank.data.destinations
         if (responseRank.data.error) {
           switch (prankSort) {
@@ -337,8 +336,7 @@ export default {
       )
       const destinations = res.data.destinations
       this.destinations = destinations
-      this.destinations = this.destinations.sort(() => Math.random() - 0.5)
-      this.original_destinations = this.destinations
+      this.destinations.sort((a, b) => a.id - b.id)
       this.topDests = destinations.slice(this.startIndex, this.pagination)
       this.topDests = await this.getObjWithCommons(
         this.topDests,
