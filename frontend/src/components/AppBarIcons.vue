@@ -108,13 +108,13 @@ export default {
     },
     async getNotifIds () {
       const userRes = await axios.get(this.backendUrl + 'users/' + this.userId)
-      const userResData = userRes.data.user?userRes.data.user.notifications:userResData
+      const userResData = userRes.data.user ? userRes.data.user.notifications : userRes.data.user
       this.notifIds = userResData
     },
     async checkUpdates () {
       const temp = this.notifIds
       const userRes = await axios.get(this.backendUrl + 'users/' + this.userId)
-      const userResData = userRes.data.user?userRes.data.user.notifications:userResData
+      const userResData = userRes.data.user ? userRes.data.user.notifications : userRes.data.user
       this.notifIds = userResData
       const diff = this.notifIds.length - temp.length
       if (diff !== 0) {
@@ -123,7 +123,7 @@ export default {
           const notRes = await axios.get(
             this.backendUrl + 'notifications/' + newNotif
           )
-          const notResData = notRes.data?notRes.data.notification:notRes.data
+          const notResData = notRes.data ? notRes.data.notification : notRes.data
           this.notify(notResData.message)
         }
       } else {
