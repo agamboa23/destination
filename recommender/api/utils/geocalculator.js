@@ -1,4 +1,10 @@
+import { truncate } from "fs";
+
 const EARTH_RADIUS = 6371;
+const Bayern_lat_max=50.165420;
+const Bayern_lat_min=47.603457;
+const Bayern_lon_max=12.566013;
+const Bayern_lon_min=9.801426;
 const BEARING = Object.freeze({
   north:degrees_to_radians(0), 
   east:degrees_to_radians(90), 
@@ -41,4 +47,15 @@ function radians_to_degrees(radians)
 {
   var pi = Math.PI;
   return radians * (180/pi);
+}
+
+export function is_Bayern(coords){
+  var [lat,lon] = coords;
+  if (Bayern_lat_min<lat&&lat<Bayern_lat_max && Bayern_lon_min<lon&&lon<Bayern_lon_max){
+    return true;
+  }
+  else{
+    return false;
+  }
+
 }

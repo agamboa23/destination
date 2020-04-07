@@ -2,31 +2,31 @@
   <div class="d-flex flex-column">
     <v-btn
       :outlined="!hover1"
-      class="ma-4 elevation-6"
-      color="secondary"
       @mouseover="hover1 = true"
       @mouseleave="hover1 = false"
       @click="toCreateTrip()"
+      class="ma-4 elevation-6"
+      color="secondary"
     >
       {{ createTripText }}
     </v-btn>
     <v-btn
       :outlined="!hover2"
-      class="ma-4 elevation-6"
-      color="secondary"
       @mouseover="hover2 = true"
       @mouseleave="hover2 = false"
       @click="toDiscoverView()"
+      class="ma-4 elevation-6"
+      color="secondary"
     >
       {{ discoverDestinationsText }}
     </v-btn>
     <v-btn
       :outlined="!hover3"
       :to="{ name: 'upcoming' }"
-      class="ma-4 elevation-6"
-      color="secondary"
       @mouseover="hover3 = true"
       @mouseleave="hover3 = false"
+      class="ma-4 elevation-6"
+      color="secondary"
     >
       Upcoming Trips
     </v-btn>
@@ -59,11 +59,12 @@ export default {
       }
     },
     toDiscoverView () {
-      if (this.signedIn) {
+      /** *if (this.signedIn) {
         this.$router.push({ name: 'discoverView' })
       } else {
         this.discoverDestinationsText = 'Not Signed In'
-      }
+      }***/
+      this.$router.push({ name: 'discoverView' })
     }
   }
 }

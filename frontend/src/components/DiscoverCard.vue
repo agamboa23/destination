@@ -62,12 +62,12 @@
           </v-card-text>
           <v-card-actions>
             <v-btn
+              :disabled="stereotypeSelection.length === 0"
+              @click="tab = 1"
               class="elevation-12"
               large
               block
               color="secondary"
-              :disabled="stereotypeSelection.length === 0"
-              @click="tab = 1"
             >
               Next Page
             </v-btn>
@@ -86,6 +86,34 @@
       <v-tab-item>
         <v-card flat>
           <v-card-text>
+            <v-btn
+              @click="rankSort('random')"
+              outlined
+              color="secondary"
+            >
+              Random Sort
+            </v-btn>
+            <v-btn
+              @click="rankSort('location')"
+              outlined
+              color="secondary"
+            >
+              Geo-Rank Sort
+            </v-btn>
+            <v-btn
+              @click="rankSort('semantic')"
+              outlined
+              color="secondary"
+            >
+              Semantic Sort
+            </v-btn>
+            <v-btn
+              @click="rankSort('all')"
+              outlined
+              color="secondary"
+            >
+              Geo-Semantic Sort
+            </v-btn>
             <v-row
               align="start"
               justify="center"
@@ -114,9 +142,9 @@
             </v-row>
             <v-btn
               :disabled="loadDisable"
+              @click="morePagination()"
               outlined
               color="secondary"
-              @click="morePagination()"
             >
               Load More
             </v-btn>
@@ -166,6 +194,28 @@ export default {
     reloadPage () {
       window.location.reload()
     },
+    async rankSort (prankSort) {
+      this.overlay = true
+      var currentList = {
+        destination_list: this.destinations,
+        user_id: this.options.personalID
+      }
+      if (prankSort === 'random') {
+        this.destinations = this.destinations.sort(() => Math.random() - 0.5)
+      } else {
+        const responseRank = await axios.post(this.recommenderUrl + 'recsys/recommendations/rank_sort/' + prankSort, currentList).catch(x => console.log(x))
+        this.destinations = responseRank.data.destinations
+      }
+      // this.destinations = this.destinations.sort(() => Math.random() - 0.5)
+      var tempTop = this.destinations.slice(0, this.pagination)
+      this.startIndex = 0
+      // var tempTop = responseRank.data.destinations.slice(0, this.pagination)
+      tempTop = await this.updateImages(
+        tempTop)
+      this.topDests = []
+      this.topDests = tempTop
+      this.overlay = false
+    },
     async morePagination () {
       this.startIndex = this.startIndex + this.pagination
       if (this.startIndex + this.pagination <= this.destinations.length) {
@@ -180,6 +230,24 @@ export default {
       } else {
         this.loadDisable = true
       }
+    },
+    async updateImages (arr) {
+      let coors = ''
+      coors = arr
+        .map(x =>
+          x.type === 'node'
+            ? x.lat + '|' + x.lon
+            : x.center.lat + '|' + x.center.lon
+        )
+        .join(',')
+      const res = await axios.get(
+        this.recommenderUrl + 'recsys/commons/images/' + coors
+      )
+      const resData = res.data.results
+      for (let i = 0; i < arr.length; i++) {
+        arr[i].image = resData[i].image_url
+      }
+      return arr
     },
     async getObjWithCommons (arr) {
       let coors = ''

@@ -1,13 +1,14 @@
 <template>
   <v-card
-    class="mx-auto"
-    max-width="400"
-    outlined
     :color="active ? 'info' : hover ? 'info' : ''"
     :style="hover ? 'cursor: pointer;' : ''"
     @mouseover="hover = true"
     @mouseleave="hover = false"
     @click="isDestination ? (clicked = !clicked) : ''"
+    class="mx-auto"
+    max-width="400"
+    min-width="350"
+    outlined
   >
     <v-list-item>
       <v-list-item-content>
@@ -19,10 +20,10 @@
         </v-list-item-title>
         <v-list-item-subtitle v-if="isDestination">
           <v-btn
+            @click="toGoogleMapsDirections()"
             small
             outlined
             color="black"
-            @click="toGoogleMapsDirections()"
           >
             To Maps <v-icon>mdi-map-marker</v-icon>
           </v-btn>
@@ -32,6 +33,7 @@
                 <li
                   v-for="(value, tag) in restTags"
                   :key="tag"
+                  style="word-break: break-word;white-space: normal;"
                   class="text-capitalize grey--text"
                 >
                   {{ underscoreToSpace(tag) }}: {{ underscoreToSpace(value) }}
@@ -42,13 +44,18 @@
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-avatar
+        v-if="!expand"
         tile
         size="80"
       >
-        <v-img
-          :src="avatarURL"
-          contain
-        />
+        <v-img :src="avatarURL" />
+      </v-list-item-avatar>
+      <v-list-item-avatar
+        v-if="expand"
+        tile
+        size="160"
+      >
+        <v-img :src="avatarURL" />
       </v-list-item-avatar>
     </v-list-item>
   </v-card>
@@ -174,7 +181,7 @@ export default {
     getRestTags () {
       const entries = Object.entries(this.tags)
       for (const [tag, value] of entries) {
-        if (value !== this.first && value !== this.second) {
+        if (value !== this.first && value !== this.second && !tag.includes('addr') && !tag.includes('Addr')) {
           this.restTags[tag] = value
         }
       }

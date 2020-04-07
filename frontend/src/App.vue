@@ -20,8 +20,14 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+
       <template v-slot:append>
         <div class="pa-2">
+          <v-switch
+            v-model="$vuetify.theme.dark"
+            color="white"
+            :label="$vuetify.theme.dark ? 'Dark Mode' : 'Light Mode'"
+          />
           <v-btn
             block
             @click="logOut()"
@@ -34,8 +40,12 @@
     <v-app-bar
       app
       color="primary"
+      elevate-on-scroll
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-app-bar-nav-icon
+        color="white"
+        @click="drawer = !drawer"
+      />
       <div
         style="cursor: pointer;"
         class="d-flex align-center"
@@ -49,7 +59,7 @@
           contain
           width="50"
         />
-        <span class="display-1 font-weight-light hidden-xs-only">
+        <span class="display-1 font-weight-light white--text hidden-xs-only">
           DestiNation
         </span>
       </div>
@@ -61,12 +71,14 @@
     </v-content>
     <notifications position="bottom right" />
     <v-footer
+      class="white--text"
       color="accent"
       padless
     >
       &copy; 2020 DestiNation GmbH
       <v-spacer />
       <v-btn
+        color="white"
         text
         to="/about"
       >

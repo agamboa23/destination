@@ -10,6 +10,7 @@
         Log In
       </v-btn>
       <v-btn
+        color="white"
         outlined
         @click="toSignup()"
       >
@@ -19,18 +20,21 @@
     </div>
     <div v-else>
       <v-btn
+        color="white"
         icon
         @click="checkUpdates()"
       >
         <v-icon>mdi-bell-ring</v-icon>
       </v-btn>
       <v-btn
+        color="white"
         icon
         :to="{ name: 'search' }"
       >
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
       <v-btn
+        color="white"
         text
         :to="{ name: 'user' }"
       >
@@ -104,13 +108,13 @@ export default {
     },
     async getNotifIds () {
       const userRes = await axios.get(this.backendUrl + 'users/' + this.userId)
-      const userResData = userRes.data.user.notifications
+      const userResData = userRes.data.user?userRes.data.user.notifications:userResData
       this.notifIds = userResData
     },
     async checkUpdates () {
       const temp = this.notifIds
       const userRes = await axios.get(this.backendUrl + 'users/' + this.userId)
-      const userResData = userRes.data.user.notifications
+      const userResData = userRes.data.user?userRes.data.user.notifications:userResData
       this.notifIds = userResData
       const diff = this.notifIds.length - temp.length
       if (diff !== 0) {
@@ -119,7 +123,7 @@ export default {
           const notRes = await axios.get(
             this.backendUrl + 'notifications/' + newNotif
           )
-          const notResData = notRes.data.notification
+          const notResData = notRes.data?notRes.data.notification:notRes.data
           this.notify(notResData.message)
         }
       } else {

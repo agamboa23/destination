@@ -16,10 +16,41 @@
           />
         </v-col>
       </v-row>
+      <v-row
+        align="center"
+        justify="center"
+      >
+        <v-col cols="4">
+          <v-facebook-login
+            :login-options="permissions"
+            v-model="model"
+            @sdk-init="handleSdkInit"
+            @login="onLogin"
+            app-id="1139571796385665"
+          />
+        </v-col>
+      </v-row>
+      <v-row>
+        <h1>My Facebook Information</h1>
+        <div class="well">
+          <div class="list-item">
+            <img :src="picture">
+          </div>
+          <div class="list-item">
+            <i>{{ name }}</i>
+          </div>
+          <div class="list-item">
+            <i>{{ email }}</i>
+          </div>
+          <div class="list-item">
+            <i>{{ isProfileReady }}</i>
+          </div>
+        </div>
+      </v-row>
       <v-btn
+        @click="getCurrentLocation()"
         class="my-6 mr-12"
         color="secondary"
-        @click="getCurrentLocation()"
       >
         {{ isLoc ? `Don't use Current Location` : 'Use Current Location' }}
       </v-btn>
@@ -29,6 +60,7 @@
       <v-autocomplete
         v-model="location"
         :disabled="isLoc"
+        :items="places"
         class="my-6"
         outlined
         color="secondary"
@@ -36,7 +68,6 @@
         hint="e.g. Tegernsee"
         prepend-inner-icon="mdi-city-variant"
         no-data-text="Couldn't find location :("
-        :items="places"
         item-text="name"
         item-value="geo"
       />
@@ -48,29 +79,29 @@
           <v-col cols="6">
             <v-select
               v-model="aroundMetric"
+              :items="aroundSelection"
               color="secondary"
               label="Distance in"
-              :items="aroundSelection"
               item-text="name"
               item-value="abbr"
             />
             <v-text-field
               v-model="minDistance"
+              :hint="minDistance + ' ' + aroundMetric"
+              :rules="[rules.betweenZeroAndHundred]"
               color="secondary"
               label="Minimum Distance"
               type="number"
               persistent-hint
-              :hint="minDistance + ' ' + aroundMetric"
-              :rules="[rules.betweenZeroAndHundred]"
             />
             <v-text-field
               v-model="maxDistance"
+              :hint="maxDistance + ' ' + aroundMetric"
+              :rules="[rules.betweenZeroAndHundred]"
               color="secondary"
               label="Maximum Distance"
               type="number"
               persistent-hint
-              :hint="maxDistance + ' ' + aroundMetric"
-              :rules="[rules.betweenZeroAndHundred]"
             />
             <v-checkbox
               v-model="bt_reachable"
@@ -89,11 +120,11 @@
     <v-card-actions>
       <v-btn
         :disabled="nextDisabled"
+        @click="$emit('next')"
         class="elevation-12"
         large
         block
         color="secondary"
-        @click="$emit('next')"
       >
         Next
       </v-btn>
@@ -103,14 +134,32 @@
 
 <script>
 import placesPack from '@/assets/destinations.js'
+import VFacebookLogin from 'vue-facebook-login-component'
+import axios from 'axios'
 
 export default {
   name: 'DiscoverOptionsCard',
+  components: {
+    VFacebookLogin
+  },
   props: {
     nextDisabled: Boolean
   },
   data: () => {
     return {
+      recommenderUrl: process.env.VUE_APP_RECOMMENDERURL,
+      FB: {},
+      model: {},
+      scope: {},
+      permissions: {
+        scope: 'email,user_friends,user_photos,user_posts,user_likes'
+      },
+      name: '',
+      email: '',
+      personalID: '',
+      isProfileReady: 'No FB profile',
+      picture: '',
+      photos: {},
       moreOptions: false,
       isLoc: false,
       location: '',
@@ -150,10 +199,14 @@ export default {
           minDistance: this.minDistance,
           aroundMetric: this.aroundMetric,
           bt_reachable: this.bt_reachable,
-          wheelchair: this.wheelchair
+          wheelchair: this.wheelchair,
+          personalID: this.personalID
         }
       } else {
-        return { location: this.location }
+        return {
+          location: this.location,
+          personalID: this.personalID
+        }
       }
     }
   },
@@ -163,6 +216,56 @@ export default {
     }
   },
   methods: {
+    handleSdkInit ({ FB, scope }) {
+      this.FB = FB
+      this.scope = scope
+      if (this.scope.connected) this.getUserData()
+    },
+    async getUserData () {
+      this.FB.api(
+        '/me',
+        'GET',
+        { fields: 'id,name,email,picture' },
+        async user => {
+          this.personalID = user.id
+          this.email = user.email
+          this.name = user.name
+          this.picture = user.picture.data.url
+          this.isProfileReady = 'Loading Data'
+          const fbProfile = {
+            fbId: user.id,
+            access_code: this.FB.getAccessToken(),
+            name: user.name,
+            email: this.email
+          }
+          const responseBuildProfile = await axios.post(
+            this.recommenderUrl + 'recsys/profiler/build_profile/',
+            fbProfile
+          )
+          if (responseBuildProfile.status === 200) {
+            this.isProfileReady = 'Ready to go'
+          } else {
+            this.isProfileReady = 'Error when loading'
+          }
+        }
+      )
+    },
+    async buildProfile () {
+      // Get all facebook data (posts and geographic points)
+      // store in backend
+      // all good
+      await this.FB.api(
+        '/me',
+        'GET',
+        { fields: 'id,name,email,picture,photos' },
+        user => {
+          this.photos.photos = user.photos
+        }
+      )
+    },
+    async onLogin () {
+      await this.getUserData()
+    },
     getCurrentLocation () {
       if (!this.isLoc) {
         if (navigator.geolocation) {

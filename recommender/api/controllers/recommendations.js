@@ -3,6 +3,7 @@ import District from "../models/district";
 import Province from "../models/province";
 import { get } from "axios";
 import * as WikiHelper from "../utils/wikidata";
+import * as RecRanker from "../utils/RecRanker";
 import * as opQueryBuilder from "../utils/overpassQueryBuilder";
 import * as Stereotypes from "../controllers/stereotypes";
 const wiki_url =
@@ -239,5 +240,16 @@ export async function get_dstn_by_stereotype(req, res, next) {
   } catch (err) {
     res.status(400).json({ error: err });
     throw err;
+  }
+}
+export async function sort_rank(req, res, next) {
+  var rank_type=req.params.sort_type?req.params.sort_type:"location";
+  var ranked_list = await RecRanker.rank_destinations(req.body.destination_list,rank_type,req.body.user_id);
+  if (ranked_list.error) {
+    res.status(200).json({ destinations:ranked_list.destinations,error:ranked_list.error});
+    console.log(ranked_list.error);
+  }
+  else{
+    res.status(200).json({ destinations:ranked_list.destinations});
   }
 }
