@@ -5,7 +5,7 @@ var provinces_qids= "Q10559|Q10547|Q10551|Q10557|Q10562|Q10554|Q10555";
 import axios from "axios";
 var media_url = "https://upload.wikimedia.org/wikipedia/commons/";
 const placeholder_url = "https://tekrabuilders.com/wp-content/uploads/2018/12/male-placeholder-image-300x300.jpeg";
-const base = "http://commons.wikimedia.org/wiki/Special:FilePath/"
+const base = "https://commons.wikimedia.org/wiki/Special:FilePath/"
 export function wikidata_extractor_helper(place_reference,wikidata) {
     var wappen,image, image_md,wappen_md,image_name,wappen_name,population,area;
     image = wikidata.data.entities[place_reference.wikidata_code].claims.P18;
