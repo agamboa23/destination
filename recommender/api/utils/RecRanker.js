@@ -108,9 +108,9 @@ async function text_rank(destinations,likes_text, posts_text) {
     });
     var reduced_namesAndDescriptions=namesAndDescriptions.map(x=>x.replace(/&/g, ' ')).join("&").substr(0,TranslateCharacterLimit).split("&");
     var reduced_rest_text=rest_text.map(x=>x.replace(/&/g, ' ')).join("&").substr(0,TranslateCharacterLimit).split("&");
-    var [names_translate, rest_translate] = await Promise.all([YandexTranslator.translate(reduced_namesAndDescriptions, {from:'de', to: 'en'}), YandexTranslator.translate(reduced_rest_text, {from:'de', to: 'en'})]);
-    rest_text=reduced_rest_text.concat(rest_text.slice(reduced_rest_text.length));
-    namesAndDescriptions=reduced_namesAndDescriptions.concat(namesAndDescriptions.slice(reduced_namesAndDescriptions.length));
+    var [names_translate, rest_translate] = await Promise.all([YandexTranslator.translate(reduced_namesAndDescriptions, {to: 'en'}), YandexTranslator.translate(reduced_rest_text, {to: 'en'})]);
+    rest_text=rest_translate.concat(rest_text.slice(reduced_rest_text.length));
+    namesAndDescriptions=names_translate.concat(namesAndDescriptions.slice(reduced_namesAndDescriptions.length));
     
     var new_corpus = new tm.Corpus(rest_text.concat(namesAndDescriptions));
     new_corpus = new_corpus.removeWords(tm.STOPWORDS.EN).clean().removeInterpunctuation().map(x=>x.replace(/[^A-Za-z0-9 ]/g, ' ').split(' ').map(p=>lancasterStemmer(p)).join(' '));
