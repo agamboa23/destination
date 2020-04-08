@@ -16,9 +16,6 @@
             <i>{{ name }}</i>
           </div>
           <div class="list-item">
-            <i>{{ email }}</i>
-          </div>
-          <div class="list-item">
             <i>{{ isProfileReady }}</i>
           </div>
         </div>
