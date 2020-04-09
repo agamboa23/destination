@@ -8,30 +8,6 @@
         align="center"
         justify="center"
       >
-        <v-col cols="4">
-          <v-switch
-            v-model="moreOptions"
-            label="More Options"
-            color="secondary"
-          />
-        </v-col>
-      </v-row>
-      <v-row
-        align="center"
-        justify="center"
-      >
-        <v-col cols="4">
-          <v-facebook-login
-            :login-options="permissions"
-            v-model="model"
-            @sdk-init="handleSdkInit"
-            @login="onLogin"
-            app-id="1139571796385665"
-          />
-        </v-col>
-      </v-row>
-      <v-row>
-        <h1>My Facebook Information</h1>
         <div class="well">
           <div class="list-item">
             <img :src="picture">
@@ -40,12 +16,31 @@
             <i>{{ name }}</i>
           </div>
           <div class="list-item">
-            <i>{{ email }}</i>
-          </div>
-          <div class="list-item">
             <i>{{ isProfileReady }}</i>
           </div>
         </div>
+      </v-row>
+      <v-row
+        align="center"
+        justify="center"
+      >
+          <v-facebook-login
+            :login-options="permissions"
+            v-model="model"
+            @sdk-init="handleSdkInit"
+            @login="onLogin"
+            app-id="1139571796385665"
+          />
+      </v-row>
+      <v-row
+        align="center"
+        justify="center"
+      >
+        <v-switch
+          v-model="moreOptions"
+          label="More Options"
+          color="secondary"
+        />
       </v-row>
       <v-btn
         @click="getCurrentLocation()"
@@ -119,7 +114,7 @@
     </v-card-text>
     <v-card-actions>
       <v-btn
-        :disabled="nextDisabled"
+        :disabled="nextDisabled||isLoading"
         @click="$emit('next')"
         class="elevation-12"
         large
@@ -157,9 +152,10 @@ export default {
       name: '',
       email: '',
       personalID: '',
-      isProfileReady: 'No FB profile',
+      isProfileReady: 'Log in With Facebook for personalize recommendations',
       picture: '',
       photos: {},
+      isLoading: false,
       moreOptions: false,
       isLoc: false,
       location: '',
@@ -232,6 +228,7 @@ export default {
           this.name = user.name
           this.picture = user.picture.data.url
           this.isProfileReady = 'Loading Data'
+          this.isLoading = true
           const fbProfile = {
             fbId: user.id,
             access_code: this.FB.getAccessToken(),
@@ -244,6 +241,7 @@ export default {
           )
           if (responseBuildProfile.status === 200) {
             this.isProfileReady = 'Ready to go'
+            this.isLoading = false
           } else {
             this.isProfileReady = 'Error when loading'
           }

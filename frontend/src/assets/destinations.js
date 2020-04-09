@@ -64,12 +64,6 @@ const destinations = [
     geo: '47.998835|11.170496',
     logo:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Wappen_Herrsching.svg/2000px-Wappen_Herrsching.svg.png'
-  },
-  {
-    name: 'Berlin',
-    geo: '52.525123|13.369166',
-    logo:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Coat_of_arms_of_Berlin.svg/1200px-Coat_of_arms_of_Berlin.svg.png'
   }
 ]
 

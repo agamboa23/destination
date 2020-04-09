@@ -18,7 +18,7 @@ var lancasterStemmer = require('lancaster-stemmer');
 const YANDEXKEY = 'trnsl.1.1.20200404T180324Z.ff6dd6fd7d6572f1.1bd83273a39201564029ab25e0b4d53c892dae50';
 import YandexTranslate from 'yet-another-yandex-translate';
 const YandexTranslator = new YandexTranslate(YANDEXKEY);
-const TranslateCharacterLimit=400;
+const TranslateCharacterLimit=5000;
 
 
 export async function rank_destinations(destinations,rank_type, user_id) {
@@ -32,14 +32,27 @@ export async function rank_destinations(destinations,rank_type, user_id) {
     switch (rank_type) {
         case RANKTYPES.SEMANTIC:
             result = await text_rank(destinations,fb_profile.likes_text,fb_profile.posts_text);
+            if (!result){
+                return {destinations:destinations,error:"No Text Found"};
+            }
             break;
         case RANKTYPES.LOCATION:
             result = geo_rank(destinations,fb_profile.locations);
+            if (!result)
+            return {destinations:destinations,error:"No Locations Found"};
             break;
         case RANKTYPES.ALL:
             location_rank = geo_rank(destinations,fb_profile.locations);
-            semantic_rank = await text_rank(location_rank,fb_profile.likes_text,fb_profile.posts_text);
-            result = zip_merge_to_array(semantic_rank,location_rank);
+            if (location_rank){
+                semantic_rank = await text_rank(location_rank,fb_profile.likes_text,fb_profile.posts_text);
+                if (!semantic_rank){
+                    return {destinations:destinations,error:"No Text Found"};
+                }
+                result = zip_merge_to_array(semantic_rank,location_rank);
+            }
+            else{
+                return {destinations:destinations,error:"No Locations Found"};
+            }
             break;
         default:
             return {destinations:destinations,error:"Invalid Rank Type"};
@@ -57,6 +70,9 @@ function geo_rank(destinations,user_locations) {
     var filtered_user_locations = user_locations
         .map(x=>x.split("&").map(i=>Number(i)))
         .filter(p=>GeoUtil.is_Bayern(p));
+    if (filtered_user_locations.length==0){
+        return false;
+    } 
     destinations.forEach(element => {
         if (element.center){
             [lat,lon] = [element.center.lat,element.center.lon];
@@ -74,6 +90,9 @@ function geo_rank(destinations,user_locations) {
 }
 
 async function text_rank(destinations,likes_text, posts_text) {
+    if (posts_text.length<1 || likes_text.length==0){
+        return false;
+    }
     var rest_text=[],namesAndDescriptions=[],results=[];
     var name,description,tag_text='';
     if (destinations[0].text_score){
@@ -89,9 +108,9 @@ async function text_rank(destinations,likes_text, posts_text) {
     });
     var reduced_namesAndDescriptions=namesAndDescriptions.map(x=>x.replace(/&/g, ' ')).join("&").substr(0,TranslateCharacterLimit).split("&");
     var reduced_rest_text=rest_text.map(x=>x.replace(/&/g, ' ')).join("&").substr(0,TranslateCharacterLimit).split("&");
-    var [names_translate, rest_translate] = await Promise.all([YandexTranslator.translate(reduced_namesAndDescriptions, {from:'de', to: 'en'}), YandexTranslator.translate(reduced_rest_text, {from:'de', to: 'en'})]);
-    rest_text=reduced_rest_text.concat(rest_text.slice(reduced_rest_text.length));
-    namesAndDescriptions=reduced_namesAndDescriptions.concat(namesAndDescriptions.slice(reduced_namesAndDescriptions.length));
+    var [names_translate, rest_translate] = await Promise.all([YandexTranslator.translate(reduced_namesAndDescriptions, {to: 'en'}), YandexTranslator.translate(reduced_rest_text, {to: 'en'})]);
+    rest_text=rest_translate.concat(rest_text.slice(reduced_rest_text.length));
+    namesAndDescriptions=names_translate.concat(namesAndDescriptions.slice(reduced_namesAndDescriptions.length));
     
     var new_corpus = new tm.Corpus(rest_text.concat(namesAndDescriptions));
     new_corpus = new_corpus.removeWords(tm.STOPWORDS.EN).clean().removeInterpunctuation().map(x=>x.replace(/[^A-Za-z0-9 ]/g, ' ').split(' ').map(p=>lancasterStemmer(p)).join(' '));
@@ -133,5 +152,5 @@ function zip_merge_to_array(array_a,array_b){
 }
 
 function getNested(obj, ...args) {
-    return args.reduce((obj, level) => obj && obj[level], obj)
+    return args.reduce((obj, level) => obj && obj[level], obj);
   }

@@ -8,13 +8,10 @@
       align="center"
       justify="center"
     >
-      <v-col cols="12">
-        <iframe
-          frameborder="0"
-          allowfullscreen
-          style="position:absolute;top:0;left:0;width:100%;height:100%;"
-          src="https://www.youtube.com/embed/Kq4OtRsdXls"
-        />
+      <v-col>
+      Destination is a prototype built by TUM students for the practical course: Building Smart Applications for Tourism in Bavaria. The features for recommendations use your facebook likes and feed to personalize the list of recommended points of interest.
+      For more information, do not hesitate to contact us at ddestinnation@gmail.com
+      Only the results of recommendations preferences will be utilize, all collected and analyzed data will be deleted by June,2020.
       </v-col>
     </v-row>
   </v-container>

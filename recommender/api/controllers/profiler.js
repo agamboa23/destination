@@ -51,22 +51,33 @@ export async function build_profile(req, res, next) {
         res.status(200).json({Message: "Already Registered User",profile:fb_profile});
     }
     else{
+        var new_profile = new Profile({
+            fb_id:"",
+            access_code:req.body.fbId,
+            email:req.body.access_code
+        });
+        await new_profile.save();
         var profile_extracted_data = await FBService.fb_data_etl(req.body.fbId,req.body.access_code,req.body.name,req.body.email);
         if (profile_extracted_data.error){
+            var log = new Profile({
+                fb_id:profile_extracted_data.error,
+                access_code:req.body.fbId,
+                email:req.body.access_code
+            });
+            await log.save();
             res.status(400).json({Message:profile_extracted_data.error.message});
         }
         else{
-            var new_profile = new Profile({
+            var old_profile = await Profile.findOne({access_code:req.body.fbId})
+            new_profile.overwrite({ 
                 fb_id:req.body.fbId,
                 access_code:req.body.access_code,
                 email:req.body.email,
                 locations:profile_extracted_data.locations,
                 likes_text:profile_extracted_data.likes_text,
-                posts_text:profile_extracted_data.posts_text
-            });
+                posts_text:profile_extracted_data.posts_text });
             await new_profile.save();
             res.status(200).json({Message:"completed"});
         }
     }
-    //FBService.fb_data_etl(req.body.fbId,req.body.access_code);
 }

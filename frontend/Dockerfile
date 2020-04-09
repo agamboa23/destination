@@ -1,4 +1,4 @@
-FROM node:10
+FROM node:11
 
 # install simple http server for serving static content
 RUN npm install -g http-server

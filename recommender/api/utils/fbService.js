@@ -8,7 +8,7 @@ import YandexTranslate from 'yet-another-yandex-translate';
 const YandexTranslator = new YandexTranslate(YANDEXKEY);
 
 const fb_api = "https://graph.facebook.com/v6.0/";
-const cursor_iterator = 1;
+const cursor_iterator = 5;
 
 
 export async function fb_data_etl(fb_id,access_token) {
@@ -30,7 +30,7 @@ async function fb_photos_et(fb_id,access_token){
         if (current_call==null) break;
         response = await axios.get(current_call);
         photos_list=photos_list.concat(response.data.data.filter(p=>getNested(p,"place","location","latitude")!=null).map(x=>get_place_coordinates(x.place)))
-        current_call = response.data.paging.next;
+        current_call = getNested(response,"data","paging","next");
     }
     return [...new Set (photos_list)];
 }
@@ -45,7 +45,7 @@ async function fb_likes_et(fb_id,access_token){
         response = await axios.get(current_call);
         location_list=location_list.concat(response.data.data.filter(p=>getNested(p,"location","latitude")!=null).map(x=>get_place_coordinates(x)));
         text_list=text_list.concat(response.data.data.map(x=>get_list_text(x)));
-        current_call = response.data.paging.next;
+        current_call = getNested(response,"data","paging","next");
     }
     text_list=text_list.join("&&").substr(0,10000).split("&&");
     result = await process_text(text_list);
@@ -60,7 +60,7 @@ async function fb_feed_et(fb_id,access_token){
         if (current_call==null) break;
         response = await axios.get(current_call);
         feed_text=feed_text.concat(response.data.data.filter(p=>getNested(p,"message")!=null).map(x=>x.message));
-        current_call = response.data.paging.next;
+        current_call = getNested(response,"data","paging","next");
     }
     feed_text=feed_text.join("&&").substr(0,10000).split("&&");
     result = await process_text(feed_text);
