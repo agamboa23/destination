@@ -94,6 +94,52 @@ exports.users_login = (req, res, next) => {
         });
 };
 
+exports.users_follow_user = (req, res, next) => {
+    userId = req.params.userId;
+    followId = req.params.followId;
+    User.findOneAndUpdate(
+        { _id: userId },
+        { $addToSet: { following: [followId] } }
+      )
+      .then(result => {
+          res.status(200).json({
+              message: 'User followed',
+              request: {
+                   type: 'GET',
+                   url: 'http://localhost:3000/users/' + followId
+              }
+          });
+      })
+      .catch(err => {
+          res.status(500).json({
+              error: err
+          });
+      });
+};
+
+exports.users_add_follower = (req, res, next) => {
+    userId = req.params.userId;
+    followerId = req.params.followerId;
+    User.findOneAndUpdate(
+        { _id: userId },
+        { $addToSet: { followers: [followerId] } }
+      )
+      .then(result => {
+        res.status(200).json({
+            message: 'User added to followers',
+            request: {
+                 type: 'GET',
+                 url: 'http://localhost:3000/users/' + followerId
+            }
+        });
+    })
+    .catch(err => {
+        res.status(500).json({
+            error: err
+        });
+    });
+}
+
 exports.users_get_all = (req, res, next) => {
     User.find()
     .select('first_name _id ') //userImage')
@@ -126,7 +172,7 @@ exports.users_get_all = (req, res, next) => {
 exports.users_get_user =  (req, res, next) => {
     const id = req.params.userId;
     User.findById(id)
-    .select('email first_name _id notifications last_name gender age languages trips joined_trips phone_number')
+    .select('email first_name _id notifications following followers last_name gender age languages trips joined_trips phone_number')
     .exec()
     .then(doc => {
         if(doc){

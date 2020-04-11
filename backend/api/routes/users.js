@@ -32,6 +32,8 @@ const UsersController = require('../controllers/users');
 
 router.post('/signup', UsersController.users_signup);
 router.post('/login', UsersController.users_login);
+router.post('/follow/:userId/:followId', UsersController.users_follow_user);
+router.post('/addfollower/:userId/:followerId', UsersController.users_add_follower);
 router.get('/', UsersController.users_get_all);
 router.get('/:userId', UsersController.users_get_user);
 router.patch('/:userId', UsersController.users_patch_user);

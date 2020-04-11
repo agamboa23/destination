@@ -5,9 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "develop": "nodemon server.js",
-    "start": "node server.js",
-    "deploy": "gcloud app deploy"
+    "start": "nodemon server.js"
   },
   "author": "Ivan Lukac",
   "license": "ISC",
